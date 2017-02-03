@@ -5,14 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    ArrayList<String> names = new ArrayList<String>(){{add("Worker1"); add("Worker2"); add("Worker3");}};
+    ArrayList<String> mEmployeesArray = new ArrayList<>();
+
+    public void setEmployeesData(ArrayList employeesData){
+        mEmployeesArray = employeesData;
+        notifyDataSetChanged();
+    }
+
+    public void addNewEmployeeToArrayList(String name){
+        mEmployeesArray.add(name);
+        notifyDataSetChanged();
+    }
 
     @Override
     public EmployeeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,12 +37,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     @Override
     public void onBindViewHolder(EmployeeViewHolder holder, int position) {
-        holder.tvEmployee.setText(names.get(position));
+        holder.tvEmployee.setText(mEmployeesArray.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return names.size();
+        return mEmployeesArray.size();
     }
 
     class EmployeeViewHolder extends RecyclerView.ViewHolder{
