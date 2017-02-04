@@ -3,7 +3,7 @@ package com.android.mig.simpletimeclock;
 
 import android.provider.BaseColumns;
 
-public class TimeclockContract {
+public class TimeClockContract {
 
     public static final class Employees implements BaseColumns{
         public static final String TABLE_EMPLOYEES = "employees";

@@ -5,14 +5,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.android.mig.simpletimeclock.TimeclockContract.*;
+import static com.android.mig.simpletimeclock.TimeClockContract.*;
 
-public class TimeclockDbHelper extends SQLiteOpenHelper {
+public class TimeClockDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "timeclock.db";
     private static final int DATABASE_VERSION = 1;
 
-    public TimeclockDbHelper(Context context){
+    public TimeClockDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

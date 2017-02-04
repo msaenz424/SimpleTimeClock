@@ -11,15 +11,20 @@ import java.util.ArrayList;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    ArrayList<String> mEmployeesArray = new ArrayList<>();
+    ArrayList<Employee> mEmployeesArrayList = new ArrayList<>();
 
-    public void setEmployeesData(ArrayList employeesData){
-        mEmployeesArray = employeesData;
+    public void setEmployeesData(ArrayList<Employee> employeesData){
+        mEmployeesArrayList = employeesData;
         notifyDataSetChanged();
     }
 
-    public void addNewEmployeeToArrayList(String name){
-        mEmployeesArray.add(name);
+    public void addNewEmployeeToArrayList(int empID, String empName){
+        mEmployeesArrayList.add(new Employee(empID, empName));
+        notifyDataSetChanged();
+    }
+
+    public void deleteEmployee(int position){
+        mEmployeesArrayList.remove(position);
         notifyDataSetChanged();
     }
 
@@ -37,15 +42,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     @Override
     public void onBindViewHolder(EmployeeViewHolder holder, int position) {
-        holder.tvEmployee.setText(mEmployeesArray.get(position));
+        holder.itemView.setTag(mEmployeesArrayList.get(position).getEmployeeID());
+        holder.tvEmployee.setText(mEmployeesArrayList.get(position).getEmployeeName());
     }
+
+
 
     @Override
     public int getItemCount() {
-        return mEmployeesArray.size();
+        return mEmployeesArrayList.size();
     }
 
-    class EmployeeViewHolder extends RecyclerView.ViewHolder{
+    class EmployeeViewHolder extends RecyclerView.ViewHolder {
         TextView tvEmployee;
 
         public EmployeeViewHolder(View itemView) {
