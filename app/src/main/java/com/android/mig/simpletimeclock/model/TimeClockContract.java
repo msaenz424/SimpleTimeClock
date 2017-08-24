@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock;
+package com.android.mig.simpletimeclock.model;
 
 
 import android.provider.BaseColumns;

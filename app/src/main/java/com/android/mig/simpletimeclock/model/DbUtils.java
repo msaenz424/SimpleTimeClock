@@ -1,10 +1,11 @@
-package com.android.mig.simpletimeclock;
+package com.android.mig.simpletimeclock.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.android.mig.simpletimeclock.TimeClockContract.Employees;
+import com.android.mig.simpletimeclock.model.TimeClockContract.Employees;
+import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
 
 public class DbUtils {
 

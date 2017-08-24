@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock;
+package com.android.mig.simpletimeclock.view;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -13,10 +13,19 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.mig.simpletimeclock.model.DbUtils;
+import com.android.mig.simpletimeclock.model.Employee;
+import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.model.TimeClockContract;
+import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<ArrayList<Employee>>{
+        implements MainView,
+        LoaderManager.LoaderCallbacks<ArrayList<Employee>>{
+
     private int c =0;
     private static final int LOADER_ID = 99;
     private RecyclerView mEmployeeRecyclerView;
@@ -42,6 +51,8 @@ public class MainActivity extends AppCompatActivity
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
             }
+
+
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
@@ -113,6 +124,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<ArrayList<Employee>> loader) {
+
+    }
+
+    @Override
+    public void showActiveEmployees(Cursor employees) {
 
     }
 }
