@@ -13,24 +13,23 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.mig.simpletimeclock.model.DbUtils;
-import com.android.mig.simpletimeclock.model.Employee;
+import com.android.mig.simpletimeclock.model.EmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.model.TimeClockContract;
 import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
+import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
 
 public class MainActivity extends AppCompatActivity
         implements MainView,
-        LoaderManager.LoaderCallbacks<ArrayList<Employee>>{
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     private int c =0;
     private static final int LOADER_ID = 99;
     private RecyclerView mEmployeeRecyclerView;
     private EmployeeAdapter mEmployeeAdapter;
     private TimeClockDbHelper mTimeClockDbHelper;
+    private ActiveEmployeesPresenter mActiveEmployeesPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +44,9 @@ public class MainActivity extends AppCompatActivity
         mEmployeeAdapter = new EmployeeAdapter();
         mEmployeeRecyclerView.setAdapter(mEmployeeAdapter);
 
+        mActiveEmployeesPresenter = new ActiveEmployeesPresenterImpl(this);
+        mActiveEmployeesPresenter.loadActiveEmployees();
+
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
@@ -52,13 +54,11 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
 
-
-
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int empID = (int) viewHolder.itemView.getTag();
                 if (direction == ItemTouchHelper.LEFT){
-                    DbUtils.deleteEmployee(mTimeClockDbHelper, empID);
+                    EmployeesInteractorImpl.deleteEmployee(mTimeClockDbHelper, empID);
                     mEmployeeAdapter.deleteEmployee(viewHolder.getAdapterPosition());
                 }
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         ContentValues contentValues = new ContentValues();
         String name = "new emp " + String.valueOf(c++);    // test data
         contentValues.put(TimeClockContract.Employees.EMP_NAME, name);
-        int newID = DbUtils.insertEmployee(mTimeClockDbHelper, contentValues);
+        int newID = EmployeesInteractorImpl.insertEmployee(mTimeClockDbHelper, contentValues);
         if (newID > 0)
             mEmployeeAdapter.addNewEmployeeToArrayList(newID, name);
         else
@@ -80,50 +80,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public Loader<ArrayList<Employee>> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<ArrayList<Employee>>(this) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(this) {
 
-            ArrayList<Employee> mEmployeesArrayList;
+            Cursor mEmployeesCursor;
 
             @Override
             protected void onStartLoading() {
-                if (mEmployeesArrayList == null)
+                if (mEmployeesCursor == null)
                     forceLoad();
                 else
-                    deliverResult(mEmployeesArrayList);
+                    deliverResult(mEmployeesCursor);
             }
 
             @Override
-            public ArrayList<Employee> loadInBackground() {
-                ArrayList<Employee> employeesArrayList = new ArrayList<>();
+            public Cursor loadInBackground() {
+                //Cursor cursor = EmployeesInteractorImpl.readActiveEmployees();
+                Cursor cursor = mActiveEmployeesPresenter.loadActiveEmployees();
 
-                Cursor cursor = DbUtils.readEmployees(mTimeClockDbHelper);
-                if (cursor != null){
-                    cursor.moveToFirst();
-                    do{
-                        employeesArrayList.add(new Employee(cursor.getInt(0),cursor.getString(1)));
-                    }while (cursor.moveToNext());
-                }
-
-                return employeesArrayList;
+                return cursor;
             }
 
             @Override
-            public void deliverResult(ArrayList<Employee> data) {
+            public void deliverResult(Cursor data) {
                 super.deliverResult(data);
-                mEmployeesArrayList = data;
+                mEmployeesCursor = data;
             }
         };
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Employee>> loader, ArrayList<Employee> data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null)
             mEmployeeAdapter.setEmployeesData(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<Employee>> loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 

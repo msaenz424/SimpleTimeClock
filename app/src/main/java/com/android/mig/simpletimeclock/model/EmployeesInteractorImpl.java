@@ -1,13 +1,21 @@
 package com.android.mig.simpletimeclock.model;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.android.mig.simpletimeclock.model.TimeClockContract.Employees;
-import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
 
-public class DbUtils {
+public class EmployeesInteractorImpl implements EmployeesInteractor{
+
+    private static int ACTIVE_STATUS = 1;
+
+    private Context mContext;
+
+    public EmployeesInteractorImpl(Context context) {
+        this.mContext = context;
+    }
 
     public static int insertEmployee(TimeClockDbHelper timeClockDbHelpter, ContentValues contentValues){
         final SQLiteDatabase db = timeClockDbHelpter.getWritableDatabase();
@@ -18,6 +26,19 @@ public class DbUtils {
     public static Cursor readEmployees(TimeClockDbHelper timeClockDbHelper){
         final SQLiteDatabase db = timeClockDbHelper.getReadableDatabase();
         Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
+        if (cursor.getCount() > 0)
+            return cursor;
+        return null;
+    }
+
+    public Cursor readActiveEmployees(){
+        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
+
+        String returnColumns[] = {Employees.EMP_ID, Employees.EMP_NAME};
+        String where = Employees.EMP_WAGE + " = " + ACTIVE_STATUS;
+
+        Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, returnColumns, where, null, null, null, null);
         if (cursor.getCount() > 0)
             return cursor;
         return null;

@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.view;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +9,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
-import com.android.mig.simpletimeclock.model.Employee;
-
-import java.util.ArrayList;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    ArrayList<Employee> mEmployeesArrayList = new ArrayList<>();
+    private static final int EMPLOYEE_COL_ID_INDEX = 0;
+    private static final int EMPLOYEE_COL_NAME_INDEX = 1;
 
-    public void setEmployeesData(ArrayList<Employee> employeesData){
-        mEmployeesArrayList = employeesData;
+    Cursor mEmployeesCursor = null;
+
+    public void setEmployeesData(Cursor employeesData){
+        mEmployeesCursor = employeesData;
         notifyDataSetChanged();
     }
 
     public void addNewEmployeeToArrayList(int empID, String empName){
-        mEmployeesArrayList.add(new Employee(empID, empName));
+        //mEmployeesCursor.add(new Employee(empID, empName));
         notifyDataSetChanged();
     }
 
     public void deleteEmployee(int position){
-        mEmployeesArrayList.remove(position);
+        //mEmployeesArrayList.remove(position);
         notifyDataSetChanged();
     }
 
@@ -45,15 +46,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     @Override
     public void onBindViewHolder(EmployeeViewHolder holder, int position) {
-        holder.itemView.setTag(mEmployeesArrayList.get(position).getEmployeeID());
-        holder.tvEmployee.setText(mEmployeesArrayList.get(position).getEmployeeName());
+        mEmployeesCursor.moveToPosition(position);
+        holder.itemView.setTag(mEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
+        holder.tvEmployee.setText(mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
     }
-
-
 
     @Override
     public int getItemCount() {
-        return mEmployeesArrayList.size();
+        if(mEmployeesCursor != null){
+            return mEmployeesCursor.getCount();
+        } else {
+            return 0;
+        }
     }
 
     class EmployeeViewHolder extends RecyclerView.ViewHolder {
