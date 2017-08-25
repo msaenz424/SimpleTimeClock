@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity
         mEmployeeAdapter = new EmployeeAdapter();
         mEmployeeRecyclerView.setAdapter(mEmployeeAdapter);
 
-        mActiveEmployeesPresenter = new ActiveEmployeesPresenterImpl(this);
-        mActiveEmployeesPresenter.loadActiveEmployees();
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
@@ -95,8 +92,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public Cursor loadInBackground() {
-                //Cursor cursor = EmployeesInteractorImpl.readActiveEmployees();
-                Cursor cursor = mActiveEmployeesPresenter.loadActiveEmployees();
+                mActiveEmployeesPresenter = new ActiveEmployeesPresenterImpl(MainActivity.this);
+                Cursor cursor = mActiveEmployeesPresenter.getActiveEmployees();
 
                 return cursor;
             }
@@ -112,7 +109,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null)
-            mEmployeeAdapter.setEmployeesData(data);
+            mActiveEmployeesPresenter.showActiveEmployees(data);
     }
 
     @Override
@@ -122,6 +119,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showActiveEmployees(Cursor employees) {
-
+        mEmployeeAdapter.setEmployeesData(employees);
     }
 }

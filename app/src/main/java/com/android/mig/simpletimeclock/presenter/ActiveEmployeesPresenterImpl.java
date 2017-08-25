@@ -19,9 +19,13 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter{
     }
 
     @Override
-    public Cursor loadActiveEmployees() {
-        //mMainView.showActiveEmployees(mEmployeesInteractor.readActiveEmployees());
+    public Cursor getActiveEmployees() {
         return mEmployeesInteractor.readActiveEmployees();
+    }
+
+    @Override
+    public void showActiveEmployees(Cursor activeEmployeesCursor) {
+        mMainView.showActiveEmployees(activeEmployeesCursor);
     }
 
     @Override

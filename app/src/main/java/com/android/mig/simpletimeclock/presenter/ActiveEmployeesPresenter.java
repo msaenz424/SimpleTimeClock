@@ -4,7 +4,9 @@ import android.database.Cursor;
 
 public interface ActiveEmployeesPresenter {
 
-    Cursor loadActiveEmployees();
+    Cursor getActiveEmployees();
+
+    void showActiveEmployees(Cursor activeEmployeesCursor);
 
     void setActiveEmployee(String[] employeeId);
 
