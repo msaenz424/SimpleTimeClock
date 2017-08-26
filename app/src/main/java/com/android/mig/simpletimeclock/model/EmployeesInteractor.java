@@ -6,4 +6,6 @@ public interface EmployeesInteractor {
 
     Cursor readActiveEmployees();
 
+    Cursor readEmployees();
+
 }

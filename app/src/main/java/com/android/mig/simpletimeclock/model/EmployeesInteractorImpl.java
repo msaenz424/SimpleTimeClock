@@ -23,8 +23,9 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         return (int)id;
     }
 
-    public static Cursor readEmployees(TimeClockDbHelper timeClockDbHelper){
-        final SQLiteDatabase db = timeClockDbHelper.getReadableDatabase();
+    public Cursor readEmployees(){
+        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
         Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
         if (cursor.getCount() > 0)
             return cursor;

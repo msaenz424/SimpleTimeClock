@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.view;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -19,6 +20,7 @@ import com.android.mig.simpletimeclock.model.TimeClockContract;
 import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
+import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements MainView,
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addEmployee(View view){
+        Intent intent = new Intent(this, AllEmployeesActivity.class);
+        startActivity(intent);
+        /*
         ContentValues contentValues = new ContentValues();
         String name = "new emp " + String.valueOf(c++);    // test data
         contentValues.put(TimeClockContract.Employees.EMP_NAME, name);
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity
             mEmployeeAdapter.addNewEmployeeToArrayList(newID, name);
         else
             Toast.makeText(this, R.string.error_text_insert, Toast.LENGTH_SHORT).show();
+            */
     }
 
     @Override

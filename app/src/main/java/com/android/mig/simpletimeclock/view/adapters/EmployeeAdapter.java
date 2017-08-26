@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.view;
+package com.android.mig.simpletimeclock.view.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
