@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.view;
+package com.android.mig.simpletimeclock.view.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,11 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.android.mig.simpletimeclock.model.EmployeesInteractorImpl;
+import com.android.mig.simpletimeclock.source.model.EmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.R;
-import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
+import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
+import com.android.mig.simpletimeclock.view.MainView;
 import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 
 public class MainActivity extends AppCompatActivity

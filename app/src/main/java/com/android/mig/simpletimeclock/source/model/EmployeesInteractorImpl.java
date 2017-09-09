@@ -1,11 +1,12 @@
-package com.android.mig.simpletimeclock.model;
+package com.android.mig.simpletimeclock.source.model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.android.mig.simpletimeclock.model.TimeClockContract.Employees;
+import com.android.mig.simpletimeclock.source.TimeClockContract.Employees;
+import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 
 public class EmployeesInteractorImpl implements EmployeesInteractor{
 

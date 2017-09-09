@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.view;
+package com.android.mig.simpletimeclock.view.activities;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.model;
+package com.android.mig.simpletimeclock.source.model;
 
 import android.database.Cursor;
 

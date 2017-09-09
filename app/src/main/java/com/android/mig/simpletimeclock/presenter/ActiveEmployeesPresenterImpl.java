@@ -4,8 +4,8 @@ package com.android.mig.simpletimeclock.presenter;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.android.mig.simpletimeclock.model.EmployeesInteractor;
-import com.android.mig.simpletimeclock.model.EmployeesInteractorImpl;
+import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
+import com.android.mig.simpletimeclock.source.model.EmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.view.MainView;
 
 public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter{
