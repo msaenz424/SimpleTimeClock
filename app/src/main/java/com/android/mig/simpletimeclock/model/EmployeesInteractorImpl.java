@@ -10,6 +10,7 @@ import com.android.mig.simpletimeclock.model.TimeClockContract.Employees;
 public class EmployeesInteractorImpl implements EmployeesInteractor{
 
     private static int ACTIVE_STATUS = 1;
+    private static int INACTIVE_STATUS = 0;
 
     private Context mContext;
 
@@ -17,8 +18,14 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         this.mContext = context;
     }
 
-    public static int insertEmployee(TimeClockDbHelper timeClockDbHelpter, ContentValues contentValues){
-        final SQLiteDatabase db = timeClockDbHelpter.getWritableDatabase();
+    public int insertEmployee(String name, double wage){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Employees.EMP_NAME, name);
+        contentValues.put(Employees.EMP_STATUS, INACTIVE_STATUS);
+        contentValues.put(Employees.EMP_WAGE, wage);
+
+        TimeClockDbHelper timeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = timeClockDbHelper.getWritableDatabase();
         long id = db.insert(Employees.TABLE_EMPLOYEES, null, contentValues);
         return (int)id;
     }

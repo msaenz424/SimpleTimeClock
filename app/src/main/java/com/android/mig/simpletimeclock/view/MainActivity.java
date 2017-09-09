@@ -1,6 +1,5 @@
 package com.android.mig.simpletimeclock.view;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,11 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.mig.simpletimeclock.model.EmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.R;
-import com.android.mig.simpletimeclock.model.TimeClockContract;
 import com.android.mig.simpletimeclock.model.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
@@ -26,7 +23,6 @@ public class MainActivity extends AppCompatActivity
         implements MainView,
         LoaderManager.LoaderCallbacks<Cursor>{
 
-    private int c =0;
     private static final int LOADER_ID = 99;
     private RecyclerView mEmployeeRecyclerView;
     private EmployeeAdapter mEmployeeAdapter;
@@ -70,16 +66,6 @@ public class MainActivity extends AppCompatActivity
     public void addEmployee(View view){
         Intent intent = new Intent(this, AllEmployeesActivity.class);
         startActivity(intent);
-        /*
-        ContentValues contentValues = new ContentValues();
-        String name = "new emp " + String.valueOf(c++);    // test data
-        contentValues.put(TimeClockContract.Employees.EMP_NAME, name);
-        int newID = EmployeesInteractorImpl.insertEmployee(mTimeClockDbHelper, contentValues);
-        if (newID > 0)
-            mEmployeeAdapter.addNewEmployeeToArrayList(newID, name);
-        else
-            Toast.makeText(this, R.string.error_text_insert, Toast.LENGTH_SHORT).show();
-            */
     }
 
     @Override

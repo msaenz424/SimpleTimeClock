@@ -20,4 +20,9 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter{
     public void loadAllEmployees() {
         mAllEmployeesView.showAllEmployees(mEmployeesInteractor.readEmployees());
     }
+
+    @Override
+    public void addEmployee(String name, double wage) {
+        mEmployeesInteractor.insertEmployee(name, wage);
+    }
 }

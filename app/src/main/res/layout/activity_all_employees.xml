@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/all_employees_fragment"
-    android:name="com.android.mig.simpletimeclock.view.AllEmployeesFragment"
+    android:name="com.android.mig.simpletimeclock.view.fragments.AllEmployeesFragment"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 

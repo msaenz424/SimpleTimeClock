@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/employee_name"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/dialog_horizontal_margin"
+        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
+        android:layout_marginBottom="@dimen/dialog_vertical_margin"
+        android:fontFamily="sans-serif"/>
+
+    <EditText
+        android:id="@+id/wage_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/wage"
+        android:layout_marginTop="@dimen/dialog_horizontal_margin"
+        android:layout_marginStart="@dimen/dialog_horizontal_margin"
+        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:fontFamily="sans-serif"/>
+
+</LinearLayout>

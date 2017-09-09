@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Simple Time Clock</string>
     <string name="error_text_insert">There was a problem when trying to add a new employee, please try it again</string>
+    <string name="employee_name">name</string>
+    <string name="wage">hourly wage</string>
+    <string name="dialog_accept_button">Accept</string>
+    <string name="dialog_cancel_button">Cancel</string>
 </resources>

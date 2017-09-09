@@ -8,4 +8,6 @@ public interface EmployeesInteractor {
 
     Cursor readEmployees();
 
+    int insertEmployee(String name, double wage);
+
 }

@@ -1,9 +1,10 @@
 package com.android.mig.simpletimeclock.presenter;
 
-import android.database.Cursor;
 
 public interface AllEmployeesPresenter {
 
     void loadAllEmployees();
+
+    void addEmployee(String name, double wage);
 
 }
