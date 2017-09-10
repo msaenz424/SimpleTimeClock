@@ -19,7 +19,8 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         this.mContext = context;
     }
 
-    public int insertEmployee(String name, double wage){
+    @Override
+    public int insertEmployee(String name, double wage) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Employees.EMP_NAME, name);
         contentValues.put(Employees.EMP_STATUS, INACTIVE_STATUS);
@@ -31,16 +32,8 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         return (int)id;
     }
 
-    public Cursor readEmployees(){
-        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
-        final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
-        Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
-        if (cursor.getCount() > 0)
-            return cursor;
-        return null;
-    }
-
-    public Cursor readActiveEmployees(){
+    @Override
+    public Cursor readActiveEmployees() {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
 
@@ -51,6 +44,17 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         if (cursor.getCount() > 0)
             return cursor;
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Cursor readEmployees() {
+        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
+        return cursor;
     }
 
     public static boolean deleteEmployee(TimeClockDbHelper timeClockDbHelper, int id){

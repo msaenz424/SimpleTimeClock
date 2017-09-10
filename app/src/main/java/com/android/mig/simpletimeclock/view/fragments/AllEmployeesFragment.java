@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenter;
+import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenterImpl;
 import com.android.mig.simpletimeclock.view.AllEmployeesView;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
 
 public class AllEmployeesFragment extends Fragment
         implements AllEmployeesView{
 
+    AllEmployeesPresenter mAllEmployeesPresenter;
     FloatingActionButton mAddEmployeeFab;
     RecyclerView mAllEmployeesRecyclerView;
     View rootView;
@@ -48,6 +51,9 @@ public class AllEmployeesFragment extends Fragment
         AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter();
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
 
+        mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
+        mAllEmployeesPresenter.loadAllEmployees();
+
         return rootView;
     }
 
@@ -66,5 +72,6 @@ public class AllEmployeesFragment extends Fragment
      */
     public void setNewEmployeeData(String name, double wage){
         Log.d("passed" , name + " " + wage);
+        mAllEmployeesPresenter.addEmployee(name, wage);
     }
 }

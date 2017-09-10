@@ -2,7 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/employee_name_text_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-</TextView>
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/text_size"
+    android:paddingStart="@dimen/item_horizontal_padding"
+    android:paddingEnd="@dimen/item_horizontal_padding"
+    android:paddingTop="@dimen/item_vertical_padding"
+    android:paddingBottom="@dimen/item_vertical_padding" />

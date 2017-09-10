@@ -11,9 +11,9 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter{
     private AllEmployeesView mAllEmployeesView;
     private EmployeesInteractor mEmployeesInteractor;
 
-    public AllEmployeesPresenterImpl(AllEmployeesView allEmployeesView) {
+    public AllEmployeesPresenterImpl(AllEmployeesView allEmployeesView, Context context) {
         this.mAllEmployeesView = allEmployeesView;
-        this.mEmployeesInteractor = new EmployeesInteractorImpl((Context) allEmployeesView);
+        this.mEmployeesInteractor = new EmployeesInteractorImpl(context);
     }
 
     @Override
@@ -24,5 +24,6 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter{
     @Override
     public void addEmployee(String name, double wage) {
         mEmployeesInteractor.insertEmployee(name, wage);
+        loadAllEmployees();
     }
 }

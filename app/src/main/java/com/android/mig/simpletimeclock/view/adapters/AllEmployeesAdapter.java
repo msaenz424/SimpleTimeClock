@@ -14,10 +14,10 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     private static final int EMPLOYEE_COL_ID_INDEX = 0;
     private static final int EMPLOYEE_COL_NAME_INDEX = 1;
 
-    Cursor mAllEmployeesCursor = null;
+    private Cursor mAllEmployeesCursor = null;
 
     public void setAllEmployeesData(Cursor employeesData){
-        mAllEmployeesCursor = employeesData;
+        this.mAllEmployeesCursor = employeesData;
         notifyDataSetChanged();
     }
 
@@ -38,7 +38,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mAllEmployeesCursor.getCount();
     }
 
     public class AllEmployeesViewHolder extends RecyclerView.ViewHolder {
