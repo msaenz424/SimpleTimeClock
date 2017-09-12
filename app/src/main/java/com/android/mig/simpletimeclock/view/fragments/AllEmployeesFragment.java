@@ -1,8 +1,6 @@
 package com.android.mig.simpletimeclock.view.fragments;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,9 +43,7 @@ public class AllEmployeesFragment extends Fragment
         mAddEmployeeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
-                DialogFragment dialogFragment = new AddEmployeeDialogFragment();
-                dialogFragment.show(fragmentManager, "title");
+
             }
         });
 

@@ -2,10 +2,12 @@ package com.android.mig.simpletimeclock.view.activities;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.android.mig.simpletimeclock.R;
@@ -13,6 +15,8 @@ import com.android.mig.simpletimeclock.view.fragments.AddEmployeeDialogFragment;
 import com.android.mig.simpletimeclock.view.fragments.AllEmployeesFragment;
 
 public class AllEmployeesActivity extends AppCompatActivity implements AddEmployeeDialogFragment.NoticeDialogListener{
+
+    private final static String DIALOG_TAG = AddEmployeeDialogFragment.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,20 @@ public class AllEmployeesActivity extends AppCompatActivity implements AddEmploy
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_all_employees_activity, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_add:
+                FragmentManager fragmentManager = getFragmentManager();
+                DialogFragment dialogFragment = new AddEmployeeDialogFragment();
+                dialogFragment.show(fragmentManager, DIALOG_TAG);
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

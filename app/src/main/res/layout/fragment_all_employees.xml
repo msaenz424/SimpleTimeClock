@@ -25,10 +25,9 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginEnd="@dimen/fab_margin_left"
-        android:layout_marginRight="@dimen/fab_margin_left"
         android:visibility="invisible"
         android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_action_done"
         app:backgroundTint="@android:color/background_dark" />
 
 </android.support.design.widget.CoordinatorLayout>
