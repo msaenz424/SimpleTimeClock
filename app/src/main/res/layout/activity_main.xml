@@ -5,20 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_emp_list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/contextual_layout"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_emp_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:onClick="addEmployee"
-        app:layout_anchor="@id/rv_emp_list"
-        app:layout_anchorGravity="bottom|right|end"
         android:src="@android:drawable/ic_input_add"
+        android:layout_marginEnd="@dimen/fab_margin_left"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_gravity="bottom|end"
+        android:onClick="addEmployee"
+        app:fabSize="normal"
         app:backgroundTint="@android:color/background_dark" />
 
 </android.support.design.widget.CoordinatorLayout>

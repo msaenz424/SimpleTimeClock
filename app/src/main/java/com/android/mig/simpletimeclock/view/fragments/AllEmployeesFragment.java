@@ -12,8 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenter;
@@ -22,8 +24,10 @@ import com.android.mig.simpletimeclock.view.AllEmployeesView;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
 
 public class AllEmployeesFragment extends Fragment
-        implements AllEmployeesView{
+        implements AllEmployeesView, AllEmployeesAdapter.OnTapHandler{
 
+    boolean actionMode = false;
+    TextView mCounterTextView;
     AllEmployeesPresenter mAllEmployeesPresenter;
     FloatingActionButton mAddEmployeeFab;
     RecyclerView mAllEmployeesRecyclerView;
@@ -33,6 +37,9 @@ public class AllEmployeesFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_all_employees , container, false);
+
+        mCounterTextView = rootView.findViewById(R.id.counter_text_view);
+        mCounterTextView.setVisibility(View.GONE);
 
         mAddEmployeeFab = (FloatingActionButton) rootView.findViewById(R.id.fab_add_employee);
         mAddEmployeeFab.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +55,24 @@ public class AllEmployeesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mAllEmployeesRecyclerView.setLayoutManager(layoutManager);
         mAllEmployeesRecyclerView.hasFixedSize();
-        AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter();
+        AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter(this);
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
+        mAllEmployeesRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
         mAllEmployeesPresenter.loadAllEmployees();
@@ -73,5 +96,15 @@ public class AllEmployeesFragment extends Fragment
     public void setNewEmployeeData(String name, double wage){
         Log.d("passed" , name + " " + wage);
         mAllEmployeesPresenter.addEmployee(name, wage);
+    }
+
+    @Override
+    public void onTap(boolean actionMode) {
+        this.actionMode = actionMode;
+        if (this.actionMode){
+            mAddEmployeeFab.setVisibility(View.VISIBLE);
+        } else {
+            mAddEmployeeFab.setVisibility(View.INVISIBLE);
+        }
     }
 }

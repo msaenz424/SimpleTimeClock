@@ -5,4 +5,6 @@
     <string name="wage">hourly wage</string>
     <string name="dialog_accept_button">Accept</string>
     <string name="dialog_cancel_button">Cancel</string>
+    <string name="item_title_delete">Delete</string>
+    <string name="item_title_add">Add New Employee</string>
 </resources>

@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.widget.EditText;
 
 import com.android.mig.simpletimeclock.R;
@@ -16,6 +18,14 @@ public class AllEmployeesActivity extends AppCompatActivity implements AddEmploy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_employees);
+        Toolbar mContextualToolbar = (Toolbar) findViewById(R.id.action_context_toolbar);
+        setSupportActionBar(mContextualToolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_all_employees_activity, menu);
+        return true;
     }
 
     /**
