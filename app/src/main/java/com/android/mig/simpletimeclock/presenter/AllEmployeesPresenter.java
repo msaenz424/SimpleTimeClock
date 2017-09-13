@@ -7,4 +7,6 @@ public interface AllEmployeesPresenter {
 
     void addEmployee(String name, double wage);
 
+    void setActiveEmployees(Integer[] ids, boolean isActive);
+
 }

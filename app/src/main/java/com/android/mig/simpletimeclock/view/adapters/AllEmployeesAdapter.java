@@ -24,7 +24,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     private static final int EMPLOYEE_COL_NAME_INDEX = 1;
 
     private Cursor mAllEmployeesCursor = null;
-    private OnTapHandler mOnTapHangler;
+    private OnTapHandler mOnTapHandler;
     private ActionMode mActionMode;
     private boolean actionMode = false;
     private ArrayList<Integer> mSelectedItems = new ArrayList<>();
@@ -57,12 +57,17 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     };
 
     public AllEmployeesAdapter(OnTapHandler onTapHandler){
-        this.mOnTapHangler = onTapHandler;
+        this.mOnTapHandler = onTapHandler;
     }
 
     public void setAllEmployeesData(Cursor employeesData){
         this.mAllEmployeesCursor = employeesData;
         notifyDataSetChanged();
+    }
+
+    public Integer[] getEmployeesIds(){
+        Integer[] ids = mSelectedItems.toArray(new Integer[mSelectedItems.size()]);
+        return ids;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         @Override
         public void onClick(View view) {
             selectItem(getAdapterPosition());
-            mOnTapHangler.onTap(actionMode);
+            mOnTapHandler.onTap(actionMode);
         }
 
         @Override
@@ -111,12 +116,13 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
                 AppCompatActivity activity = (AppCompatActivity) view.getRootView().getContext();
                 activity.startSupportActionMode(mActionModeCallbacks);
             }
-            selectItem(getAdapterPosition());
-            mOnTapHangler.onTap(actionMode);
+            int id = Integer.parseInt(view.getTag().toString());
+            selectItem(id);
+            mOnTapHandler.onTap(actionMode);
             return true;
         }
 
-        void selectItem(Integer item) {
+        void selectItem(int item) {
             if (actionMode) {
                 if (mSelectedItems.contains(item)) {
                     mSelectedItems.remove(item);

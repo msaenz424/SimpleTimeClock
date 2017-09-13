@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,7 +42,8 @@ public class AllEmployeesFragment extends Fragment
         mAddEmployeeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
+                mAllEmployeesPresenter.setActiveEmployees(allEmployeesAdapter.getEmployeesIds(), true);
             }
         });
 
@@ -53,22 +53,6 @@ public class AllEmployeesFragment extends Fragment
         mAllEmployeesRecyclerView.hasFixedSize();
         AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter(this);
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
-        mAllEmployeesRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
         mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
         mAllEmployeesPresenter.loadAllEmployees();

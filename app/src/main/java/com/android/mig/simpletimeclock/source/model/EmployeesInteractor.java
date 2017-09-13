@@ -15,4 +15,6 @@ public interface EmployeesInteractor {
 
     int insertEmployee(String name, double wage);
 
+    void updateEmployeeStatus(Integer[] ids, boolean isActive);
+
 }

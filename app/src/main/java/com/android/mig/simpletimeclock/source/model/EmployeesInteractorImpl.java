@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import com.android.mig.simpletimeclock.source.TimeClockContract.Employees;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
@@ -32,13 +34,50 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         return (int)id;
     }
 
+    /**
+     * Updates Status field on Employees table with the passed boolean value
+     * to be applied to the rows that contains the passed set of employees' ids.
+     *
+     * @param ids       set of employees' ids
+     * @param isActive  either true or false value to be used on update
+     */
+    @Override
+    public void updateEmployeeStatus(Integer[] ids, boolean isActive) {
+        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = mTimeClockDbHelper.getWritableDatabase();
+
+        int mStatus = INACTIVE_STATUS;
+        if (isActive){
+            mStatus = ACTIVE_STATUS;
+        }
+        try {
+            db.beginTransaction();
+            String sqlUpdateQuery = "UPDATE " + Employees.TABLE_EMPLOYEES + " SET " + Employees.EMP_STATUS + " =? WHERE " + Employees.EMP_ID + " =?";
+            SQLiteStatement sqLiteStatement = db.compileStatement(sqlUpdateQuery);
+
+            for (int i = 0; i < ids.length; i++){
+                sqLiteStatement.clearBindings();
+                sqLiteStatement.bindLong(1, mStatus);
+                sqLiteStatement.bindLong(2, ids[i]);
+                sqLiteStatement.execute();
+            }
+            db.setTransactionSuccessful();
+
+        } catch (Exception e) {
+            Log.w("Exception: ", e);
+        } finally {
+            db.endTransaction();
+        }
+
+    }
+
     @Override
     public Cursor readActiveEmployees() {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
 
         String returnColumns[] = {Employees.EMP_ID, Employees.EMP_NAME};
-        String where = Employees.EMP_WAGE + " = " + ACTIVE_STATUS;
+        String where = Employees.EMP_STATUS + " = " + ACTIVE_STATUS;
 
         Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, returnColumns, where, null, null, null, null);
         if (cursor.getCount() > 0)

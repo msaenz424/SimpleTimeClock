@@ -26,4 +26,9 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter{
         mEmployeesInteractor.insertEmployee(name, wage);
         loadAllEmployees();
     }
+
+    @Override
+    public void setActiveEmployees(Integer[] ids, boolean isActive) {
+        mEmployeesInteractor.updateEmployeeStatus(ids, isActive);
+    }
 }
