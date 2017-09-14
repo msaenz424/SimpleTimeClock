@@ -7,10 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,7 +26,7 @@ import com.android.mig.simpletimeclock.view.AllEmployeesView;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
 
 public class AllEmployeesFragment extends Fragment
-        implements AllEmployeesView, AllEmployeesAdapter.OnTapHandler{
+        implements AllEmployeesView, AllEmployeesAdapter.OnListTapHandler{
 
     boolean actionMode = false;
     TextView mCounterTextView;
@@ -30,6 +34,34 @@ public class AllEmployeesFragment extends Fragment
     FloatingActionButton mFabSetActiveEmployee;
     RecyclerView mAllEmployeesRecyclerView;
     View rootView;
+    ActionMode mActionMode;
+    private ActionMode.Callback mActionModeCallbacks = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            actionMode = true;
+            mActionMode = mode;
+            MenuInflater menuInflater = mode.getMenuInflater();
+            menuInflater.inflate(R.menu.menu_all_employees_action_mode, menu);
+            showFabDoneButton();
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            mode.finish();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            resetScreen();
+        }
+    };
 
     @Nullable
     @Override
@@ -71,11 +103,37 @@ public class AllEmployeesFragment extends Fragment
     /** {@inheritDoc} */
     @Override
     public void showStatusUpdateMessage() {
-        Snackbar mySnackbar = Snackbar.make(
+        Snackbar snackbar = Snackbar.make(
                 rootView,
                 R.string.status_update_message,
                 Snackbar.LENGTH_SHORT);
-        mySnackbar.show();
+        snackbar.show();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showFabDoneButton() {
+        mFabSetActiveEmployee.setVisibility(View.VISIBLE);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void hideFabDoneButton() {
+        mFabSetActiveEmployee.setVisibility(View.INVISIBLE);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void resetScreen() {
+        if (mActionMode != null){
+            mActionMode.finish();
+        }
+        actionMode = false;
+        mActionMode = null;
+        AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
+        allEmployeesAdapter.clearSelection();
+        hideFabDoneButton();
+        mAllEmployeesPresenter.onResume();
     }
 
     /**
@@ -86,17 +144,21 @@ public class AllEmployeesFragment extends Fragment
      * @param wage wage of employee
      */
     public void setNewEmployeeData(String name, double wage){
-        Log.d("passed" , name + " " + wage);
         mAllEmployeesPresenter.onActionAddClicked(name, wage);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void onTap(boolean actionMode) {
-        this.actionMode = actionMode;
-        if (this.actionMode){
-            mFabSetActiveEmployee.setVisibility(View.VISIBLE);
-        } else {
-            mFabSetActiveEmployee.setVisibility(View.INVISIBLE);
+    public void onItemLongTap() {
+        if (!actionMode){
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            activity.startSupportActionMode(mActionModeCallbacks);
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onLastSelectionItemRemoved() {
+        resetScreen();
     }
 }

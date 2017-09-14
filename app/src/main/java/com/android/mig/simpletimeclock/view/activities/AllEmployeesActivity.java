@@ -55,8 +55,8 @@ public class AllEmployeesActivity extends AppCompatActivity implements AddEmploy
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Dialog dialogView = dialog.getDialog();
-        EditText nameEditText = (EditText) dialogView.findViewById(R.id.name_edit_text);
-        EditText wageEditText = (EditText) dialogView.findViewById(R.id.wage_edit_text);
+        EditText nameEditText = dialogView.findViewById(R.id.name_edit_text);
+        EditText wageEditText = dialogView.findViewById(R.id.wage_edit_text);
 
         String name = String.valueOf(nameEditText.getText());
         double wage = Double.parseDouble(String.valueOf(wageEditText.getText()));

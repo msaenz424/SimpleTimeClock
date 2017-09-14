@@ -16,4 +16,20 @@ public interface AllEmployeesView {
      */
     void showStatusUpdateMessage();
 
+    /**
+     * Displays Done FAB
+     */
+    void showFabDoneButton();
+
+    /**
+     * Hides Done FAB
+     */
+    void hideFabDoneButton();
+
+    /**
+     * Exits action mode, clears selection list, reset values,
+     * and performs a new query on database for updated data
+     */
+    void resetScreen();
+
 }

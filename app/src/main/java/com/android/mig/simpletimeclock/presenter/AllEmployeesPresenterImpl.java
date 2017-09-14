@@ -7,7 +7,8 @@ import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
 import com.android.mig.simpletimeclock.source.model.EmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.view.AllEmployeesView;
 
-public class AllEmployeesPresenterImpl implements AllEmployeesPresenter, EmployeesInteractor.OnFinishedTransactionListener{
+public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
+        EmployeesInteractor.OnFinishedTransactionListener{
 
     private AllEmployeesView mAllEmployeesView;
     private EmployeesInteractor mEmployeesInteractor;
@@ -52,6 +53,6 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter, Employe
     @Override
     public void onUpdateSuccess() {
         mAllEmployeesView.showStatusUpdateMessage();
+        mAllEmployeesView.resetScreen();
     }
-
 }
