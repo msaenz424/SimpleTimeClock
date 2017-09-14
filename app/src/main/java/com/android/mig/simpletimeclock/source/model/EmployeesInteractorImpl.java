@@ -21,8 +21,9 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         this.mContext = context;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public int insertEmployee(String name, double wage) {
+    public void insertEmployee(String name, double wage, OnFinishedTransactionListener onFinishedTransactionListener) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Employees.EMP_NAME, name);
         contentValues.put(Employees.EMP_STATUS, INACTIVE_STATUS);
@@ -31,18 +32,14 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         TimeClockDbHelper timeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = timeClockDbHelper.getWritableDatabase();
         long id = db.insert(Employees.TABLE_EMPLOYEES, null, contentValues);
-        return (int)id;
+        if (id != -1){
+            onFinishedTransactionListener.onInsertSuccess();
+        }
     }
 
-    /**
-     * Updates Status field on Employees table with the passed boolean value
-     * to be applied to the rows that contains the passed set of employees' ids.
-     *
-     * @param ids       set of employees' ids
-     * @param isActive  either true or false value to be used on update
-     */
+    /** {@inheritDoc} */
     @Override
-    public void updateEmployeeStatus(Integer[] ids, boolean isActive) {
+    public void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListeners) {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getWritableDatabase();
 
@@ -67,8 +64,8 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
             Log.w("Exception: ", e);
         } finally {
             db.endTransaction();
+            onFinishedTransactionListeners.onUpdateSuccess();
         }
-
     }
 
     @Override
@@ -85,15 +82,15 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
-    public Cursor readEmployees() {
+    public void readEmployees(OnFinishedTransactionListener onFinishedTransactionListeners) {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
         Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
-        return cursor;
+        if (cursor != null){
+            onFinishedTransactionListeners.onReadSuccess(cursor);
+        }
     }
 
     public static boolean deleteEmployee(TimeClockDbHelper timeClockDbHelper, int id){

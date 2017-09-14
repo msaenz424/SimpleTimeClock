@@ -7,4 +7,5 @@
     <string name="dialog_cancel_button">Cancel</string>
     <string name="item_title_delete">Delete</string>
     <string name="item_title_add">Add New Employee</string>
+    <string name="status_update_message">Status updated!</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,7 +27,7 @@ public class AllEmployeesFragment extends Fragment
     boolean actionMode = false;
     TextView mCounterTextView;
     AllEmployeesPresenter mAllEmployeesPresenter;
-    FloatingActionButton mAddEmployeeFab;
+    FloatingActionButton mFabSetActiveEmployee;
     RecyclerView mAllEmployeesRecyclerView;
     View rootView;
 
@@ -38,16 +39,16 @@ public class AllEmployeesFragment extends Fragment
         mCounterTextView = rootView.findViewById(R.id.counter_text_view);
         mCounterTextView.setVisibility(View.GONE);
 
-        mAddEmployeeFab = (FloatingActionButton) rootView.findViewById(R.id.fab_add_employee);
-        mAddEmployeeFab.setOnClickListener(new View.OnClickListener() {
+        mFabSetActiveEmployee = rootView.findViewById(R.id.fab_set_active_employee);
+        mFabSetActiveEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
-                mAllEmployeesPresenter.setActiveEmployees(allEmployeesAdapter.getEmployeesIds(), true);
+                mAllEmployeesPresenter.onActionDoneClicked(allEmployeesAdapter.getEmployeesIds(), true);
             }
         });
 
-        mAllEmployeesRecyclerView = (RecyclerView) rootView.findViewById(R.id.all_employees_recycler_view);
+        mAllEmployeesRecyclerView = rootView.findViewById(R.id.all_employees_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mAllEmployeesRecyclerView.setLayoutManager(layoutManager);
         mAllEmployeesRecyclerView.hasFixedSize();
@@ -55,15 +56,26 @@ public class AllEmployeesFragment extends Fragment
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
 
         mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
-        mAllEmployeesPresenter.loadAllEmployees();
+        mAllEmployeesPresenter.onResume();
 
         return rootView;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showAllEmployees(Cursor employeesCursor) {
         AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
         allEmployeesAdapter.setAllEmployeesData(employeesCursor);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showStatusUpdateMessage() {
+        Snackbar mySnackbar = Snackbar.make(
+                rootView,
+                R.string.status_update_message,
+                Snackbar.LENGTH_SHORT);
+        mySnackbar.show();
     }
 
     /**
@@ -75,16 +87,16 @@ public class AllEmployeesFragment extends Fragment
      */
     public void setNewEmployeeData(String name, double wage){
         Log.d("passed" , name + " " + wage);
-        mAllEmployeesPresenter.addEmployee(name, wage);
+        mAllEmployeesPresenter.onActionAddClicked(name, wage);
     }
 
     @Override
     public void onTap(boolean actionMode) {
         this.actionMode = actionMode;
         if (this.actionMode){
-            mAddEmployeeFab.setVisibility(View.VISIBLE);
+            mFabSetActiveEmployee.setVisibility(View.VISIBLE);
         } else {
-            mAddEmployeeFab.setVisibility(View.INVISIBLE);
+            mFabSetActiveEmployee.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -1,12 +1,11 @@
 package com.android.mig.simpletimeclock.presenter;
 
-
 public interface AllEmployeesPresenter {
 
-    void loadAllEmployees();
+    void onResume();
 
-    void addEmployee(String name, double wage);
+    void onActionAddClicked(String name, double wage);
 
-    void setActiveEmployees(Integer[] ids, boolean isActive);
+    void onActionDoneClicked(Integer[] ids, boolean isActive);
 
 }
