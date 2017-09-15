@@ -17,6 +17,21 @@ public interface AllEmployeesView {
     void showStatusUpdateMessage();
 
     /**
+     * Displays a successful delete message
+     */
+    void showSuccessDeleteMessage();
+
+    /**
+     * Warns the user that some items couldn't be deleted
+     */
+    void showPartialDeleteMessage();
+
+    /**
+     * Warns the user that the deletion failed
+     */
+    void showFailedDeleteMessage();
+
+    /**
      * Displays Done FAB
      */
     void showFabDoneButton();

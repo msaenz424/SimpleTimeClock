@@ -52,12 +52,13 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                /*
                 int empID = (int) viewHolder.itemView.getTag();
                 if (direction == ItemTouchHelper.LEFT){
                     EmployeesInteractorImpl.deleteEmployee(mTimeClockDbHelper, empID);
                     mEmployeeAdapter.deleteEmployee(viewHolder.getAdapterPosition());
                 }
-
+                */
             }
         }).attachToRecyclerView(mEmployeeRecyclerView);
 

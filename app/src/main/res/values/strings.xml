@@ -8,4 +8,7 @@
     <string name="item_title_delete">Delete</string>
     <string name="item_title_add">Add New Employee</string>
     <string name="status_update_message">Status updated!</string>
+    <string name="success_delete_message">Items deleted successfully</string>
+    <string name="partial_delete_message">Some items couldn\'t be deleted</string>
+    <string name="failed_delete_message">An error has occurred, please try again</string>
 </resources>

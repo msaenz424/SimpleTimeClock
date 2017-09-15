@@ -22,6 +22,21 @@ public interface EmployeesInteractor {
          * Triggers a response after a successful update in database
          */
         void onUpdateSuccess();
+
+        /**
+         * Triggers a response for a successful deletion
+         */
+        void onDeleteSuccess();
+
+        /**
+         * Triggers a response for partial deletions
+         */
+        void onPartialDeleteSuccess();
+
+        /**
+         * Triggers a response if no deletion was performed
+         */
+        void onDeleteFail();
     }
 
     Cursor readActiveEmployees();
@@ -50,5 +65,13 @@ public interface EmployeesInteractor {
      * @param onFinishedTransactionListener     callback listener
      */
     void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListener);
+
+    /**
+     * Delete rows from Employees table in database
+     *
+     * @param ids                               employees id
+     * @param onFinishedTransactionListener     callback listener
+     */
+    void deleteEmployee(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener);
 
 }

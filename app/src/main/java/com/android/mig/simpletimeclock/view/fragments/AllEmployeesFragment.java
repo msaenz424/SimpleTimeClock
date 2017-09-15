@@ -53,6 +53,10 @@ public class AllEmployeesFragment extends Fragment
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.menu_item_delete){
+                AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
+                mAllEmployeesPresenter.onActionDeleteClicked(allEmployeesAdapter.getEmployeesIds());
+            }
             mode.finish();
             return true;
         }
@@ -107,6 +111,36 @@ public class AllEmployeesFragment extends Fragment
                 rootView,
                 R.string.status_update_message,
                 Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showSuccessDeleteMessage() {
+        Snackbar snackbar = Snackbar.make(
+                rootView,
+                R.string.success_delete_message,
+                Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showPartialDeleteMessage() {
+        Snackbar snackbar = Snackbar.make(
+                rootView,
+                R.string.partial_delete_message,
+                Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void showFailedDeleteMessage() {
+        Snackbar snackbar = Snackbar.make(
+                rootView,
+                R.string.failed_delete_message,
+                Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 

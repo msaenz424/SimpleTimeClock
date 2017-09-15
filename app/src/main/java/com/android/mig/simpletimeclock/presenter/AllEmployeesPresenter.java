@@ -8,4 +8,6 @@ public interface AllEmployeesPresenter {
 
     void onActionDoneClicked(Integer[] ids, boolean isActive);
 
+    void onActionDeleteClicked(Integer[] ids);
+
 }

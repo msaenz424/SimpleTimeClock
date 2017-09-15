@@ -68,6 +68,34 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void deleteEmployee(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener) {
+        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
+        final SQLiteDatabase db = mTimeClockDbHelper.getWritableDatabase();
+        int c = 0;                  // counts num of rows deleted
+        boolean isDeleted = true;   // tracks if a row couldn't be deleted
+        for (int i = 0; i < ids.length; i++){
+            int deleted = db.delete(Employees.TABLE_EMPLOYEES, Employees.EMP_ID + "=" + ids[i], null);
+            if (deleted == 0){
+                isDeleted = false;
+            } else {
+                c++;
+            }
+        }
+        // if all intended rows are deleted
+        if (isDeleted) {
+            onFinishedTransactionListener.onDeleteSuccess();
+        } else{
+            // if at least one row is deleted
+            if (c >= 1){
+                onFinishedTransactionListener.onPartialDeleteSuccess();
+            } else {
+                onFinishedTransactionListener.onDeleteFail();
+            }
+        }
+    }
+
     @Override
     public Cursor readActiveEmployees() {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
@@ -91,13 +119,5 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         if (cursor != null){
             onFinishedTransactionListeners.onReadSuccess(cursor);
         }
-    }
-
-    public static boolean deleteEmployee(TimeClockDbHelper timeClockDbHelper, int id){
-        final SQLiteDatabase db = timeClockDbHelper.getWritableDatabase();
-        int deleted = db.delete(Employees.TABLE_EMPLOYEES, Employees.EMP_ID + "=" + id, null);
-        if (deleted > 0)
-            return true;
-        return false;
     }
 }

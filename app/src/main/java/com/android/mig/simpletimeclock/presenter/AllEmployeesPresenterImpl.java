@@ -33,6 +33,11 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
         mEmployeesInteractor.updateEmployeeStatus(ids, isActive, this);
     }
 
+    @Override
+    public void onActionDeleteClicked(Integer[] ids) {
+        mEmployeesInteractor.deleteEmployee(ids, this);
+    }
+
     private void loadAllEmployees(Cursor employees){
         mAllEmployeesView.showAllEmployees(employees);
     }
@@ -53,6 +58,27 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
     @Override
     public void onUpdateSuccess() {
         mAllEmployeesView.showStatusUpdateMessage();
+        mAllEmployeesView.resetScreen();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onDeleteSuccess() {
+        mAllEmployeesView.showSuccessDeleteMessage();
+        mAllEmployeesView.resetScreen();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onPartialDeleteSuccess() {
+        mAllEmployeesView.showPartialDeleteMessage();
+        mAllEmployeesView.resetScreen();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onDeleteFail() {
+        mAllEmployeesView.showFailedDeleteMessage();
         mAllEmployeesView.resetScreen();
     }
 }
