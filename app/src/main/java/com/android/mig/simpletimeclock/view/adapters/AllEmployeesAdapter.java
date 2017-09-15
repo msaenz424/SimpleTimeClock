@@ -58,7 +58,10 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
 
     @Override
     public int getItemCount() {
-        return mAllEmployeesCursor.getCount();
+        if (mAllEmployeesCursor != null) {
+            return mAllEmployeesCursor.getCount();
+        }
+        return 0;
     }
 
     class AllEmployeesViewHolder extends RecyclerView.ViewHolder

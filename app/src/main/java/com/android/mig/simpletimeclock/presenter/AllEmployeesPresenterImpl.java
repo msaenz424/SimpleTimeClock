@@ -38,14 +38,10 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
         mEmployeesInteractor.deleteEmployee(ids, this);
     }
 
-    private void loadAllEmployees(Cursor employees){
-        mAllEmployeesView.showAllEmployees(employees);
-    }
-
     /** {@inheritDoc} */
     @Override
     public void onReadSuccess(Cursor readQuery) {
-        loadAllEmployees(readQuery);
+        mAllEmployeesView.showAllEmployees(readQuery);
     }
 
     /** {@inheritDoc} */
