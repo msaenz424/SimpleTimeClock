@@ -4,7 +4,11 @@ import android.database.Cursor;
 
 public interface ActiveEmployeesPresenter {
 
-    Cursor getActiveEmployees();
+    void onResume();
+
+    void onItemSwiped();
+
+    void onAddButtonClicked();
 
     void showActiveEmployees(Cursor activeEmployeesCursor);
 

@@ -2,10 +2,7 @@ package com.android.mig.simpletimeclock.source.model;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import com.android.mig.simpletimeclock.source.TimeClockContract.Employees;
-import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.tasks.DeleteTask;
 import com.android.mig.simpletimeclock.source.model.tasks.InsertTask;
 import com.android.mig.simpletimeclock.source.model.tasks.ReadEmployeesTask;
@@ -50,20 +47,6 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
     public void deleteEmployee(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener) {
         DeleteTask deleteTask = new DeleteTask(mContext, onFinishedTransactionListener);
         deleteTask.execute(ids);
-    }
-
-    @Override
-    public Cursor readActiveEmployees() {
-        TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
-        final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
-
-        String returnColumns[] = {Employees.EMP_ID, Employees.EMP_NAME};
-        String where = Employees.EMP_STATUS + " = " + ACTIVE_STATUS;
-
-        Cursor cursor = db.query(Employees.TABLE_EMPLOYEES, returnColumns, where, null, null, null, null);
-        if (cursor.getCount() > 0)
-            return cursor;
-        return null;
     }
 
     /** {@inheritDoc} */

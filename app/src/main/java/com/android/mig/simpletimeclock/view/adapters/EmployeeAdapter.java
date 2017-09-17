@@ -15,20 +15,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int EMPLOYEE_COL_ID_INDEX = 0;
     private static final int EMPLOYEE_COL_NAME_INDEX = 1;
 
-    Cursor mEmployeesCursor = null;
+    private Cursor mEmployeesCursor = null;
 
     public void setEmployeesData(Cursor employeesData){
-        mEmployeesCursor = employeesData;
-        notifyDataSetChanged();
-    }
-
-    public void addNewEmployeeToArrayList(int empID, String empName){
-        //mEmployeesCursor.add(new Employee(empID, empName));
-        notifyDataSetChanged();
-    }
-
-    public void deleteEmployee(int position){
-        //mEmployeesArrayList.remove(position);
+        this.mEmployeesCursor = employeesData;
         notifyDataSetChanged();
     }
 
@@ -37,9 +27,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.item_employee;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem, parent, false);
         EmployeeViewHolder viewHolder = new EmployeeViewHolder(view);
         return viewHolder;
     }
@@ -63,9 +52,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     class EmployeeViewHolder extends RecyclerView.ViewHolder {
         TextView tvEmployee;
 
-        public EmployeeViewHolder(View itemView) {
+        EmployeeViewHolder(View itemView) {
             super(itemView);
-            tvEmployee = (TextView) itemView.findViewById(R.id.tv_employee);
+            tvEmployee = itemView.findViewById(R.id.tv_employee);
         }
     }
 

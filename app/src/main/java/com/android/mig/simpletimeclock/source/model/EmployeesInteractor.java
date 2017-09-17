@@ -39,8 +39,6 @@ public interface EmployeesInteractor {
         void onDeleteFail();
     }
 
-    Cursor readActiveEmployees();
-
     /**
      * Performs a query to Employees table in database
      *
