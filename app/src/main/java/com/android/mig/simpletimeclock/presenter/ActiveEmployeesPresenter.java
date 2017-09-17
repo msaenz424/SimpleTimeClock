@@ -6,7 +6,7 @@ public interface ActiveEmployeesPresenter {
 
     void onResume();
 
-    void onItemSwiped();
+    void onItemSwiped(Integer[] ids, boolean isActive);
 
     void onAddButtonClicked();
 

@@ -23,8 +23,8 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onItemSwiped() {
-
+    public void onItemSwiped(Integer[] ids, boolean isActive) {
+        this.mActiveEmployeesInteractor.updateEmployeeStatus(ids, isActive, this);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
 
     @Override
     public void showActiveEmployees(Cursor activeEmployeesCursor) {
-        mMainView.showActiveEmployees(activeEmployeesCursor);
+        //mMainView.showActiveEmployees(activeEmployeesCursor);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
 
     @Override
     public void onUpdateSuccess() {
-
+        onResume();
     }
 }

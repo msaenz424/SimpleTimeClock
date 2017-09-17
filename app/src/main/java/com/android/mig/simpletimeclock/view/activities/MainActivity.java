@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity
         implements MainView {
 
     private RecyclerView mEmployeeRecyclerView;
+    private ActiveEmployeesPresenter mActiveEmployeesPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                /*
-                int empID = (int) viewHolder.itemView.getTag();
-                if (direction == ItemTouchHelper.LEFT){
-                    EmployeesInteractorImpl.deleteEmployee(mTimeClockDbHelper, empID);
-                    mEmployeeAdapter.deleteEmployee(viewHolder.getAdapterPosition());
-                }
-                */
+                Integer[] id = new Integer[1];
+                id[0] = Integer.parseInt(viewHolder.itemView.getTag().toString());
+                mActiveEmployeesPresenter.onItemSwiped(id, false);
             }
         }).attachToRecyclerView(mEmployeeRecyclerView);
     }
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        ActiveEmployeesPresenter mActiveEmployeesPresenter = new ActiveEmployeesPresenterImpl(this, this);
+        mActiveEmployeesPresenter = new ActiveEmployeesPresenterImpl(this, this);
         mActiveEmployeesPresenter.onResume();
     }
 
