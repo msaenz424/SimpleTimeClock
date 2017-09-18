@@ -3,8 +3,9 @@ package com.android.mig.simpletimeclock.source.model;
 import android.content.ContentValues;
 import android.content.Context;
 import com.android.mig.simpletimeclock.source.TimeClockContract.Employees;
-import com.android.mig.simpletimeclock.source.model.tasks.DeleteTask;
-import com.android.mig.simpletimeclock.source.model.tasks.InsertTask;
+import com.android.mig.simpletimeclock.source.model.tasks.DeleteEmployeeTask;
+import com.android.mig.simpletimeclock.source.model.tasks.InsertEmployeeTask;
+import com.android.mig.simpletimeclock.source.model.tasks.InsertTimeTask;
 import com.android.mig.simpletimeclock.source.model.tasks.ReadEmployeesTask;
 import com.android.mig.simpletimeclock.source.model.tasks.UpdateStatusTask;
 
@@ -27,7 +28,7 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         contentValues.put(Employees.EMP_STATUS, INACTIVE_STATUS);
         contentValues.put(Employees.EMP_WAGE, wage);
 
-        InsertTask insertTask = new InsertTask(mContext, onFinishedTransactionListener);
+        InsertEmployeeTask insertTask = new InsertEmployeeTask(mContext, onFinishedTransactionListener);
         insertTask.execute(contentValues);
     }
 
@@ -40,12 +41,14 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
         }
         UpdateStatusTask updateStatusTask = new UpdateStatusTask(mContext, onFinishedTransactionListeners);
         updateStatusTask.execute(ids, mStatus);
+        InsertTimeTask insertTimeTask = new InsertTimeTask(mContext, onFinishedTransactionListeners);
+        insertTimeTask.execute(ids);
     }
 
     /** {@inheritDoc} */
     @Override
     public void deleteEmployee(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener) {
-        DeleteTask deleteTask = new DeleteTask(mContext, onFinishedTransactionListener);
+        DeleteEmployeeTask deleteTask = new DeleteEmployeeTask(mContext, onFinishedTransactionListener);
         deleteTask.execute(ids);
     }
 

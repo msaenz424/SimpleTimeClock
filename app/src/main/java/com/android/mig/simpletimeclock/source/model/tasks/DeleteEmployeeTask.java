@@ -8,12 +8,12 @@ import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
 
-public class DeleteTask extends AsyncTask<Integer[], Void, DeleteTask.ResponseWrapper>{
+public class DeleteEmployeeTask extends AsyncTask<Integer[], Void, DeleteEmployeeTask.ResponseWrapper>{
 
     private Context mContext;
     private EmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
 
-    public DeleteTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
+    public DeleteEmployeeTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
         this.mContext = context;
         this.mOnFinishedTransactionListener = onFinishedTransactionListener;
     }

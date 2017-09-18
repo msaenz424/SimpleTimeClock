@@ -1,6 +1,5 @@
 package com.android.mig.simpletimeclock.source;
 
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -30,8 +29,10 @@ public class TimeClockDbHelper extends SQLiteOpenHelper {
                 TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " INTEGER, " +
-                TimeClockContract.Timeclock.TIMECLOCK_BREAK_IN + " INTEGER, " +
-                TimeClockContract.Timeclock.TIMECLOCK_BREAK_OUT + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_STATUS + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_PAID + " INTEGER, " +
                 "FOREIGN KEY(" +  TimeClockContract.Timeclock.TIMECLOCK_EMP_ID  + ") REFERENCES " + TimeClockContract.Employees.TABLE_EMPLOYEES + "(" + TimeClockContract.Employees.EMP_ID + ")" +
                 "); ";
 

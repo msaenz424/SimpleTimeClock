@@ -9,12 +9,12 @@ import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
 
-public class InsertTask extends AsyncTask<ContentValues, Void, Long> {
+public class InsertEmployeeTask extends AsyncTask<ContentValues, Void, Long> {
 
     private Context mContext;
     private EmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
 
-    public InsertTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
+    public InsertEmployeeTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
         this.mContext = context;
         this.mOnFinishedTransactionListener = onFinishedTransactionListener;
     }
