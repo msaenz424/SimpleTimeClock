@@ -24,27 +24,13 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onItemSwiped(Integer[] ids, boolean isActive) {
-        //this.mActiveEmployeesInteractor.updateEmployeeStatus(ids, isActive, this);
+    public void onItemSwiped(Integer[] ids) {
+        this.mActiveEmployeesInteractor.updateTimeStatus(ids, this);
+
     }
 
     @Override
     public void onAddButtonClicked() {
-
-    }
-
-    @Override
-    public void showActiveEmployees(Cursor activeEmployeesCursor) {
-        //mMainView.showActiveEmployees(activeEmployeesCursor);
-    }
-
-    @Override
-    public void setActiveEmployee(String[] employeeId) {
-
-    }
-
-    @Override
-    public void resetActiveEmployee(String[] employeeId) {
 
     }
 

@@ -12,14 +12,28 @@ import com.android.mig.simpletimeclock.R;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    private static final int EMPLOYEE_COL_ID_INDEX = 0;
-    private static final int EMPLOYEE_COL_NAME_INDEX = 1;
+    private static final int EMPLOYEE_COL_ID_INDEX = 1;
+    private static final int EMPLOYEE_COL_NAME_INDEX = 2;
 
     private Cursor mEmployeesCursor = null;
 
     public void setEmployeesData(Cursor employeesData){
         this.mEmployeesCursor = employeesData;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Obtains the timeclock id and the employee id
+     *
+     * @param position adapter position
+     * @return both ids
+     */
+    public Integer[] getItemIds(int position){
+        Integer[] ids = new Integer[2];
+        mEmployeesCursor.moveToPosition(position);
+        ids[0] = mEmployeesCursor.getInt(0);
+        ids[1] = mEmployeesCursor.getInt(1);
+        return ids;
     }
 
     @Override

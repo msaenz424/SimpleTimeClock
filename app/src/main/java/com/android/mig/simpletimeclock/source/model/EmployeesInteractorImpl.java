@@ -33,7 +33,7 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
 
     /** {@inheritDoc} */
     @Override
-    public void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListeners) {
+    public void insertTime(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListeners) {
         InsertTimeTask insertTimeTask = new InsertTimeTask(mContext, onFinishedTransactionListeners);
         insertTimeTask.execute(ids);
     }

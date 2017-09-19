@@ -13,5 +13,5 @@ public interface ActiveEmployeesInteractor {
 
     void readActiveEmployees(OnFinishedTransactionListener onFinishedTransactionListener);
 
-    void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListener);
+    void updateTimeStatus(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener);
 }

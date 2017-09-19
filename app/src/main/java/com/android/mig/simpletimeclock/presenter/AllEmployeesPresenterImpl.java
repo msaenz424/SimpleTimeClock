@@ -29,8 +29,8 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
     }
 
     @Override
-    public void onActionDoneClicked(Integer[] ids, boolean isActive) {
-        mEmployeesInteractor.updateEmployeeStatus(ids, isActive, this);
+    public void onActionDoneClicked(Integer[] ids) {
+        mEmployeesInteractor.insertTime(ids, this);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
 
     /** {@inheritDoc} */
     @Override
-    public void onUpdateSuccess() {
+    public void onInsertTimeSuccess() {
         mAllEmployeesView.showStatusUpdateMessage();
         mAllEmployeesView.resetScreen();
     }

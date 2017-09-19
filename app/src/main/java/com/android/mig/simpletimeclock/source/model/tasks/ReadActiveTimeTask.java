@@ -14,6 +14,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
 
     private final int ACTIVE_TIME_STATUS = 1;
     private final String ACTIVE_TIME_QUERY = "SELECT " +
+            "t." + TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_NAME + ", " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
@@ -24,11 +25,11 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
             " WHERE t." + TimeClockContract.Timeclock.TIMECLOCK_STATUS + " =?";
 
     private Context mContext;
-    private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
+    private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionActiveListener;
 
     public ReadActiveTimeTask(Context context, ActiveEmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
         this.mContext = context;
-        this.mOnFinishedTransactionListener = onFinishedTransactionListener;
+        this.mOnFinishedTransactionActiveListener = onFinishedTransactionListener;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
     @Override
     protected void onPostExecute(Cursor responseCursor) {
         if (responseCursor != null){
-            mOnFinishedTransactionListener.onReadSuccess(responseCursor);
+            mOnFinishedTransactionActiveListener.onReadSuccess(responseCursor);
         }
     }
 }

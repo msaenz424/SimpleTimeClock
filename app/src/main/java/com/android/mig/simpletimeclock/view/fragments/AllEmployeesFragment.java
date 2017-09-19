@@ -80,7 +80,7 @@ public class AllEmployeesFragment extends Fragment
             @Override
             public void onClick(View view) {
                 AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
-                mAllEmployeesPresenter.onActionDoneClicked(allEmployeesAdapter.getEmployeesIds(), true);
+                mAllEmployeesPresenter.onActionDoneClicked(allEmployeesAdapter.getEmployeesIds());
             }
         });
 

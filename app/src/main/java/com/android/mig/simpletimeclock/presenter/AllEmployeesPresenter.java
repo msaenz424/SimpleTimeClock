@@ -6,7 +6,7 @@ public interface AllEmployeesPresenter {
 
     void onActionAddClicked(String name, double wage);
 
-    void onActionDoneClicked(Integer[] ids, boolean isActive);
+    void onActionDoneClicked(Integer[] ids);
 
     void onActionDeleteClicked(Integer[] ids);
 

@@ -63,7 +63,7 @@ public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
     @Override
     protected void onPostExecute(Boolean isSuccess) {
         if (isSuccess){
-            this.mOnFinishedTransactionListener.onUpdateSuccess();
+            this.mOnFinishedTransactionListener.onInsertTimeSuccess();
         }
     }
 }

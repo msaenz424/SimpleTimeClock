@@ -2,6 +2,7 @@ package com.android.mig.simpletimeclock.source.model;
 
 import android.content.Context;
 import com.android.mig.simpletimeclock.source.model.tasks.ReadActiveTimeTask;
+import com.android.mig.simpletimeclock.source.model.tasks.UpdateTimeStatusTask;
 
 public class ActiveEmployeesInteractorImpl implements ActiveEmployeesInteractor {
 
@@ -18,7 +19,8 @@ public class ActiveEmployeesInteractorImpl implements ActiveEmployeesInteractor 
     }
 
     @Override
-    public void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListener) {
-
+    public void updateTimeStatus(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener) {
+        UpdateTimeStatusTask updateTimeStatusTask = new UpdateTimeStatusTask(mContext, onFinishedTransactionListener);
+        updateTimeStatusTask.execute(ids);
     }
 }

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
@@ -41,9 +42,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Integer[] id = new Integer[1];
-                id[0] = Integer.parseInt(viewHolder.itemView.getTag().toString());
-                mActiveEmployeesPresenter.onItemSwiped(id, false);
+                Integer[] ids;
+                int position = viewHolder.getAdapterPosition();
+                EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
+                ids = employeeAdapter.getItemIds(position);
+                mActiveEmployeesPresenter.onItemSwiped(ids);
             }
         }).attachToRecyclerView(mEmployeeRecyclerView);
     }

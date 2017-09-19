@@ -19,9 +19,9 @@ public interface EmployeesInteractor {
         void onInsertSuccess();
 
         /**
-         * Triggers a response after a successful update in database
+         * Triggers a response after a successful insert of a new time in database
          */
-        void onUpdateSuccess();
+        void onInsertTimeSuccess();
 
         /**
          * Triggers a response for a successful deletion
@@ -59,10 +59,9 @@ public interface EmployeesInteractor {
      * Performs a status update in Employees table in database
      *
      * @param ids                               employees id
-     * @param isActive                          new status
      * @param onFinishedTransactionListener     callback listener
      */
-    void updateEmployeeStatus(Integer[] ids, boolean isActive, OnFinishedTransactionListener onFinishedTransactionListener);
+    void insertTime(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener);
 
     /**
      * Delete rows from Employees table in database
