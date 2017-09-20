@@ -15,7 +15,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int EMPLOYEE_COL_ID_INDEX = 1;
     private static final int EMPLOYEE_COL_NAME_INDEX = 2;
 
+    private final OnClickHandler mOnClickHandler;
+
     private Cursor mEmployeesCursor = null;
+
+    public EmployeeAdapter(OnClickHandler onClickHandler) {
+        this.mOnClickHandler = onClickHandler;
+    }
 
     public void setEmployeesData(Cursor employeesData){
         this.mEmployeesCursor = employeesData;
@@ -63,13 +69,24 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 
-    class EmployeeViewHolder extends RecyclerView.ViewHolder {
+    class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvEmployee;
 
         EmployeeViewHolder(View itemView) {
             super(itemView);
             tvEmployee = itemView.findViewById(R.id.tv_employee);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            mEmployeesCursor.moveToPosition(getAdapterPosition());
+            mOnClickHandler.onItemClick(mEmployeesCursor.getInt(EMPLOYEE_COL_ID_INDEX));
+        }
+    }
+
+    public interface OnClickHandler{
+        void onItemClick(int employeeId);
     }
 
 }

@@ -11,4 +11,11 @@
     <string name="success_delete_message">Items deleted successfully</string>
     <string name="partial_delete_message">Some items couldn\'t be deleted</string>
     <string name="failed_delete_message">An error has occurred, please try again</string>
+
+    <!-- EmployeeDetailsActivity -->
+    <string name="text_wage">Wage:</string>
+    <string name="text_total_hours_worked">Total Hours Worked:\u0020</string>
+    <string name="text_total_earnings">Total Earnings:\u0020</string>
+    <string name="text_periodic_earnings">Periodic Earnings:\u0020</string>
+    <string name="text_periodic_worked_hours">Periodic Hours Worked:\u0020</string>
 </resources>

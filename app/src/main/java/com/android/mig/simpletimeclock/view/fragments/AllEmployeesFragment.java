@@ -153,7 +153,7 @@ public class AllEmployeesFragment extends Fragment
     /** {@inheritDoc} */
     @Override
     public void hideFabDoneButton() {
-        mFabSetActiveEmployee.setVisibility(View.INVISIBLE);
+        mFabSetActiveEmployee.setVisibility(View.GONE);
     }
 
     /** {@inheritDoc} */

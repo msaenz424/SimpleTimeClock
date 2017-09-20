@@ -10,4 +10,14 @@
     <dimen name="fab_margin_bottom">16dp</dimen>
     <dimen name="item_horizontal_padding">16dp</dimen>
     <dimen name="item_vertical_padding">4dp</dimen>
+
+    <!-- EmployeeDetailsActivity -->
+    <dimen name="det_textview_size">16sp</dimen>
+    <dimen name="cardview_content_padding">16dp</dimen>
+    <dimen name="cardview_elevation">8dp</dimen>
+    <dimen name="cardview_margin">8dp</dimen>
+    <dimen name="cardview_top_overlap">30dp</dimen>
+    <dimen name="det_status_icon_size">60dp</dimen>
+    <dimen name="det_item_icon_size">40dp</dimen>
+    <dimen name="det_textview_left_padding">16dp</dimen>
 </resources>

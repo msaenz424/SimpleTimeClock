@@ -14,4 +14,17 @@
         <item name="actionModeBackground">@color/colorAccent</item>
     </style>
 
+    <style name="CardViewTextItem">
+        <item name="android:textSize">@dimen/det_textview_size</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/det_textview_left_padding</item>
+        <item name="android:paddingTop">@dimen/item_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/item_vertical_padding</item>
+    </style>
+
+    <style name="LinearLayoutVerticalMargin">
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+    </style>
+
 </resources>

@@ -16,7 +16,7 @@ import com.android.mig.simpletimeclock.view.MainView;
 import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 
 public class MainActivity extends AppCompatActivity
-        implements MainView {
+        implements MainView, EmployeeAdapter.OnClickHandler {
 
     private RecyclerView mEmployeeRecyclerView;
     private ActiveEmployeesPresenter mActiveEmployeesPresenter;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEmployeeRecyclerView.setLayoutManager(layoutManager);
         mEmployeeRecyclerView.hasFixedSize();
-        EmployeeAdapter mEmployeeAdapter = new EmployeeAdapter();
+        EmployeeAdapter mEmployeeAdapter = new EmployeeAdapter(this);
         mEmployeeRecyclerView.setAdapter(mEmployeeAdapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -67,5 +67,12 @@ public class MainActivity extends AppCompatActivity
     public void showActiveEmployees(Cursor employees) {
         EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
         employeeAdapter.setEmployeesData(employees);
+    }
+
+    @Override
+    public void onItemClick(int employeeId) {
+        Intent intent = new Intent(this, EmployeeDetailsActivity.class);
+        intent.putExtra(Intent.EXTRA_UID, employeeId);
+        startActivity(intent);
     }
 }
