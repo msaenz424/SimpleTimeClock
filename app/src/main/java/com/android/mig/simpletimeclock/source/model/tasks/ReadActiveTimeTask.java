@@ -12,7 +12,6 @@ import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
 
 public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
 
-    private final int ACTIVE_TIME_STATUS = 1;
     private final String ACTIVE_TIME_QUERY = "SELECT " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_ID + ", " +
@@ -22,7 +21,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
             "t." + TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " FROM " +
             TimeClockContract.Employees.TABLE_EMPLOYEES + " e INNER JOIN " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " t" +
             " ON e." + TimeClockContract.Employees.EMP_ID + " = t." + TimeClockContract.Timeclock.TIMECLOCK_EMP_ID +
-            " WHERE t." + TimeClockContract.Timeclock.TIMECLOCK_STATUS + " =?";
+            " WHERE t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NULL";
 
     private Context mContext;
     private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionActiveListener;
@@ -39,7 +38,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
         try {
             db.beginTransaction();
-            responseCursor = db.rawQuery(ACTIVE_TIME_QUERY, new String[]{String.valueOf(ACTIVE_TIME_STATUS)});
+            responseCursor = db.rawQuery(ACTIVE_TIME_QUERY, null);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.w("Exception: ", e);

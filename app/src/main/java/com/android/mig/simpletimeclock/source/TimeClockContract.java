@@ -8,7 +8,6 @@ public class TimeClockContract {
         public static final String TABLE_EMPLOYEES = "employees";
         public static final String EMP_ID = "emp_id";
         public static final String EMP_NAME = "emp_name";
-        public static final String EMP_STATUS = "emp_status";
         public static final String EMP_WAGE = "emp_wage";
     }
 
@@ -20,7 +19,6 @@ public class TimeClockContract {
         public static final String TIMECLOCK_CLOCK_OUT = "clock_out";
         public static final String TIMECLOCK_BREAK_START = "break_start";
         public static final String TIMECLOCK_BREAK_END = "break_end";
-        public static final String TIMECLOCK_STATUS = "time_status";
         public static final String TIMECLOCK_WAGE = "time_wage";
         public static final String TIMECLOCK_PAID = "time_paid";
     }

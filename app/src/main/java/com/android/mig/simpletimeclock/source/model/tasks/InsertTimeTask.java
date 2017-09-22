@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.source.model.tasks;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
@@ -11,6 +12,11 @@ import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
 
 public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
+
+    private final String EMPLOYEE_QUERY = "SELECT " +
+            TimeClockContract.Employees.EMP_WAGE + " FROM " +
+            TimeClockContract.Employees.TABLE_EMPLOYEES + " WHERE " +
+            TimeClockContract.Employees.EMP_ID + " =?";
 
     private Context mContext;
     private EmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
@@ -31,18 +37,25 @@ public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
             String sqlUpdateQuery = "INSERT INTO " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " (" +
                     TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + ", " +
                     TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
-                    TimeClockContract.Timeclock.TIMECLOCK_STATUS + ", " +
+                    TimeClockContract.Timeclock.TIMECLOCK_WAGE + ", " +
                     TimeClockContract.Timeclock.TIMECLOCK_PAID +
-                    ") VALUES (?,?,1,0);";
+                    ") VALUES (?,?,?,0);";
 
             SQLiteStatement sqLiteStatement = db.compileStatement(sqlUpdateQuery);
 
             Integer[] ids = params[0];
 
             for (int i = 0; i < ids.length; i++){
+                // gets the current wage for the corresponding employee
+                Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{String.valueOf(ids[i])});
+                employeeCursor.moveToPosition(0);
+                double empWage = employeeCursor.getDouble(0);
+                employeeCursor.close();
+
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindLong(1, ids[i]);
                 sqLiteStatement.bindLong(2, System.currentTimeMillis() / 1000 );
+                sqLiteStatement.bindDouble(3, empWage);
                 Long rowInserted = sqLiteStatement.executeInsert();
                 if (rowInserted != -1) {
                     insertCounter++;

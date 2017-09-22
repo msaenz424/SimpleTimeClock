@@ -11,8 +11,6 @@ import com.android.mig.simpletimeclock.source.model.tasks.ReadEmployeesTask;
 
 public class EmployeesInteractorImpl implements EmployeesInteractor{
 
-    private static int INACTIVE_STATUS = 0;
-
     private Context mContext;
 
     public EmployeesInteractorImpl(Context context) {
@@ -24,7 +22,6 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
     public void insertEmployee(String name, double wage, OnFinishedTransactionListener onFinishedTransactionListener) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Employees.EMP_NAME, name);
-        contentValues.put(Employees.EMP_STATUS, INACTIVE_STATUS);
         contentValues.put(Employees.EMP_WAGE, wage);
 
         InsertEmployeeTask insertTask = new InsertEmployeeTask(mContext, onFinishedTransactionListener);

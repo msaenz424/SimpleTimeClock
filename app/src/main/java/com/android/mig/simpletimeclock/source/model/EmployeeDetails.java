@@ -9,9 +9,10 @@ public class EmployeeDetails {
     private long mTotalTimeWorked;
     private double mTotalEarnings;
 
-    public EmployeeDetails(int id, String name){
+    public EmployeeDetails(int id, String name, double wage){
         this.mID = id;
         this.mName = name;
+        this.mWage = wage;
     }
 
     public EmployeeDetails(int id, String name, double wage, long unpaidTimeWorked, double unpaidEarnings, long totalTimeWorked, double totalEarnings) {

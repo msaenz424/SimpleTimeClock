@@ -146,9 +146,9 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Log.d("emp id", String.valueOf(employeeDetails.getID()));
             Log.d("emp name", employeeDetails.getName());
             Log.d("emp wage", String.valueOf(employeeDetails.getWage()));
-            Log.d("unpaid hours", String.valueOf(employeeDetails.getUnpaidTimeWorked()));
+            Log.d("unpaid time", String.valueOf(employeeDetails.getUnpaidTimeWorked()));
             Log.d("unpaid earnings", String.valueOf(employeeDetails.getUnpaidEarnings()));
-            Log.d("total hours", String.valueOf(employeeDetails.getTotalTimeWorked()));
+            Log.d("total time", String.valueOf(employeeDetails.getTotalTimeWorked()));
             Log.d("total earnings", String.valueOf(employeeDetails.getTotalEarnings()));
             this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
         }

@@ -18,7 +18,6 @@ public class TimeClockDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_EMPLOYEES_TABLE = "CREATE TABLE " + TimeClockContract.Employees.TABLE_EMPLOYEES + " (" +
                 TimeClockContract.Employees.EMP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TimeClockContract.Employees.EMP_NAME + " TEXT NOT NULL, " +
-                TimeClockContract.Employees.EMP_STATUS + " INTEGER, " +
                 TimeClockContract.Employees.EMP_WAGE + " REAL " +
                 "); ";
 
@@ -31,11 +30,11 @@ public class TimeClockDbHelper extends SQLiteOpenHelper {
                 TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + " INTEGER DEFAULT 0, " +
                 TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " INTEGER DEFAULT 0, " +
-                TimeClockContract.Timeclock.TIMECLOCK_STATUS + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_WAGE + " REAL, " +
                 TimeClockContract.Timeclock.TIMECLOCK_PAID + " INTEGER, " +
-                "FOREIGN KEY(" +  TimeClockContract.Timeclock.TIMECLOCK_EMP_ID  + ") REFERENCES " + TimeClockContract.Employees.TABLE_EMPLOYEES + "(" + TimeClockContract.Employees.EMP_ID + ")" +
-                "); ";
+                "FOREIGN KEY(" +  TimeClockContract.Timeclock.TIMECLOCK_EMP_ID  + ") REFERENCES " +
+                TimeClockContract.Employees.TABLE_EMPLOYEES + "(" + TimeClockContract.Employees.EMP_ID + ")" +
+                ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_TIMECLOCK_TABLE);
     }

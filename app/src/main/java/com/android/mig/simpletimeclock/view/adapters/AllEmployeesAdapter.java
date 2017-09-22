@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     private Cursor mAllEmployeesCursor = null;
     private OnListTapHandler mOnTapHandler;
     private ArrayList<Integer> mSelectedItems = new ArrayList<>();
+    private ArrayList<EmployeeDetails> mSelectedEmployees = new ArrayList<>();
 
     public AllEmployeesAdapter(OnListTapHandler onTapHandler) {
         this.mOnTapHandler = onTapHandler;

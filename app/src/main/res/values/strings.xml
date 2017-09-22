@@ -18,4 +18,5 @@
     <string name="text_total_earnings">Total Earnings:\u0020</string>
     <string name="text_periodic_earnings">Periodic Earnings:\u0020</string>
     <string name="text_periodic_worked_hours">Periodic Hours Worked:\u0020</string>
+    <string name="dollar_currency_symbol">$\u0020</string>
 </resources>

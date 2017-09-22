@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.source.model.tasks;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
@@ -12,8 +13,6 @@ import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
 
 public class UpdateTimeStatusTask extends AsyncTask<Integer, Void, Boolean> {
 
-    private static int INACTIVE_STATUS = 0;
-
     private Context mContext;
     private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionActiveListener;
 
@@ -23,24 +22,24 @@ public class UpdateTimeStatusTask extends AsyncTask<Integer, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Integer... ids) {
+    protected Boolean doInBackground(Integer... params) {
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getWritableDatabase();
         Boolean isSuccess = false;
+        int timeId = params[0];
+        int empId = params[1];
         try {
             db.beginTransaction();
             String sqlUpdateQuery = "UPDATE " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " SET " +
-                    TimeClockContract.Timeclock.TIMECLOCK_STATUS + " =?, " +
                     TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " =? WHERE " +
                     TimeClockContract.Timeclock.TIMECLOCK_ID + " =? AND " +
                     TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =?";
             SQLiteStatement sqLiteStatement = db.compileStatement(sqlUpdateQuery);
 
             sqLiteStatement.clearBindings();
-            sqLiteStatement.bindLong(1, INACTIVE_STATUS);
-            sqLiteStatement.bindLong(2, System.currentTimeMillis() / 1000);
-            sqLiteStatement.bindLong(3, ids[0]);
-            sqLiteStatement.bindLong(4, ids[1]);
+            sqLiteStatement.bindLong(1, System.currentTimeMillis() / 1000);
+            sqLiteStatement.bindLong(2, timeId);
+            sqLiteStatement.bindLong(3, empId);
             sqLiteStatement.execute();
             db.setTransactionSuccessful();
             isSuccess = true;

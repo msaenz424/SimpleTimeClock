@@ -2,6 +2,7 @@ package com.android.mig.simpletimeclock.source.model;
 
 import android.content.Context;
 import com.android.mig.simpletimeclock.source.model.tasks.ReadActiveTimeTask;
+import com.android.mig.simpletimeclock.source.model.tasks.ReadEmployeesTask;
 import com.android.mig.simpletimeclock.source.model.tasks.UpdateTimeStatusTask;
 
 public class ActiveEmployeesInteractorImpl implements ActiveEmployeesInteractor {
