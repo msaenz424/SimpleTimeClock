@@ -62,6 +62,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
     @Override
     protected EmployeeDetails doInBackground(Integer... params) {
         EmployeeDetails employeeDetails = null;
+        boolean isWorking = false;
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
 
@@ -75,6 +76,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             double currentEarnings = 0;
 
             if (currentCursor.getCount() > 0) {
+                isWorking = true;
                 currentCursor.moveToPosition(0);
                 currentTime = (((System.currentTimeMillis() / 1000) - currentCursor.getLong(0)) - (currentCursor.getLong(1) - currentCursor.getLong(2)));
                 currentEarnings = currentCursor.getDouble(3) * currentTime / 60 / 60;
@@ -129,7 +131,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             }
             employeeCursor.close();
 
-            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, totalUnpaidTime, totalUnpaidEarnings, totalTime, totalEarnings);
+            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, totalUnpaidTime, totalUnpaidEarnings, totalTime, totalEarnings, isWorking);
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -150,6 +152,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Log.d("unpaid earnings", String.valueOf(employeeDetails.getUnpaidEarnings()));
             Log.d("total time", String.valueOf(employeeDetails.getTotalTimeWorked()));
             Log.d("total earnings", String.valueOf(employeeDetails.getTotalEarnings()));
+            Log.d("working?", String.valueOf(employeeDetails.getIsWorking()));
             this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
         }
     }

@@ -46,7 +46,6 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int id = getActivity().getIntent().getIntExtra(Intent.EXTRA_UID, 0);
-        boolean isActiveTime = getActivity().getIntent().getBooleanExtra(Intent.EXTRA_KEY_EVENT, true);
 
         mCollapsingToolbarLayout = rootView.findViewById(R.id.det_collapsing_layout);
         mStatusImageView = rootView.findViewById(R.id.time_status_image_view);
@@ -55,12 +54,6 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mUnpaidEarningsTextView = rootView.findViewById(R.id.det_unpaid_earnings_text_view);
         mTotalHoursTextView = rootView.findViewById(R.id.det_total_hours_text_view);
         mTotalEarningsTextView = rootView.findViewById(R.id.det_total_earnings_text_view);
-
-        if (isActiveTime){
-            mStatusImageView.setImageResource(R.drawable.im_green_light);
-        } else {
-            mStatusImageView.setImageResource(R.drawable.im_grey_light);
-        }
 
         mEmployeeDetailsPresenter = new EmployeeDetailsPresenterImpl(this, getContext());
         mEmployeeDetailsPresenter.onResume(id);
@@ -85,5 +78,10 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mTotalHoursTextView.setText(totalHours + " hours " + totalMinutes + " minutes");
         String totalEarnings = String.format(Locale.US, "%.2f", employeeDetails.getTotalEarnings());
         mTotalEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + totalEarnings);
+        if (employeeDetails.getIsWorking()){
+            mStatusImageView.setImageResource(R.drawable.im_green_light);
+        } else {
+            mStatusImageView.setImageResource(R.drawable.im_grey_light);
+        }
     }
 }
