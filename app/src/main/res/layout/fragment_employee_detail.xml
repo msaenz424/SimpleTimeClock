@@ -115,7 +115,7 @@
                         style="@style/CardViewTextItem"/>
 
                     <TextView
-                        android:id="@+id/det_hours_worked_text_view"
+                        android:id="@+id/det_unpaid_hours_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CardViewTextItem" />
@@ -140,7 +140,7 @@
                         style="@style/CardViewTextItem"/>
 
                     <TextView
-                        android:id="@+id/det_earnings"
+                        android:id="@+id/det_unpaid_earnings_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CardViewTextItem" />
@@ -170,7 +170,7 @@
                         style="@style/CardViewTextItem"/>
 
                     <TextView
-                        android:id="@+id/det_total_hours"
+                        android:id="@+id/det_total_hours_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CardViewTextItem" />
@@ -195,7 +195,7 @@
                         style="@style/CardViewTextItem"/>
 
                     <TextView
-                        android:id="@+id/det_total_earnings"
+                        android:id="@+id/det_total_earnings_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CardViewTextItem" />

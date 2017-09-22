@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemClick(int employeeId) {
         Intent intent = new Intent(this, EmployeeDetailsActivity.class);
         intent.putExtra(Intent.EXTRA_UID, employeeId);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, true);  // true means active time
         startActivity(intent);
     }
 }

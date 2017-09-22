@@ -30,15 +30,17 @@ public class UpdateTimeStatusTask extends AsyncTask<Integer, Void, Boolean> {
         try {
             db.beginTransaction();
             String sqlUpdateQuery = "UPDATE " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " SET " +
-                    TimeClockContract.Timeclock.TIMECLOCK_STATUS + " =? WHERE " +
+                    TimeClockContract.Timeclock.TIMECLOCK_STATUS + " =?, " +
+                    TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " =? WHERE " +
                     TimeClockContract.Timeclock.TIMECLOCK_ID + " =? AND " +
                     TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =?";
             SQLiteStatement sqLiteStatement = db.compileStatement(sqlUpdateQuery);
 
             sqLiteStatement.clearBindings();
             sqLiteStatement.bindLong(1, INACTIVE_STATUS);
-            sqLiteStatement.bindLong(2, ids[0]);
-            sqLiteStatement.bindLong(3, ids[1]);
+            sqLiteStatement.bindLong(2, System.currentTimeMillis() / 1000);
+            sqLiteStatement.bindLong(3, ids[0]);
+            sqLiteStatement.bindLong(4, ids[1]);
             sqLiteStatement.execute();
             db.setTransactionSuccessful();
             isSuccess = true;

@@ -1,8 +1,8 @@
 package com.android.mig.simpletimeclock.presenter;
 
 import android.content.Context;
-import android.database.Cursor;
 
+import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractorImpl;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
@@ -29,7 +29,7 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     }
 
     @Override
-    public void onReadSuccess(Cursor cursor) {
-
+    public void onReadSuccess(EmployeeDetails employeeDetails) {
+        mEmployeeDetailsView.showEmployeeInfo(employeeDetails);
     }
 }

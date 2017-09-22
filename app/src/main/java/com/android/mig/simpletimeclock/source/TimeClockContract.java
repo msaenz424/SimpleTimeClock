@@ -21,6 +21,7 @@ public class TimeClockContract {
         public static final String TIMECLOCK_BREAK_START = "break_start";
         public static final String TIMECLOCK_BREAK_END = "break_end";
         public static final String TIMECLOCK_STATUS = "time_status";
+        public static final String TIMECLOCK_WAGE = "time_wage";
         public static final String TIMECLOCK_PAID = "time_paid";
     }
 }

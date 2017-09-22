@@ -29,9 +29,10 @@ public class TimeClockDbHelper extends SQLiteOpenHelper {
                 TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + " INTEGER, " +
                 TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " INTEGER, " +
-                TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + " INTEGER, " +
-                TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + " INTEGER DEFAULT 0, " +
+                TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " INTEGER DEFAULT 0, " +
                 TimeClockContract.Timeclock.TIMECLOCK_STATUS + " INTEGER, " +
+                TimeClockContract.Timeclock.TIMECLOCK_WAGE + " REAL, " +
                 TimeClockContract.Timeclock.TIMECLOCK_PAID + " INTEGER, " +
                 "FOREIGN KEY(" +  TimeClockContract.Timeclock.TIMECLOCK_EMP_ID  + ") REFERENCES " + TimeClockContract.Employees.TABLE_EMPLOYEES + "(" + TimeClockContract.Employees.EMP_ID + ")" +
                 "); ";

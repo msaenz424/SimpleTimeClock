@@ -1,7 +1,9 @@
 package com.android.mig.simpletimeclock.view;
 
+import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
+
 public interface EmployeeDetailsView {
 
-    void showPeriodicData();
+    void showEmployeeInfo(EmployeeDetails employeeDetails);
 
 }
