@@ -79,7 +79,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                 isWorking = true;
                 currentCursor.moveToPosition(0);
                 currentTime = (((System.currentTimeMillis() / 1000) - currentCursor.getLong(0)) - (currentCursor.getLong(1) - currentCursor.getLong(2)));
-                currentEarnings = currentCursor.getDouble(3) * currentTime / 60 / 60;
+                currentEarnings = currentCursor.getDouble(3) * currentTime / 3600;
                 Log.d("activeTime: ", String.valueOf(currentTime));
                 Log.d("activeEarnings: ", String.valueOf(currentEarnings));
             }
@@ -92,7 +92,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                 unpaidCursor.moveToPosition(0);
                 do {
                     unpaidPreviousTime += unpaidCursor.getLong(0);
-                    unpaidPreviousEarnings += unpaidCursor.getDouble(1) * unpaidCursor.getLong(0) / 60 / 60;
+                    unpaidPreviousEarnings += unpaidCursor.getDouble(1) * unpaidCursor.getLong(0) / 3600;
                 } while (unpaidCursor.moveToNext());
 
                 Log.d("Past Unpaid Time: ", String.valueOf(unpaidPreviousTime));
@@ -111,7 +111,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                 paidCursor.moveToPosition(0);
                 do {
                     paidTime += paidCursor.getLong(0);
-                    paidEarnings += paidCursor.getDouble(1) * paidCursor.getLong(0);
+                    paidEarnings += paidCursor.getDouble(1) * paidCursor.getLong(0) / 3600;
                 } while (paidCursor.moveToNext());
                 Log.d("Total Paid Time: ", String.valueOf(paidTime));
                 Log.d("Total Paid Earnings: ", String.valueOf(paidEarnings));

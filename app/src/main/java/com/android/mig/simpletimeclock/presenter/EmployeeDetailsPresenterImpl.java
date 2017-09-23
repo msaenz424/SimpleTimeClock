@@ -29,7 +29,18 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     }
 
     @Override
+    public void onPayButtonClicked(int empId) {
+        mEmployeeDetailsInteractor.updateUnpaidTime(empId, this);
+    }
+
+    @Override
     public void onReadSuccess(EmployeeDetails employeeDetails) {
         mEmployeeDetailsView.showEmployeeInfo(employeeDetails);
+    }
+
+    @Override
+    public void onUpdateUnpaidTimeSuccess() {
+        mEmployeeDetailsView.showPaidMessage();
+        mEmployeeDetailsView.refreshEmployeeInfo();
     }
 }

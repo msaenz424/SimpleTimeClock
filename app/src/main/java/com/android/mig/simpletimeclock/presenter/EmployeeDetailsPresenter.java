@@ -6,4 +6,6 @@ public interface EmployeeDetailsPresenter {
 
     void onActionEditClicked();
 
+    void onPayButtonClicked(int empId);
+
 }

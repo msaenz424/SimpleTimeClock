@@ -14,9 +14,11 @@
 
     <!-- EmployeeDetailsActivity -->
     <string name="text_wage">Wage:</string>
-    <string name="text_total_hours_worked">Total Hours Worked:\u0020</string>
+    <string name="text_total_hours_worked">Total Time Worked:\u0020</string>
     <string name="text_total_earnings">Total Earnings:\u0020</string>
-    <string name="text_periodic_earnings">Periodic Earnings:\u0020</string>
-    <string name="text_periodic_worked_hours">Periodic Hours Worked:\u0020</string>
+    <string name="text_periodic_earnings">Unpaid Earnings:\u0020</string>
+    <string name="text_periodic_worked_hours">Unpaid Time:\u0020</string>
     <string name="dollar_currency_symbol">$\u0020</string>
+    <string name="pay_button_text">Pay</string>
+    <string name="paid_earnings_message">paid</string>
 </resources>
