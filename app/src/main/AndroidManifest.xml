@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.AllEmployeesActivity" />
-        <activity android:name=".view.activities.EmployeeDetailsActivity"
-            android:parentActivityName=".view.activities.MainActivity"/>
+        <activity
+            android:name=".view.activities.EmployeeDetailsActivity" />
     </application>
 
 </manifest>
