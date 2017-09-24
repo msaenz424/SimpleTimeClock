@@ -22,4 +22,12 @@
     <dimen name="det_textview_left_padding">16dp</dimen>
     <dimen name="button_horizontal_padding">16dp</dimen>
     <dimen name="det_button_margin">8dp</dimen>
+
+    <!-- DialogFragment -->
+    <dimen name="dialog_image_frame_size">120dp</dimen>
+    <dimen name="dialog_title_bottom_margin">20dp</dimen>
+    <dimen name="dialog_title_text_size">20sp</dimen>
+    <dimen name="dialog_standard_padding">24dp</dimen>
+    <dimen name="dialog_add_photo_icon_padding">12dp</dimen>
+    <dimen name="dialog_edit_text_height">56dp</dimen>
 </resources>

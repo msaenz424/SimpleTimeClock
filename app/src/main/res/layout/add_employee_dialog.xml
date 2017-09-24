@@ -1,29 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:padding="@dimen/dialog_standard_padding"
+    android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/name_edit_text"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/dialog_title_text"
+        android:textSize="@dimen/dialog_title_text_size"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:layout_marginBottom="@dimen/dialog_title_bottom_margin" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/employee_name"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginStart="@dimen/dialog_horizontal_margin"
-        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
-        android:layout_marginBottom="@dimen/dialog_vertical_margin"
-        android:fontFamily="sans-serif"/>
+        android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/wage_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/wage"
-        android:layout_marginTop="@dimen/dialog_horizontal_margin"
-        android:layout_marginStart="@dimen/dialog_horizontal_margin"
-        android:layout_marginEnd="@dimen/dialog_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:fontFamily="sans-serif"/>
+        <FrameLayout
+            android:layout_width="@dimen/dialog_image_frame_size"
+            android:layout_height="@dimen/dialog_image_frame_size"
+            android:layout_gravity="center_horizontal" >
+
+            <ImageView
+                android:id="@+id/blank_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/im_blank_profile" />
+
+            <ImageView
+                android:id="@+id/add_photo_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_add_photo"
+                android:padding="@dimen/dialog_add_photo_icon_padding"
+                android:layout_gravity="bottom|end" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_edit_text_height"
+                android:hint="@string/employee_name"
+                android:fontFamily="sans-serif"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/wage_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_edit_text_height"
+                android:hint="@string/wage"
+                android:fontFamily="sans-serif"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
