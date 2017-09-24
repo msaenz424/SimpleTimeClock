@@ -24,8 +24,8 @@ public class AllEmployeesPresenterImpl implements AllEmployeesPresenter,
     }
 
     @Override
-    public void onActionAddClicked(String name, double wage) {
-        mEmployeesInteractor.insertEmployee(name, wage, this);
+    public void onActionAddClicked(String name, double wage, String photoUri) {
+        mEmployeesInteractor.insertEmployee(name, wage, photoUri, this);
     }
 
     @Override

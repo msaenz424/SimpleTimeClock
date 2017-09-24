@@ -4,7 +4,7 @@ public interface AllEmployeesPresenter {
 
     void onResume();
 
-    void onActionAddClicked(String name, double wage);
+    void onActionAddClicked(String name, double wage, String photoUri);
 
     void onActionDoneClicked(Integer[] ids);
 

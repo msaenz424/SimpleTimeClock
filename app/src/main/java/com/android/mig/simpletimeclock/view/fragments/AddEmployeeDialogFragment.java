@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.view.activities.AllEmployeesActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.vansuita.pickimage.bean.PickResult;
@@ -26,7 +27,7 @@ public class AddEmployeeDialogFragment extends DialogFragment{
 
     private NoticeDialogListener mNoticeDialogListener;
 
-    ImageView mBlankImageView;
+    private ImageView mBlankImageView;
     private EditText mNameEditText;
     private EditText mWageEditText;
 
@@ -76,7 +77,7 @@ public class AddEmployeeDialogFragment extends DialogFragment{
 
         mBlankImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 PickSetup pickSetup = new PickSetup()
                         .setTitle(getResources().getString(R.string.dialog_add_photo_title))
                         .setSystemDialog(true);
@@ -90,6 +91,7 @@ public class AddEmployeeDialogFragment extends DialogFragment{
                                             .load(r.getUri())
                                             .apply(RequestOptions.circleCropTransform())
                                             .into(mBlankImageView);
+                                    AllEmployeesActivity.sPhotoUri = r.getPath();
                                 }
                             }
                         }).show((FragmentActivity) getActivity());

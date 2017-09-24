@@ -19,10 +19,11 @@ public class EmployeesInteractorImpl implements EmployeesInteractor{
 
     /** {@inheritDoc} */
     @Override
-    public void insertEmployee(String name, double wage, OnFinishedTransactionListener onFinishedTransactionListener) {
+    public void insertEmployee(String name, double wage, String photoUri, OnFinishedTransactionListener onFinishedTransactionListener) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Employees.EMP_NAME, name);
         contentValues.put(Employees.EMP_WAGE, wage);
+        contentValues.put(Employees.EMP_PHOTO_PATH, photoUri);
 
         InsertEmployeeTask insertTask = new InsertEmployeeTask(mContext, onFinishedTransactionListener);
         insertTask.execute(contentValues);

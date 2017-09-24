@@ -179,8 +179,8 @@ public class AllEmployeesFragment extends Fragment
      * @param name name of employee
      * @param wage wage of employee
      */
-    public void setNewEmployeeData(String name, double wage){
-        mAllEmployeesPresenter.onActionAddClicked(name, wage);
+    public void setNewEmployeeData(String name, double wage, String photoUri){
+        mAllEmployeesPresenter.onActionAddClicked(name, wage, photoUri);
     }
 
     /** {@inheritDoc} */

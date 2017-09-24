@@ -16,6 +16,8 @@ import com.android.mig.simpletimeclock.view.fragments.AllEmployeesFragment;
 
 public class AllEmployeesActivity extends AppCompatActivity implements AddEmployeeDialogFragment.NoticeDialogListener{
 
+    public static String sPhotoUri;
+
     private final static String DIALOG_TAG = AddEmployeeDialogFragment.class.getName();
 
     @Override
@@ -57,12 +59,11 @@ public class AllEmployeesActivity extends AppCompatActivity implements AddEmploy
         Dialog dialogView = dialog.getDialog();
         EditText nameEditText = dialogView.findViewById(R.id.name_edit_text);
         EditText wageEditText = dialogView.findViewById(R.id.wage_edit_text);
-
         String name = String.valueOf(nameEditText.getText());
         double wage = Double.parseDouble(String.valueOf(wageEditText.getText()));
 
         AllEmployeesFragment fragment = (AllEmployeesFragment) getFragmentManager().findFragmentById(R.id.all_employees_fragment);
-        fragment.setNewEmployeeData(name, wage);
+        fragment.setNewEmployeeData(name, wage, sPhotoUri);
     }
 
     @Override

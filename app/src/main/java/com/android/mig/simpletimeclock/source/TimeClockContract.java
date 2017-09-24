@@ -9,6 +9,7 @@ public class TimeClockContract {
         public static final String EMP_ID = "emp_id";
         public static final String EMP_NAME = "emp_name";
         public static final String EMP_WAGE = "emp_wage";
+        public static final String EMP_PHOTO_PATH = "emp_photo_path";
     }
 
     public static final class Timeclock implements BaseColumns{

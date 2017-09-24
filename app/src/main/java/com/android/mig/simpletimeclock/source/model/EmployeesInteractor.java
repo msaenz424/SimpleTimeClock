@@ -51,9 +51,10 @@ public interface EmployeesInteractor {
      *
      * @param name                              employees name
      * @param wage                              employees wage
+     * @param photoUri                          profile photo path
      * @param onFinishedTransactionListener     callback listener
      */
-    void insertEmployee(String name, double wage, OnFinishedTransactionListener onFinishedTransactionListener);
+    void insertEmployee(String name, double wage, String photoUri, OnFinishedTransactionListener onFinishedTransactionListener);
 
     /**
      * Performs a status update in Employees table in database
