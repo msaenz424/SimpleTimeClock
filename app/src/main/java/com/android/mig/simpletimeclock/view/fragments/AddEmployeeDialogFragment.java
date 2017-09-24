@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +17,16 @@ import android.widget.ImageView;
 import com.android.mig.simpletimeclock.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
-public class AddEmployeeDialogFragment extends DialogFragment {
+public class AddEmployeeDialogFragment extends DialogFragment{
 
     private NoticeDialogListener mNoticeDialogListener;
 
+    ImageView mBlankImageView;
     private EditText mNameEditText;
     private EditText mWageEditText;
 
@@ -64,15 +70,36 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View rootView = inflater.inflate(R.layout.add_employee_dialog, null);
-        ImageView mBlankImageView = rootView.findViewById(R.id.blank_image_view);
+        mBlankImageView = rootView.findViewById(R.id.blank_image_view);
         mNameEditText = rootView.findViewById(R.id.name_edit_text);
         mWageEditText = rootView.findViewById(R.id.wage_edit_text);
+
+        mBlankImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PickSetup pickSetup = new PickSetup()
+                        .setTitle(getResources().getString(R.string.dialog_add_photo_title))
+                        .setSystemDialog(true);
+
+                PickImageDialog.build(pickSetup)
+                        .setOnPickResult(new IPickResult() {
+                            @Override
+                            public void onPickResult(PickResult r) {
+                                if (r.getError() == null){
+                                    Glide.with(getActivity().getApplicationContext())
+                                            .load(r.getUri())
+                                            .apply(RequestOptions.circleCropTransform())
+                                            .into(mBlankImageView);
+                                }
+                            }
+                        }).show((FragmentActivity) getActivity());
+            }
+        });
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because it's going in the dialog layout
         Glide.with(getActivity().getApplicationContext())
                 .load(R.drawable.im_blank_profile)
-                // gives circular shape to ImageView
                 .apply(RequestOptions.circleCropTransform())
                 .into(mBlankImageView);
 

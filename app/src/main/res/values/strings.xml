@@ -22,4 +22,7 @@
     <string name="pay_button_text">Pay</string>
     <string name="paid_earnings_message">paid</string>
     <string name="dialog_title_text">Add a new employee</string>
+
+    <!-- AddEmployeeDialogFragment -->
+    <string name="dialog_add_photo_title">Profile photo</string>
 </resources>
