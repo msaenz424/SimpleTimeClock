@@ -1,13 +1,21 @@
 package com.android.mig.simpletimeclock.view.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,21 +23,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.mig.simpletimeclock.R;
-import com.android.mig.simpletimeclock.view.activities.AllEmployeesActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
-import com.vansuita.pickimage.listeners.IPickResult;
+import com.vansuita.pickimage.listeners.IPickClick;
 
-public class AddEmployeeDialogFragment extends DialogFragment{
+import static android.app.Activity.RESULT_OK;
 
+public class AddEmployeeDialogFragment extends DialogFragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_USE_CAMERA = 10;        // code should be bigger than 0
     private NoticeDialogListener mNoticeDialogListener;
+    private PhotoPickerListener mPhotoPickerListener;
 
     private ImageView mBlankImageView;
     private EditText mNameEditText;
     private EditText mWageEditText;
+    private Uri mPhotoPath, mTempContainerPath;
+    private PickImageDialog mPickImageDialog;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -40,6 +53,7 @@ public class AddEmployeeDialogFragment extends DialogFragment{
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
             mNoticeDialogListener = (NoticeDialogListener) context;
+            mPhotoPickerListener = (PhotoPickerListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
@@ -59,6 +73,7 @@ public class AddEmployeeDialogFragment extends DialogFragment{
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
             mNoticeDialogListener = (NoticeDialogListener) activity;
+            mPhotoPickerListener = (PhotoPickerListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
@@ -80,19 +95,17 @@ public class AddEmployeeDialogFragment extends DialogFragment{
             public void onClick(final View view) {
                 PickSetup pickSetup = new PickSetup()
                         .setTitle(getResources().getString(R.string.dialog_add_photo_title))
-                        .setSystemDialog(true);
+                        .setSystemDialog(false);
 
-                PickImageDialog.build(pickSetup)
-                        .setOnPickResult(new IPickResult() {
+                mPickImageDialog = PickImageDialog.build(pickSetup)
+                        .setOnClick(new IPickClick() {
                             @Override
-                            public void onPickResult(PickResult r) {
-                                if (r.getError() == null){
-                                    Glide.with(getActivity().getApplicationContext())
-                                            .load(r.getUri())
-                                            .apply(RequestOptions.circleCropTransform())
-                                            .into(mBlankImageView);
-                                    AllEmployeesActivity.sPhotoUri = r.getPath();
-                                }
+                            public void onGalleryClick() {
+                            }
+
+                            @Override
+                            public void onCameraClick() {
+                                tryUsingCamera();
                             }
                         }).show((FragmentActivity) getActivity());
             }
@@ -133,7 +146,8 @@ public class AddEmployeeDialogFragment extends DialogFragment{
                 public void onClick(View v) {
                     String name = mNameEditText.getText().toString().trim();
                     String wage = mWageEditText.getText().toString().trim();
-                    if (!name.isEmpty() && !wage.isEmpty()){
+                    if (!name.isEmpty() && !wage.isEmpty()) {
+                        preparePhotoAndSave();
                         mNoticeDialogListener.onDialogPositiveClick(AddEmployeeDialogFragment.this);
                         alertDialog.dismiss();
                     }
@@ -150,9 +164,74 @@ public class AddEmployeeDialogFragment extends DialogFragment{
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // receives result code from camera intent launched previously
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            mPhotoPath = mTempContainerPath;
+            Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
+            mTempContainerPath = null;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_USE_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // if permission is granted at run time, then launch camera
+                    dispatchCameraIntent();
+                }
+            }
+        }
+    }
+
+    /**
+     * checks for permission to use camera. Result is passed to onRequestPermissionsResult
+     */
+    private void tryUsingCamera() {
+        int cameraPermissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+        int writePermissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (cameraPermissionCheck == PackageManager.PERMISSION_DENIED || writePermissionCheck == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_USE_CAMERA);
+        } else if (cameraPermissionCheck == PackageManager.PERMISSION_GRANTED && writePermissionCheck == PackageManager.PERMISSION_GRANTED) {
+            dispatchCameraIntent();
+        }
+        mPickImageDialog.dismiss();
+    }
+
+    /**
+     * Launches camera intent with a temporary path
+     */
+    public void dispatchCameraIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, "");
+            mTempContainerPath = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mTempContainerPath);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    /**
+     * Uploads the photo (if taken) to the storage and passes its link or null to saveGeoDiary
+     */
+    private void preparePhotoAndSave(){
+        if (mPhotoPath != null){
+            mPhotoPickerListener.onPhotoTaken(String.valueOf(mPhotoPath));
+        }
+    }
+
     public interface NoticeDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
 
         void onDialogNegativeClick(DialogFragment dialog);
+    }
+
+    public interface PhotoPickerListener {
+        void onPhotoTaken(String photoPath);
     }
 }

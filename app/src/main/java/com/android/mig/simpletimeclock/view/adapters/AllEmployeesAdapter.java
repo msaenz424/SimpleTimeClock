@@ -1,15 +1,21 @@
 package com.android.mig.simpletimeclock.view.adapters;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -17,12 +23,15 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
 
     private static final int EMPLOYEE_COL_ID_INDEX = 0;
     private static final int EMPLOYEE_COL_NAME_INDEX = 1;
+    private static final int EMPLOYEE_COL_PHOTO_INDEX = 3;
 
+    private Context mContext;
     private Cursor mAllEmployeesCursor = null;
     private OnListTapHandler mOnTapHandler;
     private ArrayList<Integer> mSelectedItems = new ArrayList<>();
 
-    public AllEmployeesAdapter(OnListTapHandler onTapHandler) {
+    public AllEmployeesAdapter(Context context, OnListTapHandler onTapHandler) {
+        this.mContext = context;
         this.mOnTapHandler = onTapHandler;
     }
 
@@ -54,6 +63,22 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         holder.mItemLinearLayout.setBackgroundColor(Color.WHITE);
         holder.itemView.setTag(mAllEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
         holder.mNameTextView.setText(mAllEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
+        String photoUri = mAllEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
+
+        String cursor = DatabaseUtils.dumpCursorToString(mAllEmployeesCursor);
+        Log.d("cursor", cursor);
+
+        if (photoUri.isEmpty()){
+            Glide.with(mContext)
+                    .load(R.drawable.im_blank_profile)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.mPhotoImageView);
+        } else {
+            Glide.with(mContext)
+                    .load(photoUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.mPhotoImageView);
+        }
     }
 
     @Override
@@ -68,11 +93,13 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
             implements View.OnClickListener, View.OnLongClickListener {
 
         LinearLayout mItemLinearLayout;
+        ImageView mPhotoImageView;
         TextView mNameTextView;
 
         AllEmployeesViewHolder(View itemView) {
             super(itemView);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
+            mPhotoImageView = itemView.findViewById(R.id.item_photo_image_view);
             mNameTextView = itemView.findViewById(R.id.employee_name_text_view);
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);

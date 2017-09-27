@@ -14,9 +14,11 @@ import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.fragments.AddEmployeeDialogFragment;
 import com.android.mig.simpletimeclock.view.fragments.AllEmployeesFragment;
 
-public class AllEmployeesActivity extends AppCompatActivity implements AddEmployeeDialogFragment.NoticeDialogListener{
+public class AllEmployeesActivity extends AppCompatActivity
+        implements AddEmployeeDialogFragment.NoticeDialogListener,
+            AddEmployeeDialogFragment.PhotoPickerListener{
 
-    public static String sPhotoUri;
+    public String mPhotoUri;
 
     private final static String DIALOG_TAG = AddEmployeeDialogFragment.class.getName();
 
@@ -63,11 +65,16 @@ public class AllEmployeesActivity extends AppCompatActivity implements AddEmploy
         double wage = Double.parseDouble(String.valueOf(wageEditText.getText()));
 
         AllEmployeesFragment fragment = (AllEmployeesFragment) getFragmentManager().findFragmentById(R.id.all_employees_fragment);
-        fragment.setNewEmployeeData(name, wage, sPhotoUri);
+        fragment.setNewEmployeeData(name, wage, mPhotoUri);
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // do nothing
+    }
+
+    @Override
+    public void onPhotoTaken(String photoPath) {
+        this.mPhotoUri = photoPath;
     }
 }

@@ -90,7 +90,7 @@ public class AllEmployeesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mAllEmployeesRecyclerView.setLayoutManager(layoutManager);
         mAllEmployeesRecyclerView.hasFixedSize();
-        AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter(this);
+        AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter(getActivity(), this);
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
 
         mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
