@@ -34,6 +34,7 @@ import static android.app.Activity.RESULT_OK;
 public class AddEmployeeDialogFragment extends DialogFragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_PHOTO_PICKER =  2;
     private static final int MY_PERMISSIONS_REQUEST_USE_CAMERA = 10;        // code should be bigger than 0
     private NoticeDialogListener mNoticeDialogListener;
     private PhotoPickerListener mPhotoPickerListener;
@@ -101,10 +102,16 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                         .setOnClick(new IPickClick() {
                             @Override
                             public void onGalleryClick() {
+                                mPickImageDialog.dismiss();
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setType("image/jpeg");
+                                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                                startActivityForResult(Intent.createChooser(intent, "Complete action using"), REQUEST_PHOTO_PICKER);
                             }
 
                             @Override
                             public void onCameraClick() {
+                                mPickImageDialog.dismiss();
                                 tryUsingCamera();
                             }
                         }).show((FragmentActivity) getActivity());
@@ -147,7 +154,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                     String name = mNameEditText.getText().toString().trim();
                     String wage = mWageEditText.getText().toString().trim();
                     if (!name.isEmpty() && !wage.isEmpty()) {
-                        preparePhotoAndSave();
+                        mPhotoPickerListener.onPhotoTaken(String.valueOf(mPhotoPath));
                         mNoticeDialogListener.onDialogPositiveClick(AddEmployeeDialogFragment.this);
                         alertDialog.dismiss();
                     }
@@ -171,6 +178,9 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             mPhotoPath = mTempContainerPath;
             Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
             mTempContainerPath = null;
+        } else if (requestCode == REQUEST_PHOTO_PICKER && resultCode == RESULT_OK){
+            mPhotoPath = data.getData();
+            Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
         }
     }
 
@@ -199,7 +209,6 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         } else if (cameraPermissionCheck == PackageManager.PERMISSION_GRANTED && writePermissionCheck == PackageManager.PERMISSION_GRANTED) {
             dispatchCameraIntent();
         }
-        mPickImageDialog.dismiss();
     }
 
     /**
@@ -213,15 +222,6 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             mTempContainerPath = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mTempContainerPath);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    /**
-     * Uploads the photo (if taken) to the storage and passes its link or null to saveGeoDiary
-     */
-    private void preparePhotoAndSave(){
-        if (mPhotoPath != null){
-            mPhotoPickerListener.onPhotoTaken(String.valueOf(mPhotoPath));
         }
     }
 
