@@ -16,6 +16,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
             "t." + TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_NAME + ", " +
+            "e." + TimeClockContract.Employees.EMP_PHOTO_PATH + ", " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + ", " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " FROM " +

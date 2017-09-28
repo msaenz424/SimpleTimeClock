@@ -27,4 +27,13 @@
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
     </style>
 
+    <style name="ListItemEmployeeName" >
+        <item name="android:paddingBottom">@dimen/item_vertical_padding</item>
+        <item name="android:paddingEnd">@dimen/item_horizontal_padding</item>
+        <item name="android:paddingStart">@dimen/item_horizontal_padding</item>
+        <item name="android:paddingTop">@dimen/item_vertical_padding</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
 </resources>

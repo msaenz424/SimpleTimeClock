@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_employee"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_active_employees_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="@dimen/text_size">
+    android:orientation="horizontal">
 
-</TextView>
+    <ImageView
+        android:id="@+id/item_photo_image_view"
+        android:layout_width="@dimen/item_photo_size"
+        android:layout_height="@dimen/item_photo_size"
+        android:padding="@dimen/item_photo_size"  />
+
+    <TextView
+        android:id="@+id/active_employee_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ListItemEmployeeName"/>
+
+</LinearLayout>

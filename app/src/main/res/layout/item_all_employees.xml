@@ -7,19 +7,14 @@
 
     <ImageView
         android:id="@+id/item_photo_image_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:padding="8dp" />
+        android:layout_width="@dimen/item_photo_size"
+        android:layout_height="@dimen/item_photo_size"
+        android:padding="@dimen/item_photo_padding" />
 
     <TextView
         android:id="@+id/employee_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/item_vertical_padding"
-        android:paddingEnd="@dimen/item_horizontal_padding"
-        android:paddingStart="@dimen/item_horizontal_padding"
-        android:paddingTop="@dimen/item_vertical_padding"
-        android:textSize="@dimen/text_size"
-        android:layout_gravity="center_vertical"/>
+        style="@style/ListItemEmployeeName"/>
 
 </LinearLayout>

@@ -2,10 +2,8 @@ package com.android.mig.simpletimeclock.view.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,9 +62,6 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         holder.itemView.setTag(mAllEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
         holder.mNameTextView.setText(mAllEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
         String photoUri = mAllEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
-
-        String cursor = DatabaseUtils.dumpCursorToString(mAllEmployeesCursor);
-        Log.d("cursor", cursor);
 
         if (photoUri.isEmpty()){
             Glide.with(mContext)

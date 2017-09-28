@@ -6,20 +6,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
     private static final int EMPLOYEE_COL_ID_INDEX = 1;
     private static final int EMPLOYEE_COL_NAME_INDEX = 2;
+    private static final int EMPLOYEE_COL_PHOTO_INDEX = 3;
 
+    private Context mContext;
     private final OnClickHandler mOnClickHandler;
 
     private Cursor mEmployeesCursor = null;
 
-    public EmployeeAdapter(OnClickHandler onClickHandler) {
+    public EmployeeAdapter(Context context, OnClickHandler onClickHandler) {
+        this.mContext = context;
         this.mOnClickHandler = onClickHandler;
     }
 
@@ -57,7 +64,20 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     public void onBindViewHolder(EmployeeViewHolder holder, int position) {
         mEmployeesCursor.moveToPosition(position);
         holder.itemView.setTag(mEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
-        holder.tvEmployee.setText(mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
+        holder.mEmployeeNameTextView.setText(mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
+        String photoUri = mEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
+
+        if (photoUri.isEmpty()){
+            Glide.with(mContext)
+                    .load(R.drawable.im_blank_profile)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.mPhotoImageView);
+        } else {
+            Glide.with(mContext)
+                    .load(photoUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.mPhotoImageView);
+        }
     }
 
     @Override
@@ -70,11 +90,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvEmployee;
+        LinearLayout mItemLinearLayout;
+        ImageView mPhotoImageView;
+        TextView mEmployeeNameTextView;
 
         EmployeeViewHolder(View itemView) {
             super(itemView);
-            tvEmployee = itemView.findViewById(R.id.tv_employee);
+            mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
+            mPhotoImageView = itemView.findViewById(R.id.item_photo_image_view);
+            mEmployeeNameTextView = itemView.findViewById(R.id.active_employee_text_view);
             itemView.setOnClickListener(this);
         }
 
