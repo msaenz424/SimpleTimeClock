@@ -63,7 +63,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         holder.mNameTextView.setText(mAllEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
         String photoUri = mAllEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
 
-        if (photoUri.isEmpty()){
+        if (photoUri.isEmpty() || photoUri.equals("null")){
             Glide.with(mContext)
                     .load(R.drawable.im_blank_profile)
                     .apply(RequestOptions.circleCropTransform())
