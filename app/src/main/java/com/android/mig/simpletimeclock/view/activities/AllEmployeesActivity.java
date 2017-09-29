@@ -16,9 +16,9 @@ import com.android.mig.simpletimeclock.view.fragments.AllEmployeesFragment;
 
 public class AllEmployeesActivity extends AppCompatActivity
         implements AddEmployeeDialogFragment.NoticeDialogListener,
-            AddEmployeeDialogFragment.PhotoPickerListener{
+        AddEmployeeDialogFragment.PhotoPickerListener {
 
-    public String mPhotoUri;
+    public String mPhotoUri = "";
 
     private final static String DIALOG_TAG = AddEmployeeDialogFragment.class.getName();
 
@@ -38,7 +38,7 @@ public class AllEmployeesActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_item_add:
                 FragmentManager fragmentManager = getFragmentManager();
                 DialogFragment dialogFragment = new AddEmployeeDialogFragment();

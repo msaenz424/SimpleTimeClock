@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
 
     public void addEmployee(View view){
         Intent intent = new Intent(this, AllEmployeesActivity.class);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 

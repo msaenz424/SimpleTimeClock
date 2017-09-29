@@ -34,7 +34,7 @@ import static android.app.Activity.RESULT_OK;
 public class AddEmployeeDialogFragment extends DialogFragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_PHOTO_PICKER =  2;
+    private static final int REQUEST_PHOTO_PICKER = 2;
     private static final int MY_PERMISSIONS_REQUEST_USE_CAMERA = 10;        // code should be bigger than 0
     private NoticeDialogListener mNoticeDialogListener;
     private PhotoPickerListener mPhotoPickerListener;
@@ -103,16 +103,13 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                             @Override
                             public void onGalleryClick() {
                                 mPickImageDialog.dismiss();
-                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                intent.setType("image/jpeg");
-                                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                                startActivityForResult(Intent.createChooser(intent, "Complete action using"), REQUEST_PHOTO_PICKER);
+                                dispatchGalleryIntent();
                             }
 
                             @Override
                             public void onCameraClick() {
+                                checkWritePermission();
                                 mPickImageDialog.dismiss();
-                                tryUsingCamera();
                             }
                         }).show((FragmentActivity) getActivity());
             }
@@ -178,7 +175,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             mPhotoPath = mTempContainerPath;
             Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
             mTempContainerPath = null;
-        } else if (requestCode == REQUEST_PHOTO_PICKER && resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_PHOTO_PICKER && resultCode == RESULT_OK) {
             mPhotoPath = data.getData();
             Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
         }
@@ -190,22 +187,18 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             case MY_PERMISSIONS_REQUEST_USE_CAMERA: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // if permission is granted at run time, then launch camera
                     dispatchCameraIntent();
                 }
             }
         }
     }
 
-    /**
-     * checks for permission to use camera. Result is passed to onRequestPermissionsResult
-     */
-    private void tryUsingCamera() {
+    private void checkWritePermission() {
         int cameraPermissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
         int writePermissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
         if (cameraPermissionCheck == PackageManager.PERMISSION_DENIED || writePermissionCheck == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_USE_CAMERA);
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_USE_CAMERA);
         } else if (cameraPermissionCheck == PackageManager.PERMISSION_GRANTED && writePermissionCheck == PackageManager.PERMISSION_GRANTED) {
             dispatchCameraIntent();
         }
@@ -223,6 +216,18 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mTempContainerPath);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    public void dispatchGalleryIntent() {
+        Intent intent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        } else {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        }
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"), REQUEST_PHOTO_PICKER);
     }
 
     public interface NoticeDialogListener {

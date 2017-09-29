@@ -19,7 +19,7 @@ public class TimeClockDbHelper extends SQLiteOpenHelper {
                 TimeClockContract.Employees.EMP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TimeClockContract.Employees.EMP_NAME + " TEXT NOT NULL, " +
                 TimeClockContract.Employees.EMP_WAGE + " REAL, " +
-                TimeClockContract.Employees.EMP_PHOTO_PATH + " TEXT" +
+                TimeClockContract.Employees.EMP_PHOTO_PATH + " TEXT DEFAULT NULL" +
                 "); ";
 
         sqLiteDatabase.execSQL(SQL_CREATE_EMPLOYEES_TABLE);

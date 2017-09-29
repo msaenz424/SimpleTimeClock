@@ -47,7 +47,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
 
     private final String EMPLOYEE_QUERY = "SELECT " +
             TimeClockContract.Employees.EMP_NAME + ", " +
-            TimeClockContract.Employees.EMP_WAGE + " FROM " +
+            TimeClockContract.Employees.EMP_WAGE + ", " +
+            TimeClockContract.Employees.EMP_PHOTO_PATH + " FROM " +
             TimeClockContract.Employees.TABLE_EMPLOYEES + " WHERE " +
             TimeClockContract.Employees.EMP_ID + " =?";
 
@@ -124,14 +125,16 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
             String empName = null;
             double empWage = 0;
+            String empPhotoUri = null;
             if (employeeCursor.getCount() > 0) {
                 employeeCursor.moveToPosition(0);
                 empName = employeeCursor.getString(0);
                 empWage = employeeCursor.getDouble(1);
+                empPhotoUri = employeeCursor.getString(2);
             }
             employeeCursor.close();
 
-            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, totalUnpaidTime, totalUnpaidEarnings, totalTime, totalEarnings, isWorking);
+            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, empPhotoUri, totalUnpaidTime, totalUnpaidEarnings, totalTime, totalEarnings, isWorking);
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -148,6 +151,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Log.d("emp id", String.valueOf(employeeDetails.getID()));
             Log.d("emp name", employeeDetails.getName());
             Log.d("emp wage", String.valueOf(employeeDetails.getWage()));
+            Log.d("emp photo path", String.valueOf(employeeDetails.getPhotoPath()));
             Log.d("unpaid time", String.valueOf(employeeDetails.getUnpaidTimeWorked()));
             Log.d("unpaid earnings", String.valueOf(employeeDetails.getUnpaidEarnings()));
             Log.d("total time", String.valueOf(employeeDetails.getTotalTimeWorked()));

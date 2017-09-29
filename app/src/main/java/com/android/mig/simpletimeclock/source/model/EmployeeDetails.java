@@ -4,6 +4,7 @@ public class EmployeeDetails {
     private int mID;
     private String mName;
     private double mWage;
+    private String mPhotoPath;
     private long mUnpaidTimeWorked;
     private double mUnpaidEarnings;
     private long mTotalTimeWorked;
@@ -16,10 +17,11 @@ public class EmployeeDetails {
         this.mWage = wage;
     }
 
-    public EmployeeDetails(int id, String name, double wage, long unpaidTimeWorked, double unpaidEarnings, long totalTimeWorked, double totalEarnings, boolean isWorking) {
+    public EmployeeDetails(int id, String name, double wage, String photoPath, long unpaidTimeWorked, double unpaidEarnings, long totalTimeWorked, double totalEarnings, boolean isWorking) {
         this.mID = id;
         this.mName = name;
         this.mWage = wage;
+        this.mPhotoPath = photoPath;
         this.mUnpaidTimeWorked = unpaidTimeWorked;
         this.mUnpaidEarnings = unpaidEarnings;
         this.mTotalTimeWorked = totalTimeWorked;
@@ -49,6 +51,14 @@ public class EmployeeDetails {
 
     public void setWage(double wage) {
         this.mWage = wage;
+    }
+
+    public String getPhotoPath() {
+        return mPhotoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.mPhotoPath = photoPath;
     }
 
     public long getUnpaidTimeWorked() {

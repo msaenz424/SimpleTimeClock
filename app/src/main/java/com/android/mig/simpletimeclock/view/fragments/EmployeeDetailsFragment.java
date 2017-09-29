@@ -2,7 +2,9 @@ package com.android.mig.simpletimeclock.view.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -22,15 +24,18 @@ import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenter;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenterImpl;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
+import com.bumptech.glide.Glide;
 
 import java.util.Locale;
 
 public class EmployeeDetailsFragment extends Fragment implements EmployeeDetailsView{
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 3;
     EmployeeDetailsPresenter mEmployeeDetailsPresenter;
 
     View mRootView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private ImageView mPhotoImageView;
     private ImageView mStatusImageView;
     private TextView mWageTextView;
     private TextView mUnpaidHoursTextView;
@@ -57,14 +62,15 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mEmployeeId = getActivity().getIntent().getIntExtra(Intent.EXTRA_UID, 0);
         mEmployeeDetailsPresenter = new EmployeeDetailsPresenterImpl(this, getContext());
 
-        mCollapsingToolbarLayout = mRootView.findViewById(R.id.det_collapsing_layout);
-        mStatusImageView = mRootView.findViewById(R.id.time_status_image_view);
-        mWageTextView = mRootView.findViewById(R.id.det_wage_text_view);
-        mUnpaidHoursTextView = mRootView.findViewById(R.id.det_unpaid_hours_text_view);
-        mUnpaidEarningsTextView = mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
-        mTotalHoursTextView = mRootView.findViewById(R.id.det_total_hours_text_view);
-        mTotalEarningsTextView = mRootView.findViewById(R.id.det_total_earnings_text_view);
-        mPayButton = mRootView.findViewById(R.id.det_pay_button);
+        mCollapsingToolbarLayout    =  mRootView.findViewById(R.id.det_collapsing_layout);
+        mPhotoImageView             =  mRootView.findViewById(R.id.det_photo_image_view);
+        mStatusImageView            =  mRootView.findViewById(R.id.time_status_image_view);
+        mWageTextView               =  mRootView.findViewById(R.id.det_wage_text_view);
+        mUnpaidHoursTextView        =  mRootView.findViewById(R.id.det_unpaid_hours_text_view);
+        mUnpaidEarningsTextView     =  mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
+        mTotalHoursTextView         =  mRootView.findViewById(R.id.det_total_hours_text_view);
+        mTotalEarningsTextView      =  mRootView.findViewById(R.id.det_total_earnings_text_view);
+        mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,9 +102,26 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                }
+            }
+        }
+    }
+
+    @Override
     public void showEmployeeInfo(EmployeeDetails employeeDetails) {
 
         mCollapsingToolbarLayout.setTitle(employeeDetails.getName());
+        String photoUri = employeeDetails.getPhotoPath();
+        if (photoUri != null && !photoUri.equals("null") && !photoUri.isEmpty()){
+            Glide.with(getContext())
+                    .load(photoUri)
+                    .into(mPhotoImageView);
+        }
         mWageTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + String.valueOf(employeeDetails.getWage()));
         int unpaidInSeconds = (int) employeeDetails.getUnpaidTimeWorked();
         int hours = unpaidInSeconds / 3600;

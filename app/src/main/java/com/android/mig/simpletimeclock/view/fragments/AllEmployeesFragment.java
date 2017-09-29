@@ -179,7 +179,7 @@ public class AllEmployeesFragment extends Fragment
      * @param name name of employee
      * @param wage wage of employee
      */
-    public void setNewEmployeeData(String name, double wage, String photoUri){
+    public void setNewEmployeeData(String name, double wage, @Nullable String photoUri){
         mAllEmployeesPresenter.onActionAddClicked(name, wage, photoUri);
     }
 
@@ -202,6 +202,7 @@ public class AllEmployeesFragment extends Fragment
     public void onClick(int empId) {
         Intent intent = new Intent(getActivity(), EmployeeDetailsActivity.class);
         intent.putExtra(Intent.EXTRA_UID, empId);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 }
