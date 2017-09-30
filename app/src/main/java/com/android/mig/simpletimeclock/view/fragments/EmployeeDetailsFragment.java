@@ -2,9 +2,7 @@ package com.android.mig.simpletimeclock.view.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -30,7 +28,6 @@ import java.util.Locale;
 
 public class EmployeeDetailsFragment extends Fragment implements EmployeeDetailsView{
 
-    private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 3;
     EmployeeDetailsPresenter mEmployeeDetailsPresenter;
 
     View mRootView;
@@ -102,24 +99,18 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                }
-            }
-        }
-    }
-
-    @Override
     public void showEmployeeInfo(EmployeeDetails employeeDetails) {
 
         mCollapsingToolbarLayout.setTitle(employeeDetails.getName());
         String photoUri = employeeDetails.getPhotoPath();
         if (photoUri != null && !photoUri.equals("null") && !photoUri.isEmpty()){
+            mPhotoImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Glide.with(getContext())
                     .load(photoUri)
+                    .into(mPhotoImageView);
+        } else {
+            Glide.with(getContext())
+                    .load(R.drawable.im_blank_profile)
                     .into(mPhotoImageView);
         }
         mWageTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + String.valueOf(employeeDetails.getWage()));
