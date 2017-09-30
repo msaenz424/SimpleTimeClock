@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEmployeeRecyclerView.setLayoutManager(layoutManager);
         mEmployeeRecyclerView.hasFixedSize();
-        EmployeeAdapter mEmployeeAdapter = new EmployeeAdapter(this, this);
+        EmployeeAdapter mEmployeeAdapter = new EmployeeAdapter(this);
         mEmployeeRecyclerView.setAdapter(mEmployeeAdapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

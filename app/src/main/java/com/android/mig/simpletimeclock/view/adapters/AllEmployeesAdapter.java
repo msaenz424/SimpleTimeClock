@@ -94,7 +94,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         AllEmployeesViewHolder(View itemView) {
             super(itemView);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
-            mPhotoImageView = itemView.findViewById(R.id.item_photo_image_view);
+            mPhotoImageView = itemView.findViewById(R.id.item_all_photo_image_view);
             mNameTextView = itemView.findViewById(R.id.employee_name_text_view);
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);

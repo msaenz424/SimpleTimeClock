@@ -20,13 +20,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int EMPLOYEE_COL_NAME_INDEX = 2;
     private static final int EMPLOYEE_COL_PHOTO_INDEX = 3;
 
-    private Context mContext;
     private final OnClickHandler mOnClickHandler;
 
     private Cursor mEmployeesCursor = null;
 
-    public EmployeeAdapter(Context context, OnClickHandler onClickHandler) {
-        this.mContext = context;
+    public EmployeeAdapter(OnClickHandler onClickHandler) {
         this.mOnClickHandler = onClickHandler;
     }
 
@@ -67,13 +65,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         holder.mEmployeeNameTextView.setText(mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
         String photoUri = mEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
 
-        if (photoUri.isEmpty()){
-            Glide.with(mContext)
+        if (photoUri.isEmpty() || photoUri.equals("null")){
+            Glide.with(holder.itemView.getContext())
                     .load(R.drawable.im_blank_profile)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
         } else {
-            Glide.with(mContext)
+            Glide.with(holder.itemView.getContext())
                     .load(photoUri)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
@@ -97,7 +95,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         EmployeeViewHolder(View itemView) {
             super(itemView);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
-            mPhotoImageView = itemView.findViewById(R.id.item_photo_image_view);
+            mPhotoImageView = itemView.findViewById(R.id.item_active_photo_image_view);
             mEmployeeNameTextView = itemView.findViewById(R.id.active_employee_text_view);
             itemView.setOnClickListener(this);
         }
