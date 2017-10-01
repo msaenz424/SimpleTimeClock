@@ -28,6 +28,10 @@ public class AllEmployeesActivity extends AppCompatActivity
         setContentView(R.layout.activity_all_employees);
         Toolbar mContextualToolbar = (Toolbar) findViewById(R.id.action_context_toolbar);
         setSupportActionBar(mContextualToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.all_employees_activity_title));
+        }
     }
 
     @Override

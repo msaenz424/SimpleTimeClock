@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
@@ -25,6 +26,13 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.main_activity_title));
+        }
 
         mEmployeeRecyclerView = (RecyclerView) findViewById(R.id.rv_emp_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

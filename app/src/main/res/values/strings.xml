@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Simple Time Clock</string>
+    <string name="main_activity_title">Active Employees</string>
+    <string name="all_employees_activity_title">All Employees</string>
     <string name="error_text_insert">There was a problem when trying to add a new employee, please try it again</string>
     <string name="employee_name">name</string>
     <string name="wage">hourly wage</string>

@@ -34,7 +34,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.AllEmployeesActivity" />
+        <activity android:name=".view.activities.AllEmployeesActivity"
+            android:parentActivityName=".view.activities.MainActivity"/>
         <activity
             android:name=".view.activities.EmployeeDetailsActivity" />
     </application>

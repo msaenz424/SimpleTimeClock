@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenter;
@@ -31,7 +30,6 @@ public class AllEmployeesFragment extends Fragment
         implements AllEmployeesView, AllEmployeesAdapter.OnListTapHandler{
 
     boolean actionMode = false;
-    TextView mCounterTextView;
     AllEmployeesPresenter mAllEmployeesPresenter;
     FloatingActionButton mFabSetActiveEmployee;
     RecyclerView mAllEmployeesRecyclerView;
@@ -73,9 +71,6 @@ public class AllEmployeesFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_all_employees , container, false);
-
-        mCounterTextView = rootView.findViewById(R.id.counter_text_view);
-        mCounterTextView.setVisibility(View.GONE);
 
         mFabSetActiveEmployee = rootView.findViewById(R.id.fab_set_active_employee);
         mFabSetActiveEmployee.setOnClickListener(new View.OnClickListener() {
