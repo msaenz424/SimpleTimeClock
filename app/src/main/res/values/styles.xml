@@ -36,4 +36,14 @@
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
+    <style name="PrimaryToolbar" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/toolbar_text_color</item>
+        <item name="android:textColorSecondary">@color/toolbar_text_color</item >
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <!--style name="ContextualToolbar" parent="PrimaryToolbar">
+        <item name="android:background">@color/contextual_toolbar_color</item>
+    </style-->
+
 </resources>
