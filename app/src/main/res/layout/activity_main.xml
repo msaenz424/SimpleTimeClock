@@ -34,7 +34,7 @@
         android:layout_marginEnd="@dimen/fab_margin_left"
         android:clickable="true"
         android:onClick="addEmployee"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_action_add"
         app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>
