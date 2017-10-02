@@ -11,24 +11,28 @@ import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeesInteractor;
 
-public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
+public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean> {
 
     private final String EMPLOYEE_QUERY = "SELECT " +
             TimeClockContract.Employees.EMP_WAGE + " FROM " +
             TimeClockContract.Employees.TABLE_EMPLOYEES + " WHERE " +
             TimeClockContract.Employees.EMP_ID + " =?";
 
+    private final String IS_ACTIVE_QUERY = "SELECT *  FROM " +
+            TimeClockContract.Timeclock.TABLE_TIMECLOCK + " WHERE " +
+            TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =? AND " +
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NULL";
+
     private Context mContext;
     private EmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
 
-    public InsertTimeTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener){
+    public InsertTimeTask(Context context, EmployeesInteractor.OnFinishedTransactionListener onFinishedTransactionListener) {
         this.mContext = context;
         this.mOnFinishedTransactionListener = onFinishedTransactionListener;
     }
 
     @Override
     protected Boolean doInBackground(Integer[]... params) {
-        int insertCounter = 0;
         boolean isSuccess = false;
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getWritableDatabase();
@@ -45,25 +49,28 @@ public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
 
             Integer[] ids = params[0];
 
-            for (int i = 0; i < ids.length; i++){
-                // gets the current wage for the corresponding employee
-                Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{String.valueOf(ids[i])});
-                employeeCursor.moveToPosition(0);
-                double empWage = employeeCursor.getDouble(0);
-                employeeCursor.close();
+            for (int i = 0; i < ids.length; i++) {
+                // checks if employee was already added to active list
+                Cursor isActiveCursor = db.rawQuery(IS_ACTIVE_QUERY, new String[]{String.valueOf(ids[i])});
+                if (isActiveCursor == null || isActiveCursor.getCount() == 0) {
+                    // gets the current wage for the corresponding employee
+                    Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{String.valueOf(ids[i])});
+                    employeeCursor.moveToPosition(0);
+                    double empWage = employeeCursor.getDouble(0);
+                    employeeCursor.close();
 
-                sqLiteStatement.clearBindings();
-                sqLiteStatement.bindLong(1, ids[i]);
-                sqLiteStatement.bindLong(2, System.currentTimeMillis() / 1000 );
-                sqLiteStatement.bindDouble(3, empWage);
-                Long rowInserted = sqLiteStatement.executeInsert();
-                if (rowInserted != -1) {
-                    insertCounter++;
+                    // performs the insert (clocks in)
+                    sqLiteStatement.clearBindings();
+                    sqLiteStatement.bindLong(1, ids[i]);
+                    sqLiteStatement.bindLong(2, System.currentTimeMillis() / 1000);
+                    sqLiteStatement.bindDouble(3, empWage);
+                    sqLiteStatement.executeInsert();
+                }
+                if (isActiveCursor != null) {
+                    isActiveCursor.close();
                 }
             }
-            if (insertCounter == ids.length){
-                  isSuccess = true;
-            }
+            isSuccess = true;
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.w("Exception: ", e);
@@ -75,7 +82,7 @@ public class InsertTimeTask extends AsyncTask<Integer[], Void, Boolean>{
 
     @Override
     protected void onPostExecute(Boolean isSuccess) {
-        if (isSuccess){
+        if (isSuccess) {
             this.mOnFinishedTransactionListener.onInsertTimeSuccess();
         }
     }
