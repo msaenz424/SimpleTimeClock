@@ -3,18 +3,30 @@
     android:id="@+id/item_all_employees_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/item_all_photo_image_view"
-        android:layout_width="@dimen/item_photo_size"
-        android:layout_height="@dimen/item_photo_size"
-        android:padding="@dimen/item_photo_padding" />
-
-    <TextView
-        android:id="@+id/employee_name_text_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ListItemEmployeeName"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/item_all_photo_image_view"
+            android:layout_width="@dimen/item_photo_size"
+            android:layout_height="@dimen/item_photo_size"
+            android:padding="@dimen/item_photo_padding" />
+
+        <TextView
+            android:id="@+id/employee_name_text_view"
+            style="@style/ListItemEmployeeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide_background" />
 
 </LinearLayout>
