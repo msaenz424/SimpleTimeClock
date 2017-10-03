@@ -17,12 +17,15 @@ import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
 import com.android.mig.simpletimeclock.view.MainView;
 import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
 
     private RecyclerView mEmployeeRecyclerView;
     private TextView mListMessageTextView;
+    private AdView mAdView;
     private ActiveEmployeesPresenter mActiveEmployeesPresenter;
 
     @Override
@@ -36,6 +39,11 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle(getResources().getString(R.string.main_activity_title));
         }
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        // Requests an ad to the AdMob platform
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         mListMessageTextView = (TextView) findViewById(R.id.active_list_text_view);
         mEmployeeRecyclerView = (RecyclerView) findViewById(R.id.rv_emp_list);
