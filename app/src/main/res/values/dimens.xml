@@ -12,6 +12,9 @@
     <dimen name="item_vertical_padding">4dp</dimen>
     <dimen name="item_photo_size">80dp</dimen>
     <dimen name="item_photo_padding">8dp</dimen>
+    <dimen name="item_ic_clock_out_size">30dp</dimen>
+    <dimen name="item_clock_out_margin">10dp</dimen>
+    <dimen name="item_clock_out_text_size">13sp</dimen>
 
     <!-- EmployeeDetailsActivity -->
     <dimen name="det_textview_size">16sp</dimen>

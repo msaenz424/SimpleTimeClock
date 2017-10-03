@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Simple Time Clock</string>
+
+    <!-- MainActivity -->
     <string name="main_activity_title">Active Employees</string>
+    <string name="clock_out_text">Clock out</string>
+
     <string name="all_employees_activity_title">All Employees</string>
     <string name="error_text_insert">There was a problem when trying to add a new employee, please try it again</string>
     <string name="employee_name">name</string>
     <string name="wage">hourly wage</string>
+
+    <!-- DialogFragment -->
     <string name="dialog_accept_button">Accept</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="item_title_delete">Delete</string>

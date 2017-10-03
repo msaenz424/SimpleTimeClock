@@ -1,20 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_active_employees_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/item_active_photo_image_view"
-        android:layout_width="@dimen/item_photo_size"
-        android:layout_height="@dimen/item_photo_size"
-        android:padding="@dimen/item_photo_padding" />
+    <RelativeLayout
+        android:id="@+id/view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/item_background">
 
-    <TextView
-        android:id="@+id/active_employee_text_view"
+        <ImageView
+            android:id="@+id/clock_out_icon_left"
+            android:layout_width="@dimen/item_ic_clock_out_size"
+            android:layout_height="@dimen/item_ic_clock_out_size"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/item_clock_out_margin"
+            android:src="@drawable/ic_action_clock_out" />
+
+        <TextView
+            android:id="@+id/clock_out_text_view_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/item_clock_out_margin"
+            android:layout_toEndOf="@id/clock_out_icon_left"
+            android:text="@string/clock_out_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/item_clock_out_text_size" />
+
+        <ImageView
+            android:id="@+id/clock_out_icon_right"
+            android:layout_width="@dimen/item_ic_clock_out_size"
+            android:layout_height="@dimen/item_ic_clock_out_size"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/item_clock_out_margin"
+            android:src="@drawable/ic_action_clock_out" />
+
+        <TextView
+            android:id="@+id/clock_out_text_view_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/item_clock_out_margin"
+            android:layout_toStartOf="@id/clock_out_icon_right"
+            android:text="@string/clock_out_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/item_clock_out_text_size" />
+
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ListItemEmployeeName"/>
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/item_active_photo_image_view"
+                android:layout_width="@dimen/item_photo_size"
+                android:layout_height="@dimen/item_photo_size"
+                android:padding="@dimen/item_photo_padding" />
+
+            <TextView
+                android:id="@+id/active_employee_text_view"
+                style="@style/ListItemEmployeeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_background"/>
+
+    </LinearLayout>
+
+</FrameLayout>

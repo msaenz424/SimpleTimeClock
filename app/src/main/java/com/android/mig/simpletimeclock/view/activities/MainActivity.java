@@ -2,6 +2,7 @@ package com.android.mig.simpletimeclock.view.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+                return true;
             }
 
             @Override
@@ -55,6 +56,46 @@ public class MainActivity extends AppCompatActivity
                 EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
                 ids = employeeAdapter.getItemIds(position);
                 mActiveEmployeesPresenter.onItemSwiped(ids);
+            }
+
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                if (viewHolder != null) {
+                    final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                    getDefaultUIUtil().onSelected(foregroundView);
+                }
+            }
+
+            @Override
+            public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    if (dX > 0){
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutIcon.setVisibility(View.VISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutTextView.setVisibility(View.VISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutIcon.setVisibility(View.INVISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutTextView.setVisibility(View.INVISIBLE);
+                    } else {
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutIcon.setVisibility(View.VISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutTextView.setVisibility(View.VISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutIcon.setVisibility(View.INVISIBLE);
+                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutTextView.setVisibility(View.INVISIBLE);
+                    }
+                    final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                    getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
+                }
+
+            }
+
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                getDefaultUIUtil().clearView(foregroundView);
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(mEmployeeRecyclerView);
     }

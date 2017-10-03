@@ -87,16 +87,24 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 
-    class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout mItemLinearLayout;
         ImageView mPhotoImageView;
         TextView mEmployeeNameTextView;
+        public LinearLayout mForegroundLayout;
+        public ImageView mLeftClockOutIcon, mRightClockOutIcon;
+        public TextView mLeftClockOutTextView, mRightClockOutTextView;
 
         EmployeeViewHolder(View itemView) {
             super(itemView);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
             mPhotoImageView = itemView.findViewById(R.id.item_active_photo_image_view);
             mEmployeeNameTextView = itemView.findViewById(R.id.active_employee_text_view);
+            mForegroundLayout = itemView.findViewById(R.id.view_foreground);
+            mLeftClockOutIcon = itemView.findViewById(R.id.clock_out_icon_left);
+            mRightClockOutIcon = itemView.findViewById(R.id.clock_out_icon_right);
+            mLeftClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_left);
+            mRightClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_right);
             itemView.setOnClickListener(this);
         }
 
