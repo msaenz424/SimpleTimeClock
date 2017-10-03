@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenter;
@@ -30,11 +31,12 @@ public class AllEmployeesFragment extends Fragment
         implements AllEmployeesView, AllEmployeesAdapter.OnListTapHandler{
 
     boolean actionMode = false;
-    AllEmployeesPresenter mAllEmployeesPresenter;
-    FloatingActionButton mFabSetActiveEmployee;
-    RecyclerView mAllEmployeesRecyclerView;
-    View rootView;
-    ActionMode mActionMode;
+    private AllEmployeesPresenter mAllEmployeesPresenter;
+    private FloatingActionButton mFabSetActiveEmployee;
+    private RecyclerView mAllEmployeesRecyclerView;
+    private TextView mEmptyListMessageTextView;
+    private View rootView;
+    private ActionMode mActionMode;
     private ActionMode.Callback mActionModeCallbacks = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -81,6 +83,7 @@ public class AllEmployeesFragment extends Fragment
             }
         });
 
+        mEmptyListMessageTextView = rootView.findViewById(R.id.all_employees_list_text_view);
         mAllEmployeesRecyclerView = rootView.findViewById(R.id.all_employees_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mAllEmployeesRecyclerView.setLayoutManager(layoutManager);
@@ -97,6 +100,11 @@ public class AllEmployeesFragment extends Fragment
     /** {@inheritDoc} */
     @Override
     public void showAllEmployees(Cursor employeesCursor) {
+        if (employeesCursor.getCount() == 0){
+            mEmptyListMessageTextView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListMessageTextView.setVisibility(View.INVISIBLE);
+        }
         AllEmployeesAdapter allEmployeesAdapter = (AllEmployeesAdapter) mAllEmployeesRecyclerView.getAdapter();
         allEmployeesAdapter.setAllEmployeesData(employeesCursor);
     }

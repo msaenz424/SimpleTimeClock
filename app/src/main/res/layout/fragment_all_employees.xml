@@ -18,6 +18,13 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/all_employees_list_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_all_employees_list_message"
+        android:layout_gravity="center"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_set_active_employee"
         android:layout_width="wrap_content"

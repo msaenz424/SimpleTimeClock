@@ -9,6 +9,9 @@
     <string name="error_text_insert">There was a problem when trying to add a new employee, please try it again</string>
     <string name="employee_name">name</string>
     <string name="wage">hourly wage</string>
+    <string name="empty_active_list_message">Your list of active employees is currently empty.</string>
+
+    <string name="empty_all_employees_list_message">Add a new employee here.</string>
 
     <!-- DialogFragment -->
     <string name="dialog_accept_button">Accept</string>

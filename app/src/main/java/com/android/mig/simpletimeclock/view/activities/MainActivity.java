@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
 
     private RecyclerView mEmployeeRecyclerView;
+    private TextView mListMessageTextView;
     private ActiveEmployeesPresenter mActiveEmployeesPresenter;
 
     @Override
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(getResources().getString(R.string.main_activity_title));
         }
 
+        mListMessageTextView = (TextView) findViewById(R.id.active_list_text_view);
         mEmployeeRecyclerView = (RecyclerView) findViewById(R.id.rv_emp_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEmployeeRecyclerView.setLayoutManager(layoutManager);
@@ -115,6 +118,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showActiveEmployees(Cursor employees) {
+        if (employees.getCount() == 0) {
+            mListMessageTextView.setVisibility(View.VISIBLE);
+        } else {
+            mListMessageTextView.setVisibility(View.INVISIBLE);
+        }
         EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
         employeeAdapter.setEmployeesData(employees);
     }
