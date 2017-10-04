@@ -42,8 +42,4 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
-    <!--style name="ContextualToolbar" parent="PrimaryToolbar">
-        <item name="android:background">@color/contextual_toolbar_color</item>
-    </style-->
-
 </resources>

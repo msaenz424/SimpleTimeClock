@@ -118,13 +118,13 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         int unpaidInSeconds = (int) employeeDetails.getUnpaidTimeWorked();
         int hours = unpaidInSeconds / 3600;
         int minutes = (unpaidInSeconds % 3600) / 60;
-        mUnpaidHoursTextView.setText(hours + " hours " + minutes + " minutes");
+        mUnpaidHoursTextView.setText(hours + "h " + minutes + "m");
         mUnpaidEarnings = String.format(Locale.US, "%.2f", employeeDetails.getUnpaidEarnings());
         mUnpaidEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings);
         int totalInSeconds = (int) employeeDetails.getTotalTimeWorked();
         int totalHours = totalInSeconds / 3600;
         int totalMinutes = (totalInSeconds % 3600) / 60;
-        mTotalHoursTextView.setText(totalHours + " hours " + totalMinutes + " minutes");
+        mTotalHoursTextView.setText(totalHours + "h " + totalMinutes + "m");
         String totalEarnings = String.format(Locale.US, "%.2f", employeeDetails.getTotalEarnings());
         mTotalEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + totalEarnings);
         if (employeeDetails.getIsWorking()){

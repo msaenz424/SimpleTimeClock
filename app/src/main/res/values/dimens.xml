@@ -25,8 +25,8 @@
     <dimen name="det_status_icon_size">60dp</dimen>
     <dimen name="det_item_icon_size">40dp</dimen>
     <dimen name="det_textview_left_padding">16dp</dimen>
-    <dimen name="button_horizontal_padding">16dp</dimen>
-    <dimen name="det_button_margin">8dp</dimen>
+    <!--dimen name="button_horizontal_padding">16dp</dimen-->
+    <!--dimen name="det_button_margin">8dp</dimen-->
 
     <!-- DialogFragment -->
     <dimen name="dialog_image_frame_size">120dp</dimen>
