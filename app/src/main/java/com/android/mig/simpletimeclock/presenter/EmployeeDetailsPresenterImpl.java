@@ -10,8 +10,8 @@ import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
         EmployeeDetailsInteractor.OnFinishedTransactionListener{
 
-    EmployeeDetailsView mEmployeeDetailsView;
-    EmployeeDetailsInteractor mEmployeeDetailsInteractor;
+    private EmployeeDetailsView mEmployeeDetailsView;
+    private EmployeeDetailsInteractor mEmployeeDetailsInteractor;
 
     public EmployeeDetailsPresenterImpl(EmployeeDetailsView employeeDetailsView, Context context) {
         this.mEmployeeDetailsView = employeeDetailsView;
@@ -24,9 +24,10 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     }
 
     @Override
-    public void onActionEditClicked() {
-
+    public void onActionEditClicked(int empId, String name, double wage, String photoPath) {
+        mEmployeeDetailsInteractor.editEmployeeDetails(empId, name, wage, photoPath, this);
     }
+
 
     @Override
     public void onPayButtonClicked(int empId) {
@@ -36,6 +37,11 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     @Override
     public void onReadSuccess(EmployeeDetails employeeDetails) {
         mEmployeeDetailsView.showEmployeeInfo(employeeDetails);
+    }
+
+    @Override
+    public void onUpdateSuccess() {
+        mEmployeeDetailsView.refreshEmployeeInfo();
     }
 
     @Override

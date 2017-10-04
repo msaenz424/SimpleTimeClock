@@ -4,7 +4,7 @@ public interface EmployeeDetailsPresenter {
 
     void onResume(int empId);
 
-    void onActionEditClicked();
+    void onActionEditClicked(int empId, String name, double wage, String photoPath);
 
     void onPayButtonClicked(int empId);
 

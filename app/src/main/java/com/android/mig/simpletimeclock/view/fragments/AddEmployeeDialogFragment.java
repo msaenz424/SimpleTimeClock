@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -121,6 +122,22 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                 .load(R.drawable.im_blank_profile)
                 .apply(RequestOptions.circleCropTransform())
                 .into(mBlankImageView);
+
+        if (getArguments() != null) {
+            String name = getArguments().getString(EmployeeDetailsActivity.EMP_NAME_TAG);
+            String wage = String.valueOf(getArguments().getDouble(EmployeeDetailsActivity.EMP_WAGE_TAG));
+            String photoPath = getArguments().getString(EmployeeDetailsActivity.EMP_PHOTOPATH_TAG);
+            mNameEditText.setText(name);
+            mWageEditText.setText(wage);
+            if (photoPath != null){
+                if (!photoPath.isEmpty() && !photoPath.equals("null")){
+                    Glide.with(getActivity().getApplicationContext())
+                            .load(photoPath)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(mBlankImageView);
+                }
+            }
+        }
 
         builder.setView(rootView)
                 // Add action buttons

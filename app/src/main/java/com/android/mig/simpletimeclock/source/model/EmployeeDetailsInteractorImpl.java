@@ -3,11 +3,12 @@ package com.android.mig.simpletimeclock.source.model;
 import android.content.Context;
 
 import com.android.mig.simpletimeclock.source.model.tasks.ReadEmployeeDetailsTask;
+import com.android.mig.simpletimeclock.source.model.tasks.UpdateEmployeeTask;
 import com.android.mig.simpletimeclock.source.model.tasks.UpdateUnpaidTimeTask;
 
 public class EmployeeDetailsInteractorImpl implements EmployeeDetailsInteractor{
 
-    Context mContext;
+    private Context mContext;
 
     public EmployeeDetailsInteractorImpl(Context context) {
         this.mContext = context;
@@ -17,6 +18,12 @@ public class EmployeeDetailsInteractorImpl implements EmployeeDetailsInteractor{
     public void readEmployeeDetails(int empId, OnFinishedTransactionListener onFinishedTransactionListener) {
         ReadEmployeeDetailsTask readEmployeeDetailsTask = new ReadEmployeeDetailsTask(mContext, onFinishedTransactionListener);
         readEmployeeDetailsTask.execute(empId);
+    }
+
+    @Override
+    public void editEmployeeDetails(int empId, String name, double wage, String photoPath, OnFinishedTransactionListener onFinishedTransactionListener) {
+        UpdateEmployeeTask updateEmployeeTask = new UpdateEmployeeTask(mContext, onFinishedTransactionListener);
+        updateEmployeeTask.execute(empId, name, wage, photoPath);
     }
 
     @Override

@@ -22,13 +22,14 @@ import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenter;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenterImpl;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
+import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.Locale;
 
 public class EmployeeDetailsFragment extends Fragment implements EmployeeDetailsView{
 
-    EmployeeDetailsPresenter mEmployeeDetailsPresenter;
+    private EmployeeDetailsPresenter mEmployeeDetailsPresenter;
 
     View mRootView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -136,6 +137,8 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
                 mPayButton.setEnabled(false);
             }
         }
+        EmployeeDetailsActivity employeeDetailsActivity = (EmployeeDetailsActivity) getActivity();
+        employeeDetailsActivity.setEmployeeDetails(new EmployeeDetails(mEmployeeId, employeeDetails.getName(), employeeDetails.getWage(), employeeDetails.getPhotoPath()));
     }
 
     @Override
@@ -149,5 +152,9 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     @Override
     public void refreshEmployeeInfo() {
         mEmployeeDetailsPresenter.onResume(mEmployeeId);
+    }
+
+    public EmployeeDetailsPresenter getPresenter(){
+        return mEmployeeDetailsPresenter;
     }
 }

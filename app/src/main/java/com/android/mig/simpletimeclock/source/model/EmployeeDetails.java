@@ -11,10 +11,11 @@ public class EmployeeDetails {
     private double mTotalEarnings;
     private boolean isWorking;
 
-    public EmployeeDetails(int id, String name, double wage){
+    public EmployeeDetails(int id, String name, double wage, String photoPath){
         this.mID = id;
         this.mName = name;
         this.mWage = wage;
+        this.mPhotoPath = photoPath;
     }
 
     public EmployeeDetails(int id, String name, double wage, String photoPath, long unpaidTimeWorked, double unpaidEarnings, long totalTimeWorked, double totalEarnings, boolean isWorking) {
