@@ -69,7 +69,8 @@
                 android:id="@+id/item_active_photo_image_view"
                 android:layout_width="@dimen/item_photo_size"
                 android:layout_height="@dimen/item_photo_size"
-                android:padding="@dimen/item_photo_padding" />
+                android:padding="@dimen/item_photo_padding"
+                android:transitionName="@string/transition_photo"/>
 
             <TextView
                 android:id="@+id/active_employee_text_view"

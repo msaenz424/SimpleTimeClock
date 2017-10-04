@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+//import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -66,12 +66,12 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         if (photoUri.isEmpty() || photoUri.equals("null")){
             Glide.with(mContext)
                     .load(R.drawable.im_blank_profile)
-                    .apply(RequestOptions.circleCropTransform())
+                    //.apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
         } else {
             Glide.with(mContext)
                     .load(photoUri)
-                    .apply(RequestOptions.circleCropTransform())
+                    //.apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
         }
     }
@@ -107,7 +107,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
                 onLongClick(view);
             } else {
                 int empId = Integer.valueOf(view.getTag().toString());
-                mOnTapHandler.onClick(empId);
+                mOnTapHandler.onClick(empId, mPhotoImageView);
             }
         }
 
@@ -146,6 +146,6 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
          */
         void onLastSelectionItemRemoved();
 
-        void onClick(int empId);
+        void onClick(int empId, View photoImageView);
     }
 }

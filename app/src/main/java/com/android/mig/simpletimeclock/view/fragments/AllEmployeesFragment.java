@@ -1,8 +1,10 @@
 package com.android.mig.simpletimeclock.view.fragments;
 
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
@@ -26,6 +29,7 @@ import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenterImpl;
 import com.android.mig.simpletimeclock.view.AllEmployeesView;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
+import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 
 public class AllEmployeesFragment extends Fragment
         implements AllEmployeesView, AllEmployeesAdapter.OnListTapHandler{
@@ -202,10 +206,17 @@ public class AllEmployeesFragment extends Fragment
     }
 
     @Override
-    public void onClick(int empId) {
+    public void onClick(int empId, View photoImageView) {
+
+        Bundle bundle = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            bundle = ActivityOptions
+                    .makeSceneTransitionAnimation(getActivity(), photoImageView, photoImageView.getTransitionName())
+                    .toBundle();
+        }
         Intent intent = new Intent(getActivity(), EmployeeDetailsActivity.class);
         intent.putExtra(Intent.EXTRA_UID, empId);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
+        startActivity(intent, bundle);
     }
 }

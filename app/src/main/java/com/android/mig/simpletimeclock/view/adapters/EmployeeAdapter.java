@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+//import com.bumptech.glide.request.RequestOptions;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
@@ -68,12 +68,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         if (photoUri.isEmpty() || photoUri.equals("null")){
             Glide.with(holder.itemView.getContext())
                     .load(R.drawable.im_blank_profile)
-                    .apply(RequestOptions.circleCropTransform())
+                    //.apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
         } else {
             Glide.with(holder.itemView.getContext())
                     .load(photoUri)
-                    .apply(RequestOptions.circleCropTransform())
+                    //.apply(RequestOptions.circleCropTransform())
                     .into(holder.mPhotoImageView);
         }
     }
@@ -111,12 +111,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         @Override
         public void onClick(View view) {
             mEmployeesCursor.moveToPosition(getAdapterPosition());
-            mOnClickHandler.onItemClick(mEmployeesCursor.getInt(EMPLOYEE_COL_ID_INDEX));
+            mOnClickHandler.onItemClick(mEmployeesCursor.getInt(EMPLOYEE_COL_ID_INDEX), mPhotoImageView);
         }
     }
 
     public interface OnClickHandler{
-        void onItemClick(int employeeId);
+        void onItemClick(int employeeId, View photoImageView);
     }
 
 }

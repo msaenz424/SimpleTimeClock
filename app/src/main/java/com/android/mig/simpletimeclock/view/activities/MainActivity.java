@@ -1,5 +1,6 @@
 package com.android.mig.simpletimeclock.view.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
@@ -136,9 +138,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemClick(int employeeId) {
+    public void onItemClick(int employeeId, View photoImageView) {
+        Bundle bundle = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            bundle = ActivityOptions
+                    .makeSceneTransitionAnimation(this, photoImageView, photoImageView.getTransitionName())
+                    .toBundle();
+        }
         Intent intent = new Intent(this, EmployeeDetailsActivity.class);
         intent.putExtra(Intent.EXTRA_UID, employeeId);
-        startActivity(intent);
+        startActivity(intent, bundle);
     }
 }

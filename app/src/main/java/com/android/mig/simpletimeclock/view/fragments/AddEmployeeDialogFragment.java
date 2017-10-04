@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+//import com.bumptech.glide.request.RequestOptions;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickClick;
@@ -120,7 +120,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         // Pass null as the parent view because it's going in the dialog layout
         Glide.with(getActivity().getApplicationContext())
                 .load(R.drawable.im_blank_profile)
-                .apply(RequestOptions.circleCropTransform())
+                //.apply(RequestOptions.circleCropTransform())
                 .into(mBlankImageView);
 
         if (getArguments() != null) {
@@ -133,7 +133,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                 if (!photoPath.isEmpty() && !photoPath.equals("null")){
                     Glide.with(getActivity().getApplicationContext())
                             .load(photoPath)
-                            .apply(RequestOptions.circleCropTransform())
+                            //.apply(RequestOptions.circleCropTransform())
                             .into(mBlankImageView);
                 }
             }
@@ -190,11 +190,15 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         // receives result code from camera intent launched previously
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             mPhotoPath = mTempContainerPath;
-            Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
+            Glide.with(mBlankImageView.getContext()).load(mPhotoPath)
+                    //.apply(RequestOptions.circleCropTransform())
+                    .into(mBlankImageView);
             mTempContainerPath = null;
         } else if (requestCode == REQUEST_PHOTO_PICKER && resultCode == RESULT_OK) {
             mPhotoPath = data.getData();
-            Glide.with(mBlankImageView.getContext()).load(mPhotoPath).apply(RequestOptions.circleCropTransform()).into(mBlankImageView);
+            Glide.with(mBlankImageView.getContext()).load(mPhotoPath)
+                    //.apply(RequestOptions.circleCropTransform())
+                    .into(mBlankImageView);
         }
     }
 

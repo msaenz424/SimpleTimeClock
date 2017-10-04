@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,9 @@ import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.Locale;
 
@@ -56,6 +60,8 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         final Toolbar toolbar = mRootView.findViewById(R.id.det_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        postponeEnterTransition();
 
         mEmployeeId = getActivity().getIntent().getIntExtra(Intent.EXTRA_UID, 0);
         mEmployeeDetailsPresenter = new EmployeeDetailsPresenterImpl(this, getContext());
@@ -104,16 +110,39 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
 
         mCollapsingToolbarLayout.setTitle(employeeDetails.getName());
         String photoUri = employeeDetails.getPhotoPath();
+
         if (photoUri != null && !photoUri.equals("null") && !photoUri.isEmpty()){
-            mPhotoImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            //mPhotoImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Glide.with(getContext())
-                    .load(photoUri)
+                    .load(employeeDetails.getPhotoPath())
+                    .dontAnimate()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            scheduleStartPostponedTransition(mPhotoImageView);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            scheduleStartPostponedTransition(mPhotoImageView);
+                            return false;
+                        }
+                    })
                     .into(mPhotoImageView);
         } else {
             Glide.with(getContext())
                     .load(R.drawable.im_blank_profile)
                     .into(mPhotoImageView);
         }
+
+/*
+        if (photoUri != null && !photoUri.equals("null") && !photoUri.isEmpty()) {
+            Picasso.with(getContext())
+                    .load(photoUri)
+                    .into(mPhotoImageView);
+        }
+        */
         mWageTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + String.valueOf(employeeDetails.getWage()));
         int unpaidInSeconds = (int) employeeDetails.getUnpaidTimeWorked();
         int hours = unpaidInSeconds / 3600;
@@ -156,5 +185,17 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
 
     public EmployeeDetailsPresenter getPresenter(){
         return mEmployeeDetailsPresenter;
+    }
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                });
     }
 }
