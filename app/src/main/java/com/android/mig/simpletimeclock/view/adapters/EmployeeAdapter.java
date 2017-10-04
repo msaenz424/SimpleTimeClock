@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.view.utils.CircleTransform;
 import com.bumptech.glide.Glide;
-//import com.bumptech.glide.request.RequestOptions;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
@@ -68,12 +68,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         if (photoUri.isEmpty() || photoUri.equals("null")){
             Glide.with(holder.itemView.getContext())
                     .load(R.drawable.im_blank_profile)
-                    //.apply(RequestOptions.circleCropTransform())
+                    .transform(new CircleTransform(holder.itemView.getContext()))
                     .into(holder.mPhotoImageView);
         } else {
             Glide.with(holder.itemView.getContext())
                     .load(photoUri)
-                    //.apply(RequestOptions.circleCropTransform())
+                    .transform(new CircleTransform(holder.itemView.getContext()))
                     .into(holder.mPhotoImageView);
         }
     }

@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
+import com.android.mig.simpletimeclock.view.utils.CircleTransform;
 import com.bumptech.glide.Glide;
-//import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -66,12 +66,12 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         if (photoUri.isEmpty() || photoUri.equals("null")){
             Glide.with(mContext)
                     .load(R.drawable.im_blank_profile)
-                    //.apply(RequestOptions.circleCropTransform())
+                    .transform(new CircleTransform(mContext))
                     .into(holder.mPhotoImageView);
         } else {
             Glide.with(mContext)
                     .load(photoUri)
-                    //.apply(RequestOptions.circleCropTransform())
+                    .transform(new CircleTransform(mContext))
                     .into(holder.mPhotoImageView);
         }
     }
