@@ -1,13 +1,17 @@
 package com.android.mig.simpletimeclock.view.activities;
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.os.Build;
+import android.content.res.Resources;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 
 import com.android.mig.simpletimeclock.R;
@@ -66,6 +70,40 @@ public class EmployeeDetailsActivity extends AppCompatActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onEnterAnimationComplete() {
+        super.onEnterAnimationComplete();
+        final AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.det_appbar_layout);
+
+        int scrollValue = 0;
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int appbarHeight = mAppBarLayout.getHeight();
+
+        // if height of AppBar if bigger than screen's height then the scrolling will be slightly more extended
+        if (appbarHeight >= screenHeight){
+            scrollValue = getResources().getInteger(R.integer.det_scroll_height_value);
+        }
+
+        // generates an up-scrolling animation (instructive motion) when activity just starts
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
+        final AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        if (behavior != null && scrollValue != 0) {
+            ValueAnimator valueAnimator = ValueAnimator.ofInt();
+            valueAnimator.setInterpolator(new DecelerateInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    behavior.setTopAndBottomOffset((Integer) animation.getAnimatedValue());
+                    mAppBarLayout.requestLayout();
+                }
+            });
+            valueAnimator.setIntValues(0, scrollValue);
+            valueAnimator.setDuration(getResources().getInteger(R.integer.det_scroll_duration));
+            valueAnimator.setStartDelay(getResources().getInteger(R.integer.det_scroll_delay));
+            valueAnimator.start();
+        }
     }
 
     @Override

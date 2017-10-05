@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="det_scroll_delay">300</integer>
+    <integer name="det_scroll_duration">800</integer>
+    <integer name="det_scroll_height_value">-800</integer>
+</resources>
