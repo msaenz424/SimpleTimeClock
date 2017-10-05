@@ -37,6 +37,8 @@ public class AddEmployeeDialogFragment extends DialogFragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_PHOTO_PICKER = 2;
     private static final int MY_PERMISSIONS_REQUEST_USE_CAMERA = 10;        // code should be bigger than 0
+    private static final String PHOTO_SAVED_STATE_ID = "photo_path";
+
     private NoticeDialogListener mNoticeDialogListener;
     private PhotoPickerListener mPhotoPickerListener;
 
@@ -116,26 +118,24 @@ public class AddEmployeeDialogFragment extends DialogFragment {
             }
         });
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because it's going in the dialog layout
-        Glide.with(getActivity().getApplicationContext())
-                .load(R.drawable.im_blank_profile)
-                .transform(new CircleTransform(getActivity().getApplicationContext()))
-                .into(mBlankImageView);
-
-        if (getArguments() != null) {
-            String name = getArguments().getString(EmployeeDetailsActivity.EMP_NAME_TAG);
-            String wage = String.valueOf(getArguments().getDouble(EmployeeDetailsActivity.EMP_WAGE_TAG));
-            String photoPath = getArguments().getString(EmployeeDetailsActivity.EMP_PHOTOPATH_TAG);
-            mNameEditText.setText(name);
-            mWageEditText.setText(wage);
-            if (photoPath != null){
-                if (!photoPath.isEmpty() && !photoPath.equals("null")){
-                    Glide.with(getActivity().getApplicationContext())
-                            .load(photoPath)
-                            .transform(new CircleTransform(getActivity().getApplicationContext()))
-                            .into(mBlankImageView);
-                }
+        if (savedInstanceState != null) {
+            String savedPhotoPath = savedInstanceState.getString(PHOTO_SAVED_STATE_ID);
+            if (savedPhotoPath != null){
+                setPhoto(savedPhotoPath);
+            } else {
+                setPhoto("");
+            }
+        } else {
+            // if dialog was invoked from detail activity
+            if (getArguments() != null) {
+                String name = getArguments().getString(EmployeeDetailsActivity.EMP_NAME_TAG);
+                String wage = String.valueOf(getArguments().getDouble(EmployeeDetailsActivity.EMP_WAGE_TAG));
+                String photoPath = getArguments().getString(EmployeeDetailsActivity.EMP_PHOTOPATH_TAG);
+                mNameEditText.setText(name);
+                mWageEditText.setText(wage);
+                setPhoto(photoPath);
+            } else {
+                setPhoto("");
             }
         }
 
@@ -186,21 +186,21 @@ public class AddEmployeeDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPhotoPath != null){
+            outState.putString(PHOTO_SAVED_STATE_ID, String.valueOf(mPhotoPath));
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // receives result code from camera intent launched previously
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            mPhotoPath = mTempContainerPath;
-            Glide.with(mBlankImageView.getContext())
-                    .load(mPhotoPath)
-                    .transform(new CircleTransform(mBlankImageView.getContext()))
-                    .into(mBlankImageView);
+            setPhoto(String.valueOf(mTempContainerPath));
             mTempContainerPath = null;
         } else if (requestCode == REQUEST_PHOTO_PICKER && resultCode == RESULT_OK) {
-            mPhotoPath = data.getData();
-            Glide.with(mBlankImageView.getContext())
-                    .load(mPhotoPath)
-                    .transform(new CircleTransform(mBlankImageView.getContext()))
-                    .into(mBlankImageView);
+            setPhoto(String.valueOf(data.getData()));
         }
     }
 
@@ -251,6 +251,27 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         intent.setType("image/jpeg");
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), REQUEST_PHOTO_PICKER);
+    }
+
+    /**
+     * Sets the ImageView for either a placeholder or an actual picture
+     *
+     * @param photoPath path of picture if there is any
+     */
+    private void setPhoto(String photoPath){
+        if (photoPath.equals("null") || photoPath.isEmpty()){
+            Glide.with(getActivity().getApplicationContext())
+                    .load(R.drawable.im_blank_profile)
+                    .transform(new CircleTransform(getActivity().getApplicationContext()))
+                    .into(mBlankImageView);
+        } else {
+            mPhotoPath = Uri.parse(photoPath);
+            Glide.with(mBlankImageView.getContext())
+                    .load(mPhotoPath)
+                    .transform(new CircleTransform(mBlankImageView.getContext()))
+                    .into(mBlankImageView);
+        }
+
     }
 
     public interface NoticeDialogListener {
