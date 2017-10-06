@@ -81,8 +81,6 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                 currentCursor.moveToPosition(0);
                 currentTime = (((System.currentTimeMillis() / 1000) - currentCursor.getLong(0)) - (currentCursor.getLong(1) - currentCursor.getLong(2)));
                 currentEarnings = currentCursor.getDouble(3) * currentTime / 3600;
-                Log.d("activeTime: ", String.valueOf(currentTime));
-                Log.d("activeEarnings: ", String.valueOf(currentEarnings));
             }
             currentCursor.close();
 
@@ -95,16 +93,11 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                     unpaidPreviousTime += unpaidCursor.getLong(0);
                     unpaidPreviousEarnings += unpaidCursor.getDouble(1) * unpaidCursor.getLong(0) / 3600;
                 } while (unpaidCursor.moveToNext());
-
-                Log.d("Past Unpaid Time: ", String.valueOf(unpaidPreviousTime));
-                Log.d("Past Unpaid Earnings: ", String.valueOf(unpaidPreviousEarnings));
             }
             unpaidCursor.close();
+
             long totalUnpaidTime = currentTime + unpaidPreviousTime;
             double totalUnpaidEarnings = currentEarnings + unpaidPreviousEarnings;
-            Log.d("Total Unpaid Time: ", String.valueOf(totalUnpaidTime));
-            Log.d("Total Unpaid Earnings: ", String.valueOf(totalUnpaidEarnings));
-
             Cursor paidCursor = db.rawQuery(TOTALS_QUERY, new String[]{empId, String.valueOf(PAID_STATUS)});
             long paidTime = 0;
             double paidEarnings = 0;
@@ -114,14 +107,11 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                     paidTime += paidCursor.getLong(0);
                     paidEarnings += paidCursor.getDouble(1) * paidCursor.getLong(0) / 3600;
                 } while (paidCursor.moveToNext());
-                Log.d("Total Paid Time: ", String.valueOf(paidTime));
-                Log.d("Total Paid Earnings: ", String.valueOf(paidEarnings));
             }
             paidCursor.close();
 
             long totalTime = (totalUnpaidTime + paidTime);
             double totalEarnings = totalUnpaidEarnings + paidEarnings;
-
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
             String empName = null;
             double empWage = 0;
@@ -148,15 +138,6 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
     @Override
     protected void onPostExecute(EmployeeDetails employeeDetails) {
         if (employeeDetails != null) {
-            Log.d("emp id", String.valueOf(employeeDetails.getID()));
-            Log.d("emp name", employeeDetails.getName());
-            Log.d("emp wage", String.valueOf(employeeDetails.getWage()));
-            Log.d("emp photo path", String.valueOf(employeeDetails.getPhotoPath()));
-            Log.d("unpaid time", String.valueOf(employeeDetails.getUnpaidTimeWorked()));
-            Log.d("unpaid earnings", String.valueOf(employeeDetails.getUnpaidEarnings()));
-            Log.d("total time", String.valueOf(employeeDetails.getTotalTimeWorked()));
-            Log.d("total earnings", String.valueOf(employeeDetails.getTotalEarnings()));
-            Log.d("working?", String.valueOf(employeeDetails.getIsWorking()));
             this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
         }
     }

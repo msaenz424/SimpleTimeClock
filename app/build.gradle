@@ -16,7 +16,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.android.mig.simpletimeclock"
+        applicationId "com.marsac.migc.simpletimeclock"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
