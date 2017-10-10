@@ -149,7 +149,7 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mTotalEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + totalEarnings);
         if (employeeDetails.getIsWorking()){
             mStatusImageView.setImageResource(R.drawable.im_green_light);
-            mPayButton.setVisibility(View.INVISIBLE);
+            mPayButton.setVisibility(View.GONE);
         } else {
             mStatusImageView.setImageResource(R.drawable.im_grey_light);
             mPayButton.setVisibility(View.VISIBLE);
