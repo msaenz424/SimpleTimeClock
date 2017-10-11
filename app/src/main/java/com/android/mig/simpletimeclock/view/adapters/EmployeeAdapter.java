@@ -2,7 +2,9 @@ package com.android.mig.simpletimeclock.view.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,19 @@ import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.utils.CircleTransform;
 import com.bumptech.glide.Glide;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
     private static final int EMPLOYEE_COL_ID_INDEX = 1;
     private static final int EMPLOYEE_COL_NAME_INDEX = 2;
     private static final int EMPLOYEE_COL_PHOTO_INDEX = 3;
+    private static final int EMPLOYEE_COL_CLOCK_IN_INDEX = 4;
+    private static final int EMPLOYEE_COL_BREAK_START_INDEX = 5;
+    private static final int EMPLOYEE_COL_BREAK_END_INDEX = 6;
+    private static final int TIMER_START_DELAY = 0;
+    private static final int TIMER_UPDATE_FREQUENCY = 60000;
 
     private final OnClickHandler mOnClickHandler;
 
@@ -28,7 +38,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         this.mOnClickHandler = onClickHandler;
     }
 
-    public void setEmployeesData(Cursor employeesData){
+    public void setEmployeesData(Cursor employeesData) {
         this.mEmployeesCursor = employeesData;
         notifyDataSetChanged();
     }
@@ -39,7 +49,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
      * @param position adapter position
      * @return both ids
      */
-    public Integer[] getItemIds(int position){
+    public Integer[] getItemIds(int position) {
         Integer[] ids = new Integer[2];
         mEmployeesCursor.moveToPosition(position);
         ids[0] = mEmployeesCursor.getInt(0);
@@ -59,13 +69,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     @Override
-    public void onBindViewHolder(EmployeeViewHolder holder, int position) {
+    public void onBindViewHolder(final EmployeeViewHolder holder, int position) {
         mEmployeesCursor.moveToPosition(position);
         holder.itemView.setTag(mEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
         holder.mEmployeeNameTextView.setText(mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
         String photoUri = mEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
 
-        if (photoUri.isEmpty() || photoUri.equals("null")){
+        if (photoUri.isEmpty() || photoUri.equals("null")) {
             Glide.with(holder.itemView.getContext())
                     .load(R.drawable.im_blank_profile)
                     .transform(new CircleTransform(holder.itemView.getContext()))
@@ -76,21 +86,50 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
                     .transform(new CircleTransform(holder.itemView.getContext()))
                     .into(holder.mPhotoImageView);
         }
+
+        final long clockIn = mEmployeesCursor.getInt(EMPLOYEE_COL_CLOCK_IN_INDEX);
+        final long breakStart = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
+        final long breakEnd = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_END_INDEX);
+
+        // updates the timer every 60 seconds
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            long currentTime = System.currentTimeMillis()/1000;
+                            long time = currentTime - clockIn - (breakEnd - breakStart);
+                            long hours = time / 3600;
+                            long minutes = (time % 3600) / 60;
+                            String result = String.format("%02d:%02d", hours, minutes);
+                            holder.mTimerTextView.setText(result);
+                        } catch (Exception e) {
+                            Log.e("Exception", String.valueOf(e));
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, TIMER_START_DELAY, TIMER_UPDATE_FREQUENCY);
     }
 
     @Override
     public int getItemCount() {
-        if(mEmployeesCursor != null){
+        if (mEmployeesCursor != null) {
             return mEmployeesCursor.getCount();
         } else {
             return 0;
         }
     }
 
-    public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         LinearLayout mItemLinearLayout;
         ImageView mPhotoImageView;
-        TextView mEmployeeNameTextView;
+        TextView mEmployeeNameTextView, mTimerTextView;
         public LinearLayout mForegroundLayout;
         public ImageView mLeftClockOutIcon, mRightClockOutIcon;
         public TextView mLeftClockOutTextView, mRightClockOutTextView;
@@ -105,6 +144,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             mRightClockOutIcon = itemView.findViewById(R.id.clock_out_icon_right);
             mLeftClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_left);
             mRightClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_right);
+            mTimerTextView = itemView.findViewById(R.id.item_time_text_view);
             itemView.setOnClickListener(this);
         }
 
@@ -115,7 +155,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 
-    public interface OnClickHandler{
+    public interface OnClickHandler {
         void onItemClick(int employeeId, View photoImageView);
     }
 
