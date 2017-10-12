@@ -4,7 +4,7 @@ public interface ActiveEmployeesPresenter {
 
     void onResume();
 
-    void onItemSwiped(Integer[] ids);
+    void onItemSwiped(int timeId, int actionCode);
 
     void onItemTimerClicked(int timeId, int actionCode);
 

@@ -68,11 +68,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Integer[] ids;
                 int position = viewHolder.getAdapterPosition();
                 EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
-                ids = employeeAdapter.getItemIds(position);
-                mActiveEmployeesPresenter.onItemSwiped(ids);
+                int timeId = employeeAdapter.getTimeId(position);
+                mActiveEmployeesPresenter.onItemSwiped(timeId, CLOCK_OUT_CODE);
             }
 
             @Override

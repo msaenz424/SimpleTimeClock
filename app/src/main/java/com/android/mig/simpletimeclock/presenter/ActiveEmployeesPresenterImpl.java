@@ -24,8 +24,11 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onItemSwiped(Integer[] ids) {
-        this.mActiveEmployeesInteractor.updateTimeStatus(ids, this);
+    public void onItemSwiped(int empId, int actionCode) {
+        Integer[] values = new Integer[2];
+        values[0] = empId;
+        values[1] = actionCode;
+        this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
 
     }
 

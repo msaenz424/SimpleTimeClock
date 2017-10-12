@@ -31,7 +31,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int EMPLOYEE_COL_BREAK_END_INDEX = 6;
     private static final int TIMER_START_DELAY = 0;
     private static final int TIMER_UPDATE_FREQUENCY = 60000;
-    private static final int CLOCK_OUT_CODE = 0;
+
     private static final int BREAK_START_CODE = 1;
     private static final int BREAK_END_CODE = 2;
 
@@ -49,17 +49,14 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     /**
-     * Obtains the timeclock id and the employee id
+     * Obtains the timeclock id
      *
      * @param position adapter position
-     * @return both ids
+     * @return timeclock id
      */
-    public Integer[] getItemIds(int position) {
-        Integer[] ids = new Integer[2];
+    public int getTimeId(int position) {
         mEmployeesCursor.moveToPosition(position);
-        ids[0] = mEmployeesCursor.getInt(0);
-        ids[1] = mEmployeesCursor.getInt(1);
-        return ids;
+        return mEmployeesCursor.getInt(0);
     }
 
     @Override
