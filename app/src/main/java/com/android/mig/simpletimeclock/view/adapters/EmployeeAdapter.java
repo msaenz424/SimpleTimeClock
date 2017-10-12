@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.util.TimerTask;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
+    private static final int EMPLOYEE_COL_TIME_ID_INDEX = 0;
     private static final int EMPLOYEE_COL_ID_INDEX = 1;
     private static final int EMPLOYEE_COL_NAME_INDEX = 2;
     private static final int EMPLOYEE_COL_PHOTO_INDEX = 3;
@@ -29,6 +31,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int EMPLOYEE_COL_BREAK_END_INDEX = 6;
     private static final int TIMER_START_DELAY = 0;
     private static final int TIMER_UPDATE_FREQUENCY = 60000;
+    private static final int CLOCK_OUT_CODE = 0;
+    private static final int BREAK_START_CODE = 1;
+    private static final int BREAK_END_CODE = 2;
 
     private final OnClickHandler mOnClickHandler;
 
@@ -127,7 +132,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        LinearLayout mItemLinearLayout;
+        FrameLayout mItemFrameLayout;
         ImageView mPhotoImageView;
         TextView mEmployeeNameTextView, mTimerTextView;
         public LinearLayout mForegroundLayout;
@@ -136,7 +141,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         EmployeeViewHolder(View itemView) {
             super(itemView);
-            mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
+            mItemFrameLayout = itemView.findViewById(R.id.item_active_employees_linear_layout);
             mPhotoImageView = itemView.findViewById(R.id.item_active_photo_image_view);
             mEmployeeNameTextView = itemView.findViewById(R.id.active_employee_text_view);
             mForegroundLayout = itemView.findViewById(R.id.view_foreground);
@@ -146,17 +151,45 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             mRightClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_right);
             mTimerTextView = itemView.findViewById(R.id.item_time_text_view);
             itemView.setOnClickListener(this);
+            mTimerTextView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             mEmployeesCursor.moveToPosition(getAdapterPosition());
-            mOnClickHandler.onItemClick(mEmployeesCursor.getInt(EMPLOYEE_COL_ID_INDEX), mPhotoImageView);
+            switch (view.getId()){
+                case R.id.item_time_text_view:
+                    int start = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
+                    int end = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
+                    int empId = mEmployeesCursor.getInt(EMPLOYEE_COL_TIME_ID_INDEX);
+                    if (start == 0){
+                        mOnClickHandler.onItemTimerClick(empId, BREAK_START_CODE);
+                    } else {
+                        if (end == 0) {
+                            mOnClickHandler.onItemTimerClick(empId, BREAK_END_CODE);
+                        }
+                    }
+                    break;
+                case R.id.item_active_employees_linear_layout:
+                    mOnClickHandler.onItemClick(mEmployeesCursor.getInt(EMPLOYEE_COL_ID_INDEX), mPhotoImageView);
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 
     public interface OnClickHandler {
         void onItemClick(int employeeId, View photoImageView);
+
+        /**
+         * Handles action when timer is clicked
+         *
+         * @param employeeId id of employee
+         * @param actionCode type of action (start break or end break)
+         */
+        boolean onItemTimerClick(int employeeId, int actionCode);
     }
 
 }

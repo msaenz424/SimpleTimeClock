@@ -6,6 +6,6 @@ public interface ActiveEmployeesPresenter {
 
     void onItemSwiped(Integer[] ids);
 
-    void onAddButtonClicked();
+    void onItemTimerClicked(int timeId, int actionCode);
 
 }

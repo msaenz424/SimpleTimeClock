@@ -30,8 +30,11 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onAddButtonClicked() {
-
+    public void onItemTimerClicked(int timeId, int actionCode) {
+        Integer[] values = new Integer[2];
+        values[0] = timeId;
+        values[1] = actionCode;
+        this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
     }
 
     @Override

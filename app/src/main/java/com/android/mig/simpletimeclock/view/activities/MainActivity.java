@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +24,10 @@ import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
+
+    private static final int CLOCK_OUT_CODE = 0;
+    private static final int BREAK_START_CODE = 1;
+    private static final int BREAK_END_CODE = 2;
 
     private RecyclerView mEmployeeRecyclerView;
     private TextView mListMessageTextView;
@@ -147,5 +152,16 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, EmployeeDetailsActivity.class);
         intent.putExtra(Intent.EXTRA_UID, employeeId);
         startActivity(intent, bundle);
+    }
+
+    @Override
+    public boolean onItemTimerClick(int employeeId, int actionCode) {
+        if (actionCode == BREAK_START_CODE || actionCode == BREAK_END_CODE){
+            Log.d("break", String.valueOf(actionCode));
+            mActiveEmployeesPresenter.onItemTimerClicked(employeeId, actionCode);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
