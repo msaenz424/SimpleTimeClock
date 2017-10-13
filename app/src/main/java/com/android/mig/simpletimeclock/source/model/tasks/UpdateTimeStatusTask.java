@@ -32,7 +32,7 @@ public class UpdateTimeStatusTask extends AsyncTask<Integer, Void, Boolean> {
         int timeId = params[0];
         int actionCode = params[1];
 
-        Log.d("task", String.valueOf(actionCode));
+        Log.d("TASK", String.valueOf(actionCode));
 
         try {
             db.beginTransaction();

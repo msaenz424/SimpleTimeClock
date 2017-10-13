@@ -8,4 +8,6 @@
 
     <color name="item_background">#DD2C00</color>
     <color name="divide_background">#E0E0E0</color>
+    <color name="active_timer">#008000</color>
+    <color name="inactive_timer">#DD2C00</color>
 </resources>

@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onItemTimerClick(int employeeId, int actionCode) {
         if (actionCode == BREAK_START_CODE || actionCode == BREAK_END_CODE){
-            Log.d("break", String.valueOf(actionCode));
+            Log.d("MAINVIEW", String.valueOf(actionCode));
             mActiveEmployeesPresenter.onItemTimerClicked(employeeId, actionCode);
             return true;
         } else {

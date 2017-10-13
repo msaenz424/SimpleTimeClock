@@ -3,6 +3,7 @@ package com.android.mig.simpletimeclock.view.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.utils.CircleTransform;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,15 +38,29 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private static final int BREAK_END_CODE = 2;
 
     private final OnClickHandler mOnClickHandler;
+    private Context mContext;
 
     private Cursor mEmployeesCursor = null;
+    private ArrayList<Timer> mTimerArrayList;
 
     public EmployeeAdapter(OnClickHandler onClickHandler) {
         this.mOnClickHandler = onClickHandler;
+        this.mContext = (Context) onClickHandler;
+
     }
 
     public void setEmployeesData(Cursor employeesData) {
         this.mEmployeesCursor = employeesData;
+        if (mTimerArrayList != null) {
+            for (int i = 0; i < mTimerArrayList.size(); i++){
+                mTimerArrayList.get(i).cancel();
+                Log.d("setData", "cancelling array item at position " + i);
+            }
+            mTimerArrayList.clear();
+            mTimerArrayList = null;
+        }
+        mTimerArrayList = new ArrayList<>();
+        Log.d("setData", "new array created");
         notifyDataSetChanged();
     }
 
@@ -93,30 +109,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         final long breakStart = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
         final long breakEnd = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_END_INDEX);
 
-        // updates the timer every 60 seconds
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            long currentTime = System.currentTimeMillis()/1000;
-                            long time = currentTime - clockIn - (breakEnd - breakStart);
-                            long hours = time / 3600;
-                            long minutes = (time % 3600) / 60;
-                            String result = String.format("%02d:%02d", hours, minutes);
-                            holder.mTimerTextView.setText(result);
-                        } catch (Exception e) {
-                            Log.e("Exception", String.valueOf(e));
-                        }
-                    }
-                });
-            }
-        };
-        timer.schedule(timerTask, TIMER_START_DELAY, TIMER_UPDATE_FREQUENCY);
+        setTimers(breakStart, breakEnd, clockIn, holder.mTimerTextView);
     }
 
     @Override
@@ -146,7 +139,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             mRightClockOutIcon = itemView.findViewById(R.id.clock_out_icon_right);
             mLeftClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_left);
             mRightClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_right);
-            mTimerTextView = itemView.findViewById(R.id.item_time_text_view);
+            mTimerTextView = itemView.findViewById(R.id.item_timer_text_view);
             itemView.setOnClickListener(this);
             mTimerTextView.setOnClickListener(this);
         }
@@ -154,15 +147,17 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         @Override
         public void onClick(View view) {
             mEmployeesCursor.moveToPosition(getAdapterPosition());
-            switch (view.getId()){
-                case R.id.item_time_text_view:
-                    int start = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
-                    int end = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
+            switch (view.getId()) {
+                case R.id.item_timer_text_view:
+                    long start = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
+                    long end = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_END_INDEX);
                     int empId = mEmployeesCursor.getInt(EMPLOYEE_COL_TIME_ID_INDEX);
                     if (start == 0){
+                        Log.d("ADAPTER", String.valueOf(BREAK_START_CODE));
                         mOnClickHandler.onItemTimerClick(empId, BREAK_START_CODE);
                     } else {
                         if (end == 0) {
+                            Log.d("ADAPTER", String.valueOf(BREAK_END_CODE));
                             mOnClickHandler.onItemTimerClick(empId, BREAK_END_CODE);
                         }
                     }
@@ -175,6 +170,52 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             }
 
         }
+    }
+
+    private void setTimers(final long breakStart, final long breakEnd, final long clockIn, final TextView timerTextView){
+        // updates the timer every 60 seconds
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            long time;
+                            // if employee in currently on break
+                            if (breakStart != 0 && breakEnd == 0) {
+                                time = breakStart - clockIn;
+                                timerTextView.setTextColor(ContextCompat.getColor(mContext, R.color.inactive_timer));
+                                Log.d("run", "RED");
+                            } else {
+                                timerTextView.setTextColor(ContextCompat.getColor(mContext, R.color.active_timer));
+                                Log.d("run", "GREEN");
+                                long currentTime = System.currentTimeMillis() / 1000;
+                                int breakTime = 0;
+                                // if breaking has finished
+                                if (breakEnd != 0 && breakStart != 0) {
+                                    breakTime = (int) (breakEnd - breakStart);
+                                }
+                                time = currentTime - clockIn - breakTime;
+                            }
+
+                            long hours = time / 3600;
+                            long minutes = (time % 3600) / 60;
+                            String result = String.format("%02d:%02d", hours, minutes);
+                            timerTextView.setText(result);
+                        } catch (Exception e) {
+                            Log.e("Exception", String.valueOf(e));
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, TIMER_START_DELAY, TIMER_UPDATE_FREQUENCY);
+        mTimerArrayList.add(timer);
+        Log.d("TIMER ARRAY", String.valueOf(mTimerArrayList.size()));
+        Log.d("SETTIMERS", "set and added timer to array list");
     }
 
     public interface OnClickHandler {

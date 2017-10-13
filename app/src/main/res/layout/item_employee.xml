@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/item_time_text_view"
+                android:id="@+id/item_timer_text_view"
                 style="@style/ListItemEmployeeName"
                 android:textSize="@dimen/item_timer_text_size"
                 android:layout_width="wrap_content"
