@@ -9,20 +9,37 @@ import android.util.Log;
 import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
+import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
+import com.android.mig.simpletimeclock.source.model.Break;
 
-public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
+import java.util.ArrayList;
+
+public class ReadActiveTimeTask extends AsyncTask<Void, Void, ArrayList<ActiveEmployee>>{
+
+    private static final int TIMECLOCK_COL_ID_INDEX = 0;
+    private static final int TIMECLOCK_COL_EMP_ID_INDEX = 1;
+    private static final int TIMECLOCK_COL_NAME_INDEX = 2;
+    private static final int TIMECLOCK_COL_PHOTO_PATH = 3;
+    private static final int TIMECLOCK_COL_CLOCK_IN_INDEX = 4;
+
+    private static final int BREAK_COL_ID_INDEX = 0;
+    private static final int BREAK_COL_BREAK_START_INDEX = 2;
+    private static final int BREAK_COL_BREAK_END_INDEX = 3;
+
 
     private final String ACTIVE_TIME_QUERY = "SELECT " +
             "t." + TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_ID + ", " +
             "e." + TimeClockContract.Employees.EMP_NAME + ", " +
             "e." + TimeClockContract.Employees.EMP_PHOTO_PATH + ", " +
-            "t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
-            "t." + TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + ", " +
-            "t." + TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " FROM " +
+            "t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + " FROM " +
             TimeClockContract.Employees.TABLE_EMPLOYEES + " e INNER JOIN " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " t" +
             " ON e." + TimeClockContract.Employees.EMP_ID + " = t." + TimeClockContract.Timeclock.TIMECLOCK_EMP_ID +
             " WHERE t." + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NULL";
+
+    private final String BREAKS_ACTIVE_TIME_QUERY = "SELECT * FROM " +
+            TimeClockContract.Breaks.TABLE_BREAKS + " WHERE " +
+            TimeClockContract.Breaks.BREAK_TIMECLOCK_ID + "=?";
 
     private Context mContext;
     private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionActiveListener;
@@ -33,24 +50,54 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, Cursor>{
     }
 
     @Override
-    protected Cursor doInBackground(Void... voids) {
-        Cursor responseCursor = null;
+    protected ArrayList<ActiveEmployee> doInBackground(Void... voids) {
+        ArrayList<ActiveEmployee> activeEmployeesArrayList = new ArrayList<>();
+        Cursor activeTimeCursor;
+        Cursor breaksCursor;
+
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
         try {
             db.beginTransaction();
-            responseCursor = db.rawQuery(ACTIVE_TIME_QUERY, null);
+            activeTimeCursor = db.rawQuery(ACTIVE_TIME_QUERY, null);
+
+            if (activeTimeCursor != null){
+                activeTimeCursor.moveToFirst();
+                do {
+                    ActiveEmployee activeEmployee = new ActiveEmployee(
+                            activeTimeCursor.getInt(TIMECLOCK_COL_ID_INDEX),
+                            activeTimeCursor.getInt(TIMECLOCK_COL_EMP_ID_INDEX),
+                            activeTimeCursor.getString(TIMECLOCK_COL_NAME_INDEX),
+                            activeTimeCursor.getString(TIMECLOCK_COL_PHOTO_PATH),
+                            activeTimeCursor.getLong(TIMECLOCK_COL_CLOCK_IN_INDEX));
+
+                    breaksCursor = db.rawQuery(BREAKS_ACTIVE_TIME_QUERY, new String[]{String.valueOf(activeEmployee.getTimeID())});
+                    if (breaksCursor != null && breaksCursor.getCount() > 0) {
+                        breaksCursor.moveToFirst();
+                        ArrayList<Break> breakArrayList = new ArrayList<>();
+                        do {
+                            Break breakObject = new Break(
+                                    breaksCursor.getInt(BREAK_COL_ID_INDEX),
+                                    breaksCursor.getLong(BREAK_COL_BREAK_START_INDEX),
+                                    breaksCursor.getLong(BREAK_COL_BREAK_END_INDEX));
+                            breakArrayList.add(breakObject);
+                        } while (breaksCursor.moveToNext());
+                        activeEmployee.setBreaksArrayList(breakArrayList);
+                    }
+                    activeEmployeesArrayList.add(activeEmployee);
+                } while (activeTimeCursor.moveToNext());
+            }
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.w("Exception: ", e);
         } finally {
             db.endTransaction();
         }
-        return responseCursor;
+        return activeEmployeesArrayList;
     }
 
     @Override
-    protected void onPostExecute(Cursor responseCursor) {
+    protected void onPostExecute(ArrayList<ActiveEmployee> responseCursor) {
         if (responseCursor != null){
             mOnFinishedTransactionActiveListener.onReadSuccess(responseCursor);
         }

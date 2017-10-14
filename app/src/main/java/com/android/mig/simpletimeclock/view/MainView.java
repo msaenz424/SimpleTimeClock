@@ -1,9 +1,11 @@
 package com.android.mig.simpletimeclock.view;
 
-import android.database.Cursor;
+import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
+
+import java.util.ArrayList;
 
 public interface MainView {
 
-    void showActiveEmployees(Cursor employees);
+    void showActiveEmployees(ArrayList<ActiveEmployee> activeEmployeesArrayList);
 
 }

@@ -3,9 +3,12 @@ package com.android.mig.simpletimeclock.presenter;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
 import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
 import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractorImpl;
 import com.android.mig.simpletimeclock.view.MainView;
+
+import java.util.ArrayList;
 
 public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
         ActiveEmployeesInteractor.OnFinishedTransactionListener{
@@ -41,8 +44,8 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onReadSuccess(Cursor readQuery) {
-        mMainView.showActiveEmployees(readQuery);
+    public void onReadSuccess(ArrayList<ActiveEmployee> activeEmployeesArrayList) {
+        mMainView.showActiveEmployees(activeEmployeesArrayList);
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.android.mig.simpletimeclock.source.model;
 
-import android.database.Cursor;
+import java.util.ArrayList;
 
 public interface ActiveEmployeesInteractor {
 
     interface OnFinishedTransactionListener{
 
-        void onReadSuccess(Cursor readQuery);
+        void onReadSuccess(ArrayList<ActiveEmployee> activeEmployeesArrayList);
 
         void onUpdateSuccess();
     }

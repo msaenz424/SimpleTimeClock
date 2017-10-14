@@ -2,7 +2,6 @@ package com.android.mig.simpletimeclock.view.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +16,13 @@ import android.widget.TextView;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.ActiveEmployeesPresenterImpl;
+import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
 import com.android.mig.simpletimeclock.view.MainView;
 import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
@@ -130,14 +132,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showActiveEmployees(Cursor employees) {
-        if (employees.getCount() == 0) {
+    public void showActiveEmployees(ArrayList<ActiveEmployee> activeEmployeesArrayList) {
+        if (activeEmployeesArrayList.size() == 0) {
             mListMessageTextView.setVisibility(View.VISIBLE);
         } else {
             mListMessageTextView.setVisibility(View.INVISIBLE);
         }
         EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
-        employeeAdapter.setEmployeesData(employees);
+        employeeAdapter.setEmployeesData(activeEmployeesArrayList);
     }
 
     @Override
