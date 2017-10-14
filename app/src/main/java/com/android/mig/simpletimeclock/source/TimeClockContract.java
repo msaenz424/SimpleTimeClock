@@ -18,9 +18,18 @@ public class TimeClockContract {
         public static final String TIMECLOCK_EMP_ID = "emp_id";
         public static final String TIMECLOCK_CLOCK_IN = "clock_in";
         public static final String TIMECLOCK_CLOCK_OUT = "clock_out";
-        public static final String TIMECLOCK_BREAK_START = "break_start";
-        public static final String TIMECLOCK_BREAK_END = "break_end";
+        public static final String TIMECLOCK_BREAK_START = "break_start";   // column dropped on db v2
+        public static final String TIMECLOCK_BREAK_END = "break_end";       // column dropped on db v2
         public static final String TIMECLOCK_WAGE = "time_wage";
         public static final String TIMECLOCK_PAID = "time_paid";
     }
+
+    public static final class Breaks implements BaseColumns{                // table added on db v2
+        public static final String TABLE_BREAKS = "breaks";
+        public static final String BREAK_ID = "break_id";
+        public static final String BREAK_TIMECLOCK_ID = "timeclock_id";
+        public static final String TIMECLOCK_BREAK_START = "break_start";
+        public static final String TIMECLOCK_BREAK_END = "break_end";
+    }
+
 }
