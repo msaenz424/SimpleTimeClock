@@ -31,16 +31,17 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
         Integer[] values = new Integer[2];
         values[0] = empId;
         values[1] = actionCode;
-        this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
-
+        //this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
     }
 
     @Override
-    public void onItemTimerClicked(int timeId, int actionCode) {
+    public void onItemTimerClicked(int timeId, int breakId, boolean isOnBreak) {
+        /*
         Integer[] values = new Integer[2];
         values[0] = timeId;
         values[1] = actionCode;
-        this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
+        */
+        this.mActiveEmployeesInteractor.updateTimeStatus(timeId, breakId, isOnBreak, false, this);
     }
 
     @Override

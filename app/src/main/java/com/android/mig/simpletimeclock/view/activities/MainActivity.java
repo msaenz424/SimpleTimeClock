@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,8 +27,6 @@ public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
 
     private static final int CLOCK_OUT_CODE = 0;
-    private static final int BREAK_START_CODE = 1;
-    private static final int BREAK_END_CODE = 2;
 
     private RecyclerView mEmployeeRecyclerView;
     private TextView mListMessageTextView;
@@ -86,8 +83,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    if (dX > 0){
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    if (dX > 0) {
                         ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutIcon.setVisibility(View.VISIBLE);
                         ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutTextView.setVisibility(View.VISIBLE);
                         ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutIcon.setVisibility(View.INVISIBLE);
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         mActiveEmployeesPresenter.onResume();
     }
 
-    public void addEmployee(View view){
+    public void addEmployee(View view) {
         Intent intent = new Intent(this, AllEmployeesActivity.class);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
@@ -156,13 +153,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onItemTimerClick(int employeeId, int actionCode) {
-        if (actionCode == BREAK_START_CODE || actionCode == BREAK_END_CODE){
-            Log.d("MAINVIEW", String.valueOf(actionCode));
-            mActiveEmployeesPresenter.onItemTimerClicked(employeeId, actionCode);
-            return true;
-        } else {
-            return false;
-        }
+    public void onItemTimerClick(int timeId, int breakId, boolean isOnBreak) {
+        mActiveEmployeesPresenter.onItemTimerClicked(timeId, breakId, isOnBreak);
     }
 }

@@ -12,12 +12,13 @@ public class ActiveEmployee {
 
     private ArrayList<Break> mBreaksArrayList;
 
-    public ActiveEmployee(int timeID, int employeeID, String employeeName, String mhotoPath, long clockIn) {
+    public ActiveEmployee(int timeID, int employeeID, String employeeName, String photoPath, long clockIn) {
         this.mTimeID = timeID;
         this.mEmployeeID = employeeID;
         this.mEmployeeName = employeeName;
-        this.mPhotoPath = mhotoPath;
+        this.mPhotoPath = photoPath;
         this.mClockIn = clockIn;
+        this.mIsOnBreak = false;
     }
 
     public void setBreaksArrayList(ArrayList<Break> mBreaksArrayList) {

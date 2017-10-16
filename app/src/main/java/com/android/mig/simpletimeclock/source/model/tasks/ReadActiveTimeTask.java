@@ -72,16 +72,20 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, ArrayList<ActiveEm
                             activeTimeCursor.getLong(TIMECLOCK_COL_CLOCK_IN_INDEX));
 
                     breaksCursor = db.rawQuery(BREAKS_ACTIVE_TIME_QUERY, new String[]{String.valueOf(activeEmployee.getTimeID())});
-                    if (breaksCursor != null && breaksCursor.getCount() > 0) {
+                    if (breaksCursor.getCount() > 0) {
+                        Log.d("READACTIVETIME", "cursor exists");
                         breaksCursor.moveToFirst();
                         ArrayList<Break> breakArrayList = new ArrayList<>();
                         do {
+                            Log.d("BREAK LOOP", "break item");
                             Break breakObject = new Break(
                                     breaksCursor.getInt(BREAK_COL_ID_INDEX),
                                     breaksCursor.getLong(BREAK_COL_BREAK_START_INDEX),
                                     breaksCursor.getLong(BREAK_COL_BREAK_END_INDEX));
                             breakArrayList.add(breakObject);
                         } while (breaksCursor.moveToNext());
+                        breaksCursor.close();
+                        activeEmployee.setIsOnBreak(true);
                         activeEmployee.setBreaksArrayList(breakArrayList);
                     }
                     activeEmployeesArrayList.add(activeEmployee);
@@ -99,6 +103,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, ArrayList<ActiveEm
     @Override
     protected void onPostExecute(ArrayList<ActiveEmployee> responseCursor) {
         if (responseCursor != null){
+            Log.d("READACTIVETIMETASK", "read success");
             mOnFinishedTransactionActiveListener.onReadSuccess(responseCursor);
         }
     }

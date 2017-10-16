@@ -1,13 +1,14 @@
 package com.android.mig.simpletimeclock.view.adapters;
 
 import android.content.Context;
-import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,19 +21,14 @@ import com.android.mig.simpletimeclock.view.utils.CircleTransform;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
-
-    private static final int TIMER_START_DELAY = 0;
-    private static final int TIMER_UPDATE_FREQUENCY = 60000;
 
     private final OnClickHandler mOnClickHandler;
     private Context mContext;
 
     private ArrayList<ActiveEmployee> mActiveEmployeesArrayList = null;
-    private ArrayList<Timer> mTimerArrayList;
+    private ArrayList<Chronometer> mChronometerArrayList;
 
     public EmployeeAdapter(OnClickHandler onClickHandler) {
         this.mOnClickHandler = onClickHandler;
@@ -42,16 +38,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     public void setEmployeesData(ArrayList<ActiveEmployee> activeEmployeesArrayList) {
         this.mActiveEmployeesArrayList = activeEmployeesArrayList;
-        if (mTimerArrayList != null) {
-            for (int i = 0; i < mTimerArrayList.size(); i++){
-                mTimerArrayList.get(i).cancel();
-                Log.d("setData", "cancelling array item at position " + i);
+        if (mChronometerArrayList != null) {
+            for (int i = 0; i < mChronometerArrayList.size(); i++){
+                mChronometerArrayList.get(i).stop();
             }
-            mTimerArrayList.clear();
-            mTimerArrayList = null;
+            mChronometerArrayList.clear();
+            mChronometerArrayList = null;
         }
-        mTimerArrayList = new ArrayList<>();
-        Log.d("setData", "new array created");
+        mChronometerArrayList = new ArrayList<>();
+        Log.d("setEmployeesData", "new chronometer array created");
         notifyDataSetChanged();
     }
 
@@ -78,9 +73,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     @Override
     public void onBindViewHolder(final EmployeeViewHolder holder, int position) {
-        holder.itemView.setTag(mActiveEmployeesArrayList.get(position).getEmployeeID()); // (mEmployeesCursor.getString(EMPLOYEE_COL_ID_INDEX));
-        holder.mEmployeeNameTextView.setText(mActiveEmployeesArrayList.get(position).getEmployeeName()); // (mEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
-        String photoUri =  mActiveEmployeesArrayList.get(position).getPhotoPath(); // mEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
+        holder.itemView.setTag(mActiveEmployeesArrayList.get(position).getEmployeeID());
+        holder.mEmployeeNameTextView.setText(mActiveEmployeesArrayList.get(position).getEmployeeName());
+        String photoUri = mActiveEmployeesArrayList.get(position).getPhotoPath();
 
         if (photoUri.isEmpty() || photoUri.equals("null")) {
             Glide.with(holder.itemView.getContext())
@@ -94,22 +89,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
                     .into(holder.mPhotoImageView);
         }
 
-        final long clockIn = mActiveEmployeesArrayList.get(position).getClockIn(); // mEmployeesCursor.getInt(EMPLOYEE_COL_CLOCK_IN_INDEX);
-        ArrayList<Break> breaksArrayList = mActiveEmployeesArrayList.get(position).getBreaksArrayList();
-        int totalBreak = 0;
-        if (breaksArrayList != null) {
-            for (int i = 0; i < breaksArrayList.size(); i++){
-                long breakStart = breaksArrayList.get(i).getBreakStart();
-                long breakEnd = breaksArrayList.get(i).getBreakStart();
-                if (breakEnd == 0) {
-                    breakEnd = System.currentTimeMillis() / 1000;
-                    mActiveEmployeesArrayList.get(position).setIsOnBreak(true);        // current employee is on break
-                }
-                totalBreak += (int) (breakEnd - breakStart);
-            }
-        }
+        int currentWorked = calculateCurrentWorked(position);
+        boolean isOnBreak = mActiveEmployeesArrayList.get(position).getIsOnBreak();
 
-        setTimers(clockIn, totalBreak, mActiveEmployeesArrayList.get(position).getIsOnBreak(), holder.mTimerTextView);
+        setChronometers(isOnBreak, currentWorked, holder.mChronometer);
     }
 
     @Override
@@ -123,7 +106,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         FrameLayout mItemFrameLayout;
         ImageView mPhotoImageView;
-        TextView mEmployeeNameTextView, mTimerTextView;
+        TextView mEmployeeNameTextView;
+        Chronometer mChronometer;
         public LinearLayout mForegroundLayout;
         public ImageView mLeftClockOutIcon, mRightClockOutIcon;
         public TextView mLeftClockOutTextView, mRightClockOutTextView;
@@ -133,36 +117,30 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             mItemFrameLayout = itemView.findViewById(R.id.item_active_employees_linear_layout);
             mPhotoImageView = itemView.findViewById(R.id.item_active_photo_image_view);
             mEmployeeNameTextView = itemView.findViewById(R.id.active_employee_text_view);
+            mChronometer = itemView.findViewById(R.id.item_chronometer);
             mForegroundLayout = itemView.findViewById(R.id.view_foreground);
             mLeftClockOutIcon = itemView.findViewById(R.id.clock_out_icon_left);
             mRightClockOutIcon = itemView.findViewById(R.id.clock_out_icon_right);
             mLeftClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_left);
             mRightClockOutTextView = itemView.findViewById(R.id.clock_out_text_view_right);
-            mTimerTextView = itemView.findViewById(R.id.item_timer_text_view);
             itemView.setOnClickListener(this);
-            mTimerTextView.setOnClickListener(this);
+            mChronometer.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            // mEmployeesCursor.moveToPosition(getAdapterPosition());
             switch (view.getId()) {
-                case R.id.item_timer_text_view:
-                    /*
-                    //long start = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_START_INDEX);
-                    //long end = mEmployeesCursor.getInt(EMPLOYEE_COL_BREAK_END_INDEX);
-                    int empId = mEmployeesCursor.getInt(EMPLOYEE_COL_TIME_ID_INDEX);
-                    if (start == 0){
-                        Log.d("ADAPTER", String.valueOf(BREAK_START_CODE));
-                        mOnClickHandler.onItemTimerClick(empId, BREAK_START_CODE);
-                    } else {
-                        if (end == 0) {
-                            Log.d("ADAPTER", String.valueOf(BREAK_END_CODE));
-                            mOnClickHandler.onItemTimerClick(empId, BREAK_END_CODE);
-                        }
+                case R.id.item_chronometer:
+                    int timeId = mActiveEmployeesArrayList.get(getAdapterPosition()).getTimeID();
+                    int breakId = 0;
+                    ArrayList<Break> breaksArrayList = mActiveEmployeesArrayList.get(getAdapterPosition()).getBreaksArrayList();
+                    if (breaksArrayList != null) {
+                        Break breakObject = breaksArrayList.get(breaksArrayList.size() - 1);
+                        breakId = breakObject.getBreakID();
                     }
+                    boolean isOnBreak = mActiveEmployeesArrayList.get(getAdapterPosition()).getIsOnBreak();
+                    mOnClickHandler.onItemTimerClick(timeId, breakId, isOnBreak);
                     break;
-                    */
                 case R.id.item_active_employees_linear_layout:
                     mOnClickHandler.onItemClick(mActiveEmployeesArrayList.get(getAdapterPosition()).getEmployeeID(), mPhotoImageView);
                     break;
@@ -173,42 +151,94 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 
-    private void setTimers(final long clockIn, final long totalBreak, final boolean isOnBreak, final TextView timerTextView){
-        // updates the timer every 60 seconds
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            long time;
-                            long currentTime = System.currentTimeMillis() / 1000;
-                            time = currentTime - clockIn - totalBreak;
-                            if (isOnBreak) {
-                                timerTextView.setTextColor(ContextCompat.getColor(mContext, R.color.inactive_timer));
-                                Log.d("run", "RED");
-                            } else {
-                                timerTextView.setTextColor(ContextCompat.getColor(mContext, R.color.active_timer));
-                                Log.d("run", "GREEN");
-                            }
-                            long hours = time / 3600;
-                            long minutes = (time % 3600) / 60;
-                            String result = String.format("%02d:%02d", hours, minutes);
-                            timerTextView.setText(result);
-                        } catch (Exception e) {
-                            Log.e("Exception", String.valueOf(e));
-                        }
-                    }
-                });
+    /**
+     * Calculates the time worked in seconds of employee on current active time
+     *
+     * @param position      current position of array list of active employees
+     * @return              hours worked in seconds
+     */
+    private int calculateCurrentWorked(int position){
+        // obtains the breaks if there is any
+        ArrayList<Break> breaksArrayList = mActiveEmployeesArrayList.get(position).getBreaksArrayList();
+        int currentWorked;
+        int totalBreak = 0;
+        long currentTime = System.currentTimeMillis() / 1000;
+        if (breaksArrayList != null) {
+            Log.d("calculateCurrentWorked", "onBindViewHolder: Break array exists");
+
+            int lastBreakIndex = breaksArrayList.size() - 1;
+            long lastBreakDuration = 0;
+            int lastRun;
+            // checks if current employee is on break. Most recent break is the key to find that out.
+            if (breaksArrayList.get(lastBreakIndex).getBreakEnd() == 0) {
+                Log.d("calculateCurrentWorked", mActiveEmployeesArrayList.get(position).getEmployeeName() + " break true");
+                mActiveEmployeesArrayList.get(position).setIsOnBreak(true);
+                lastRun = breaksArrayList.size() - 1;
+                lastBreakDuration = currentTime - breaksArrayList.get(lastBreakIndex).getBreakStart();
+            } else {
+                Log.d("calculateCurrentWorked", mActiveEmployeesArrayList.get(position).getEmployeeName() + " break false");
+                mActiveEmployeesArrayList.get(position).setIsOnBreak(false);
+                lastRun = breaksArrayList.size();
             }
-        };
-        timer.schedule(timerTask, TIMER_START_DELAY, TIMER_UPDATE_FREQUENCY);
-        mTimerArrayList.add(timer);
-        Log.d("TIMER ARRAY", String.valueOf(mTimerArrayList.size()));
-        Log.d("SETTIMERS", "set and added timer to array list");
+
+            for (int i = 0; i < lastRun; i++) {
+                long breakStart = breaksArrayList.get(i).getBreakStart();
+                long breakEnd = breaksArrayList.get(i).getBreakEnd();
+                totalBreak += (int) (breakEnd - breakStart);
+            }
+            totalBreak += lastBreakDuration;
+            Log.d("calculateCurrentWorked", String.valueOf(totalBreak));
+        }
+
+        boolean isOnBreak = mActiveEmployeesArrayList.get(position).getIsOnBreak();
+        long clockIn = mActiveEmployeesArrayList.get(position).getClockIn();
+        if (isOnBreak){
+            Log.d("break start", String.valueOf(breaksArrayList.get(breaksArrayList.size() - 1).getBreakStart()));
+            Log.d("clock in", String.valueOf(clockIn));
+            Log.d("total break", String.valueOf(totalBreak));
+            currentWorked = (int) (currentTime - clockIn - totalBreak);
+            //currentWorked = (int) (breaksArrayList.get(breaksArrayList.size() - 1).getBreakStart() - clockIn - totalBreak);
+            Log.d("calculateCurrentWorked", String.valueOf(currentWorked));
+        } else {
+            currentWorked = (int) (currentTime - clockIn - totalBreak);
+            Log.d("calculateCurrentWorked", String.valueOf(currentWorked));
+        }
+        return currentWorked;
+    }
+
+    /**
+     * Sets a timer for each active employee in the list
+     *
+     * @param isOnBreak         boolean value to check if employee is currently on break
+     * @param currentWorked     time in seconds of hours worked of employee on the current active time
+     * @param chronometer       View to display the timer
+     */
+    private void setChronometers(boolean isOnBreak, final int currentWorked, Chronometer chronometer){
+        long currentWorkedMillis = currentWorked * 1000;
+
+        if (isOnBreak) {
+            Log.d("setChronometers", "RED");
+            int h = currentWorked / 3600;
+            int m = (currentWorked % 3600) / 60;
+            chronometer.setText(String.format("%02d:%02d", h, m));
+            chronometer.setTextColor(ContextCompat.getColor(mContext, R.color.inactive_timer));
+        } else {
+            Log.d("setChronometers", "GREEN");
+            Log.d("setChronometers", "system time elapsed: " + String.valueOf(SystemClock.elapsedRealtime()));
+            chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                @Override
+                public void onChronometerTick(Chronometer chronometer) {
+                    long time = SystemClock.elapsedRealtime() - chronometer.getBase();
+                    int h   = (int) (time / 3600000);
+                    int m = (int) (time - h * 3600000) / 60000;
+                    chronometer.setText(String.format("%02d:%02d", h, m));
+                }
+            });
+            chronometer.setTextColor(ContextCompat.getColor(mContext, R.color.active_timer));
+            chronometer.setBase(SystemClock.elapsedRealtime() - currentWorkedMillis);
+            chronometer.start();
+            mChronometerArrayList.add(chronometer);
+        }
     }
 
     public interface OnClickHandler {
@@ -217,10 +247,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         /**
          * Handles action when timer is clicked
          *
-         * @param employeeId id of employee
-         * @param actionCode type of action (start break or end break)
+         * @param timeId    id of active time
+         * @param breakId   id of the most recent break
+         * @param isOnBreak differentiates between start break and end break
          */
-        boolean onItemTimerClick(int employeeId, int actionCode);
+        void onItemTimerClick(int timeId, int breakId, boolean isOnBreak);
     }
 
 }

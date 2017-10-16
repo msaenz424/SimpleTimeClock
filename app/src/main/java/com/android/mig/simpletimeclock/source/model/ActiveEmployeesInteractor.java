@@ -13,7 +13,6 @@ public interface ActiveEmployeesInteractor {
 
     void readActiveEmployees(OnFinishedTransactionListener onFinishedTransactionListener);
 
-    void updateTimeStatus(Integer[] ids, OnFinishedTransactionListener onFinishedTransactionListener);
-
+    void updateTimeStatus(int timeId, int breakId, boolean isOnBreak, boolean isClockOut, OnFinishedTransactionListener onFinishedTransactionListener);
 
 }
