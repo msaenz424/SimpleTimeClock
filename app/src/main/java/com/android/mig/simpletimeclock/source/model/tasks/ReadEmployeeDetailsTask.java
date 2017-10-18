@@ -89,9 +89,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             double currentEarnings = 0;
 
             // calculates the earning of the current active time, if there is any
-            if (currentCursor.getCount() > 0) {
+            if (currentCursor.moveToFirst()) {
                 isWorking = true;
-                currentCursor.moveToFirst();
 
                 Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(currentCursor.getInt(ACTIVE_TIME_ID_INDEX))});
                 int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
@@ -105,8 +104,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Cursor unpaidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(UNPAID_STATUS)});
             long unpaidPreviousTime = 0;
             double unpaidPreviousEarnings = 0;
-            if (unpaidCursor.getCount() > 0) {
-                unpaidCursor.moveToFirst();
+            if (unpaidCursor.moveToFirst()) {
                 int currentTimeWorked;
                 do {
                     long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
@@ -128,22 +126,21 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             Cursor paidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(PAID_STATUS)});
             long paidTime = 0;
             double paidEarnings = 0;
-            if (paidCursor.getCount() > 0) {
-                paidCursor.moveToFirst();
+            if (paidCursor.moveToFirst()) {
                 int currentPaidTime;
                 do {
-                    long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
-                    long clockOutTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
-                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
+                    long clockInTime = paidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
+                    long clockOutTime = paidCursor.getLong(BY_PAID_CLOCKOUT_INDEX);
+                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(paidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
                     int paidBreakTime = calculateBreaks(breaksCursor, timeNow);
 
                     currentPaidTime = (int) (clockOutTime - clockInTime - paidBreakTime);
                     paidTime += currentPaidTime;
-                    paidEarnings = paidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentPaidTime / 3600;
+                    paidEarnings += paidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentPaidTime / 3600;
                 } while (paidCursor.moveToNext());
             }
             paidCursor.close();
-            long totalTime = (totalUnpaidTime + paidTime);
+            long totalTime = totalUnpaidTime + paidTime;
             double totalEarnings = totalUnpaidEarnings + paidEarnings;
 
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});

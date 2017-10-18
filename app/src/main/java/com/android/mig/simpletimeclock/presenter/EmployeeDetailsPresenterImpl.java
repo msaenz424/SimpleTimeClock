@@ -28,7 +28,6 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
         mEmployeeDetailsInteractor.editEmployeeDetails(empId, name, wage, photoPath, this);
     }
 
-
     @Override
     public void onPayButtonClicked(int empId) {
         mEmployeeDetailsInteractor.updateUnpaidTime(empId, this);
