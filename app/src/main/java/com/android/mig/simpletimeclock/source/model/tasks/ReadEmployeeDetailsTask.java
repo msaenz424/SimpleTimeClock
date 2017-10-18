@@ -16,34 +16,39 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
     private final int PAID_STATUS = 1;
     private final int UNPAID_STATUS = 0;
 
+    private final int ACTIVE_TIME_ID_INDEX = 0;
+    private final int ACTIVE_CLOCKIN_INDEX = 1;
+    private final int ACTIVE_WAGE_INDEX = 2;
+
+    private final int BY_PAID_TIME_ID_INDEX = 0;
+    private final int BY_PAID_CLOCKIN_INDEX = 1;
+    private final int BY_PAID_CLOCKOUT_INDEX = 2;
+    private final int BY_PAID_WAGE_INDEX = 3;
+
+    private final int EMPLOYEES_NAME_INDEX = 0;
+    private final int EMPLOYEES_WAGE_INDEX = 1;
+    private final int EMPLOYEES_PHOTO_INDEX = 2;
+
+    private final int BREAKS_START_INDEX = 0;
+    private final int BREAKS_END_INDEX = 1;
+
     private final String ACTIVE_TIME_QUERY = "SELECT " +
+            TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
             TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
-            TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + ", " +
-            TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + ", " +
             TimeClockContract.Timeclock.TIMECLOCK_WAGE + " FROM " +
             TimeClockContract.Timeclock.TABLE_TIMECLOCK + " WHERE " +
             TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =? AND " +
             TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NULL";
 
-    private final String PERIODIC_QUERY = "SELECT sum((" +
-            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " - " + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN +
-            ") - (" + TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " - " + TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + ")), " +
-            TimeClockContract.Timeclock.TIMECLOCK_WAGE +
-            " FROM " + TimeClockContract.Timeclock.TABLE_TIMECLOCK +
-            " WHERE " + TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =? AND " +
-            TimeClockContract.Timeclock.TIMECLOCK_PAID + " =? AND " +
-            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NOT NULL GROUP BY " +
-            TimeClockContract.Timeclock.TIMECLOCK_WAGE;
-
-    private final String TOTALS_QUERY = "SELECT sum((" +
-            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " - " + TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN +
-            ") - (" + TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " - " + TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + ")), " +
-            TimeClockContract.Timeclock.TIMECLOCK_WAGE +
-            " FROM " + TimeClockContract.Timeclock.TABLE_TIMECLOCK +
-            " WHERE " + TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + " =? AND " +
-            TimeClockContract.Timeclock.TIMECLOCK_PAID + " =? AND " +
-            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NOT NULL GROUP BY " +
-            TimeClockContract.Timeclock.TIMECLOCK_WAGE;
+    private final String BY_PAID_TIME_QUERY = "SELECT " +
+            TimeClockContract.Timeclock.TIMECLOCK_ID + ", " +
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + ", " +
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + ", " +
+            TimeClockContract.Timeclock.TIMECLOCK_WAGE + " FROM " +
+            TimeClockContract.Timeclock.TABLE_TIMECLOCK + " WHERE " +
+            TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + "=? AND " +
+            TimeClockContract.Timeclock.TIMECLOCK_PAID + "=? AND " +
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NOT NULL";
 
     private final String EMPLOYEE_QUERY = "SELECT " +
             TimeClockContract.Employees.EMP_NAME + ", " +
@@ -51,6 +56,12 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             TimeClockContract.Employees.EMP_PHOTO_PATH + " FROM " +
             TimeClockContract.Employees.TABLE_EMPLOYEES + " WHERE " +
             TimeClockContract.Employees.EMP_ID + " =?";
+
+    private final String BREAKS_QUERY = "SELECT " +
+            TimeClockContract.Breaks.TIMECLOCK_BREAK_START + ", " +
+            TimeClockContract.Breaks.TIMECLOCK_BREAK_END + " FROM " +
+            TimeClockContract.Breaks.TABLE_BREAKS + " WHERE " +
+            TimeClockContract.Breaks.BREAK_TIMECLOCK_ID + "=?";
 
     private Context mContext;
     private EmployeeDetailsInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
@@ -73,54 +84,77 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             db.beginTransaction();
 
             Cursor currentCursor = db.rawQuery(ACTIVE_TIME_QUERY, new String[]{empId});
+            long timeNow = (System.currentTimeMillis() / 1000);
             long currentTime = 0;
             double currentEarnings = 0;
 
+            // calculates the earning of the current active time, if there is any
             if (currentCursor.getCount() > 0) {
                 isWorking = true;
-                currentCursor.moveToPosition(0);
-                currentTime = (((System.currentTimeMillis() / 1000) - currentCursor.getLong(0)) - (currentCursor.getLong(1) - currentCursor.getLong(2)));
-                currentEarnings = currentCursor.getDouble(3) * currentTime / 3600;
+                currentCursor.moveToFirst();
+
+                Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(currentCursor.getInt(ACTIVE_TIME_ID_INDEX))});
+                int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
+                currentTime = timeNow - currentCursor.getLong(ACTIVE_CLOCKIN_INDEX) - currentBreakTime;
+
+                currentEarnings = currentCursor.getDouble(ACTIVE_WAGE_INDEX) * currentTime / 3600;
             }
             currentCursor.close();
 
-            Cursor unpaidCursor = db.rawQuery(PERIODIC_QUERY, new String[]{empId, String.valueOf(UNPAID_STATUS)});
+            // calculate the earnings of unpaid times (active time not included)
+            Cursor unpaidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(UNPAID_STATUS)});
             long unpaidPreviousTime = 0;
             double unpaidPreviousEarnings = 0;
             if (unpaidCursor.getCount() > 0) {
-                unpaidCursor.moveToPosition(0);
+                unpaidCursor.moveToFirst();
+                int currentTimeWorked;
                 do {
-                    unpaidPreviousTime += unpaidCursor.getLong(0);
-                    unpaidPreviousEarnings += unpaidCursor.getDouble(1) * unpaidCursor.getLong(0) / 3600;
+                    long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
+                    long clockOutTime = unpaidCursor.getLong(BY_PAID_CLOCKOUT_INDEX);
+                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
+                    int unpaidBreakTime = calculateBreaks(breaksCursor, timeNow);
+
+                    currentTimeWorked = (int) (clockOutTime - clockInTime - unpaidBreakTime);
+
+                    unpaidPreviousTime += currentTimeWorked;
+                    unpaidPreviousEarnings += unpaidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentTimeWorked / 3600;
                 } while (unpaidCursor.moveToNext());
             }
             unpaidCursor.close();
-
             long totalUnpaidTime = currentTime + unpaidPreviousTime;
             double totalUnpaidEarnings = currentEarnings + unpaidPreviousEarnings;
-            Cursor paidCursor = db.rawQuery(TOTALS_QUERY, new String[]{empId, String.valueOf(PAID_STATUS)});
+
+            // calculates totals (paid and unpaid)
+            Cursor paidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(PAID_STATUS)});
             long paidTime = 0;
             double paidEarnings = 0;
             if (paidCursor.getCount() > 0) {
-                paidCursor.moveToPosition(0);
+                paidCursor.moveToFirst();
+                int currentPaidTime;
                 do {
-                    paidTime += paidCursor.getLong(0);
-                    paidEarnings += paidCursor.getDouble(1) * paidCursor.getLong(0) / 3600;
+                    long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
+                    long clockOutTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
+                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
+                    int paidBreakTime = calculateBreaks(breaksCursor, timeNow);
+
+                    currentPaidTime = (int) (clockOutTime - clockInTime - paidBreakTime);
+                    paidTime += currentPaidTime;
+                    paidEarnings = paidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentPaidTime / 3600;
                 } while (paidCursor.moveToNext());
             }
             paidCursor.close();
-
             long totalTime = (totalUnpaidTime + paidTime);
             double totalEarnings = totalUnpaidEarnings + paidEarnings;
+
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
             String empName = null;
             double empWage = 0;
             String empPhotoUri = null;
             if (employeeCursor.getCount() > 0) {
-                employeeCursor.moveToPosition(0);
-                empName = employeeCursor.getString(0);
-                empWage = employeeCursor.getDouble(1);
-                empPhotoUri = employeeCursor.getString(2);
+                employeeCursor.moveToFirst();
+                empName = employeeCursor.getString(EMPLOYEES_NAME_INDEX);
+                empWage = employeeCursor.getDouble(EMPLOYEES_WAGE_INDEX);
+                empPhotoUri = employeeCursor.getString(EMPLOYEES_PHOTO_INDEX);
             }
             employeeCursor.close();
 
@@ -140,5 +174,22 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
         if (employeeDetails != null) {
             this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
         }
+    }
+
+    private int calculateBreaks(Cursor breaksCursor, long timeNow){
+        int breakSum = 0;
+        if (breaksCursor.getCount() > 0){
+            breaksCursor.moveToFirst();
+            do {
+                long breakStart = breaksCursor.getLong(BREAKS_START_INDEX);
+                long breakEnd = breaksCursor.getLong(BREAKS_END_INDEX);
+                if (breakEnd == 0) {
+                    breakEnd = timeNow;
+                }
+                breakSum += (int) (breakEnd - breakStart);
+            } while (breaksCursor.moveToNext());
+        }
+        breaksCursor.close();
+        return breakSum;
     }
 }
