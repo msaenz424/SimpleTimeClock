@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.source.model.tasks;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
@@ -12,9 +13,14 @@ import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
 
 public class UpdateTimeStatusTask extends AsyncTask<Object, Void, Boolean> {
 
-    private static final int CLOCK_OUT_CODE = 0;
-    private static final int BREAK_START_CODE = 1;
-    private static final int BREAK_END_CODE = 2;
+    private static final int BREAK_ID_INDEX = 0;
+    private static final int BREAK_END_INDEX = 1;
+
+    private final String BREAKS_QUERY = "SELECT " +
+            TimeClockContract.Breaks.BREAK_ID + ", " +
+            TimeClockContract.Breaks.TIMECLOCK_BREAK_END + " FROM " +
+            TimeClockContract.Breaks.TABLE_BREAKS + " WHERE " +
+            TimeClockContract.Breaks.BREAK_TIMECLOCK_ID + "=?";
 
     private Context mContext;
     private ActiveEmployeesInteractor.OnFinishedTransactionListener mOnFinishedTransactionActiveListener;
@@ -34,8 +40,6 @@ public class UpdateTimeStatusTask extends AsyncTask<Object, Void, Boolean> {
         boolean isOnBreak = (boolean) params[2];
         boolean isClockOut = (boolean) params[3];
 
-        //Log.d("TASK", String.valueOf(actionCode));
-
         try {
             db.beginTransaction();
 
@@ -51,6 +55,14 @@ public class UpdateTimeStatusTask extends AsyncTask<Object, Void, Boolean> {
                 sqLiteStatement.execute();
                 sqLiteStatement.close();
                 Log.d("UPDATETIMETASK", "updated clock out");
+
+                Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(timeId)});
+                if (breaksCursor.moveToLast()) {
+                    if (breaksCursor.getLong(BREAK_END_INDEX) == 0) {
+                        breakId = breaksCursor.getInt(BREAK_ID_INDEX);
+                        isOnBreak = true;
+                    }
+                }
             }
 
             if (isOnBreak) {
@@ -64,7 +76,9 @@ public class UpdateTimeStatusTask extends AsyncTask<Object, Void, Boolean> {
                 sqLiteStatement.execute();
                 sqLiteStatement.close();
                 Log.d("UPDATETIMETASK", "updated break end");
-            } else {
+            }
+
+            if (!isOnBreak && !isClockOut){
                 String sqlUpdateQuery = "INSERT INTO " + TimeClockContract.Breaks.TABLE_BREAKS + " (" +
                         TimeClockContract.Breaks.BREAK_TIMECLOCK_ID + ", " +
                         TimeClockContract.Breaks.TIMECLOCK_BREAK_START + ") VALUES (?,?);";
@@ -76,31 +90,7 @@ public class UpdateTimeStatusTask extends AsyncTask<Object, Void, Boolean> {
                 sqLiteStatement.close();
                 Log.d("UPDATETIMETASK", "updated break start");
             }
-/*
-            switch (actionCode) {
-                case CLOCK_OUT_CODE:
-                    sqlUpdateQuery = "UPDATE " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " SET " +
-                            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " =? WHERE " +
-                            TimeClockContract.Timeclock.TIMECLOCK_ID + " =?";
-                    break;
-                case BREAK_START_CODE:
-                    sqlUpdateQuery = "UPDATE " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " SET " +
-                            TimeClockContract.Timeclock.TIMECLOCK_BREAK_START + " =? WHERE " +
-                            TimeClockContract.Timeclock.TIMECLOCK_ID + " =?";
-                    break;
-                case BREAK_END_CODE:
-                    sqlUpdateQuery = "UPDATE " + TimeClockContract.Timeclock.TABLE_TIMECLOCK + " SET " +
-                            TimeClockContract.Timeclock.TIMECLOCK_BREAK_END + " =? WHERE " +
-                            TimeClockContract.Timeclock.TIMECLOCK_ID + " =?";
-                    break;
-            }
 
-            SQLiteStatement sqLiteStatement = db.compileStatement(sqlUpdateQuery);
-            sqLiteStatement.clearBindings();
-            sqLiteStatement.bindLong(1, System.currentTimeMillis() / 1000);
-            sqLiteStatement.bindLong(2, timeId);
-            sqLiteStatement.execute();
-*/
             db.setTransactionSuccessful();
             isSuccess = true;
         } catch (Exception e) {

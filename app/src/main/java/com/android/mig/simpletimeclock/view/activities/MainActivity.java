@@ -26,8 +26,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements MainView, EmployeeAdapter.OnClickHandler {
 
-    private static final int CLOCK_OUT_CODE = 0;
-
     private RecyclerView mEmployeeRecyclerView;
     private TextView mListMessageTextView;
     private AdView mAdView;
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity
                 int position = viewHolder.getAdapterPosition();
                 EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
                 int timeId = employeeAdapter.getTimeId(position);
-                mActiveEmployeesPresenter.onItemSwiped(timeId, CLOCK_OUT_CODE);
+                mActiveEmployeesPresenter.onItemSwiped(timeId);
             }
 
             @Override

@@ -1,7 +1,6 @@
 package com.android.mig.simpletimeclock.presenter;
 
 import android.content.Context;
-import android.database.Cursor;
 
 import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
 import com.android.mig.simpletimeclock.source.model.ActiveEmployeesInteractor;
@@ -27,20 +26,12 @@ public class ActiveEmployeesPresenterImpl implements ActiveEmployeesPresenter,
     }
 
     @Override
-    public void onItemSwiped(int empId, int actionCode) {
-        Integer[] values = new Integer[2];
-        values[0] = empId;
-        values[1] = actionCode;
-        //this.mActiveEmployeesInteractor.updateTimeStatus(values, this);
+    public void onItemSwiped(int timeId) {
+        this.mActiveEmployeesInteractor.updateTimeStatus(timeId, 0, false, true, this);
     }
 
     @Override
     public void onItemTimerClicked(int timeId, int breakId, boolean isOnBreak) {
-        /*
-        Integer[] values = new Integer[2];
-        values[0] = timeId;
-        values[1] = actionCode;
-        */
         this.mActiveEmployeesInteractor.updateTimeStatus(timeId, breakId, isOnBreak, false, this);
     }
 
