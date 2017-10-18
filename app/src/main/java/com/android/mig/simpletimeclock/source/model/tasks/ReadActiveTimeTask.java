@@ -61,8 +61,7 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, ArrayList<ActiveEm
             db.beginTransaction();
             activeTimeCursor = db.rawQuery(ACTIVE_TIME_QUERY, null);
 
-            if (activeTimeCursor != null){
-                activeTimeCursor.moveToFirst();
+            if (activeTimeCursor.moveToFirst()){
                 do {
                     ActiveEmployee activeEmployee = new ActiveEmployee(
                             activeTimeCursor.getInt(TIMECLOCK_COL_ID_INDEX),
@@ -70,6 +69,9 @@ public class ReadActiveTimeTask extends AsyncTask<Void, Void, ArrayList<ActiveEm
                             activeTimeCursor.getString(TIMECLOCK_COL_NAME_INDEX),
                             activeTimeCursor.getString(TIMECLOCK_COL_PHOTO_PATH),
                             activeTimeCursor.getLong(TIMECLOCK_COL_CLOCK_IN_INDEX));
+
+                    Log.d("REACACTIVETIMETASK", activeTimeCursor.getString(TIMECLOCK_COL_NAME_INDEX));
+                    Log.d("REACACTIVETIMETASK", String.valueOf(activeTimeCursor.getLong(TIMECLOCK_COL_CLOCK_IN_INDEX)));
 
                     breaksCursor = db.rawQuery(BREAKS_ACTIVE_TIME_QUERY, new String[]{String.valueOf(activeEmployee.getTimeID())});
                     if (breaksCursor.getCount() > 0) {

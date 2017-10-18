@@ -96,6 +96,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
                 int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
                 currentTime = timeNow - currentCursor.getLong(ACTIVE_CLOCKIN_INDEX) - currentBreakTime;
 
+                Log.d("READEMPLOYEEDETAILSTASK", "clock in = " + String.valueOf(currentCursor.getLong(ACTIVE_CLOCKIN_INDEX)));
+
                 currentEarnings = currentCursor.getDouble(ACTIVE_WAGE_INDEX) * currentTime / 3600;
             }
             currentCursor.close();

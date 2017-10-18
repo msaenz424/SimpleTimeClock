@@ -190,6 +190,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             Log.d("calculateCurrentWorked", String.valueOf(totalBreak));
         }
 
+        Log.d("calculateCurrentWorked", mActiveEmployeesArrayList.get(position).getEmployeeName());
+        Log.d("calculateCurrentWorked", "currentTime =" + String.valueOf(currentTime));
+        Log.d("calculateCurrentWorked", "clockIn= " + String.valueOf(mActiveEmployeesArrayList.get(position).getClockIn()));
+
         boolean isOnBreak = mActiveEmployeesArrayList.get(position).getIsOnBreak();
         long clockIn = mActiveEmployeesArrayList.get(position).getClockIn();
         if (isOnBreak){
@@ -225,12 +229,21 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         } else {
             Log.d("setChronometers", "GREEN");
             Log.d("setChronometers", "system time elapsed: " + String.valueOf(SystemClock.elapsedRealtime()));
+            Log.d("setChronometers", "current in millis: " + String.valueOf(currentWorkedMillis));
             chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                 @Override
                 public void onChronometerTick(Chronometer chronometer) {
                     long time = SystemClock.elapsedRealtime() - chronometer.getBase();
                     int h   = (int) (time / 3600000);
                     int m = (int) (time - h * 3600000) / 60000;
+
+                    Log.d("onChronometerTick", "elapsed = " + String.valueOf(SystemClock.elapsedRealtime()));
+                    Log.d("onChronometerTick", "base = " + String.valueOf( chronometer.getBase()));
+                    Log.d("onChronometerTick", "elaspsed - base = " + String.valueOf(time));
+                    Log.d("onChronometerTick", "hours = " + String.valueOf(h));
+                    Log.d("onChronometerTick", "minutes = " + String.valueOf(m));
+                    Log.d("onChronometerTick", "--------------------------");
+
                     chronometer.setText(String.format("%02d:%02d", h, m));
                 }
             });
