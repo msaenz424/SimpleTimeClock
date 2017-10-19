@@ -95,10 +95,14 @@ public class AllEmployeesFragment extends Fragment
         AllEmployeesAdapter mAllEmployeeAdapter = new AllEmployeesAdapter(getActivity(), this);
         mAllEmployeesRecyclerView.setAdapter(mAllEmployeeAdapter);
 
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mAllEmployeesPresenter = new AllEmployeesPresenterImpl(this, getActivity());
         mAllEmployeesPresenter.onResume();
-
-        return rootView;
     }
 
     /** {@inheritDoc} */
