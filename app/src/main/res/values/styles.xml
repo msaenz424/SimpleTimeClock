@@ -34,6 +34,7 @@
         <item name="android:paddingTop">@dimen/item_vertical_padding</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="PrimaryToolbar" parent="AppTheme">

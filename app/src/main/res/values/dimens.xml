@@ -16,6 +16,7 @@
     <dimen name="item_clock_out_margin">10dp</dimen>
     <dimen name="item_clock_out_text_size">13sp</dimen>
     <dimen name="item_timer_text_size">16sp</dimen>
+    <dimen name="item_chronometer_ripple_radius">80dp</dimen>
 
     <!-- EmployeeDetailsActivity -->
     <dimen name="det_textview_size">16sp</dimen>

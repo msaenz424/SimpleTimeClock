@@ -1,6 +1,7 @@
 package com.android.mig.simpletimeclock.view.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -131,6 +132,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.item_chronometer:
+                //case R.id.ripple_view:
                     int timeId = mActiveEmployeesArrayList.get(getAdapterPosition()).getTimeID();
                     int breakId = 0;
                     ArrayList<Break> breaksArrayList = mActiveEmployeesArrayList.get(getAdapterPosition()).getBreaksArrayList();
@@ -201,7 +203,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             Log.d("clock in", String.valueOf(clockIn));
             Log.d("total break", String.valueOf(totalBreak));
             currentWorked = (int) (currentTime - clockIn - totalBreak);
-            //currentWorked = (int) (breaksArrayList.get(breaksArrayList.size() - 1).getBreakStart() - clockIn - totalBreak);
             Log.d("calculateCurrentWorked", String.valueOf(currentWorked));
         } else {
             currentWorked = (int) (currentTime - clockIn - totalBreak);
@@ -221,12 +222,19 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         long currentWorkedMillis = currentWorked * 1000;
 
         if (isOnBreak) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                chronometer.setBackground(mContext.getResources().getDrawable(R.drawable.ripple_chronometer_clock_in, null));
+            }
             Log.d("setChronometers", "RED");
             int h = currentWorked / 3600;
             int m = (currentWorked % 3600) / 60;
             chronometer.setText(String.format("%02d:%02d", h, m));
             chronometer.setTextColor(ContextCompat.getColor(mContext, R.color.inactive_timer));
+            //chronometer.getRootView().findViewById(R.id.ripple_view).setBackground(Color.RED);
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                chronometer.setBackground(mContext.getResources().getDrawable(R.drawable.ripple_chronometer_clock_out, null));
+            }
             Log.d("setChronometers", "GREEN");
             Log.d("setChronometers", "system time elapsed: " + String.valueOf(SystemClock.elapsedRealtime()));
             Log.d("setChronometers", "current in millis: " + String.valueOf(currentWorkedMillis));
