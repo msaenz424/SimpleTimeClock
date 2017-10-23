@@ -23,7 +23,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
+public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_BODY = 0;
+    private static final int TYPE_FOOTER = 1;
 
     private final OnClickHandler mOnClickHandler;
     private Context mContext;
@@ -34,7 +37,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     public EmployeeAdapter(OnClickHandler onClickHandler) {
         this.mOnClickHandler = onClickHandler;
         this.mContext = (Context) onClickHandler;
-
     }
 
     public void setEmployeesData(ArrayList<ActiveEmployee> activeEmployeesArrayList) {
@@ -62,38 +64,57 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     @Override
-    public EmployeeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.item_employee;
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        View view = inflater.inflate(layoutIdForListItem, parent, false);
-        EmployeeViewHolder viewHolder = new EmployeeViewHolder(view);
-        return viewHolder;
+    public int getItemViewType(int position) {
+        if (position == (getItemCount() - 1)) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_BODY;
+        }
     }
 
     @Override
-    public void onBindViewHolder(final EmployeeViewHolder holder, int position) {
-        holder.itemView.setTag(mActiveEmployeesArrayList.get(position).getEmployeeID());
-        holder.mEmployeeNameTextView.setText(mActiveEmployeesArrayList.get(position).getEmployeeName());
-        String photoUri = mActiveEmployeesArrayList.get(position).getPhotoPath();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        if (photoUri.isEmpty() || photoUri.equals("null")) {
-            Glide.with(holder.itemView.getContext())
-                    .load(R.drawable.im_blank_profile)
-                    .transform(new CircleTransform(holder.itemView.getContext()))
-                    .into(holder.mPhotoImageView);
+        if (viewType == TYPE_BODY){
+            int layoutIdForListItem = R.layout.item_employee;
+            View view = inflater.inflate(layoutIdForListItem, parent, false);
+            EmployeeViewHolder viewHolder = new EmployeeViewHolder(view);
+            return viewHolder;
         } else {
-            Glide.with(holder.itemView.getContext())
-                    .load(photoUri)
-                    .transform(new CircleTransform(holder.itemView.getContext()))
-                    .into(holder.mPhotoImageView);
+            int layoutIdForListItem = R.layout.item_employee_footer;
+            View view = inflater.inflate(layoutIdForListItem, parent, false);
+            EmployeeFooterViewHolder viewHolder = new EmployeeFooterViewHolder(view);
+            return viewHolder;
         }
+    }
 
-        int currentWorked = calculateCurrentWorked(position);
-        boolean isOnBreak = mActiveEmployeesArrayList.get(position).getIsOnBreak();
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof EmployeeViewHolder){
+            EmployeeViewHolder employeeViewHolder = (EmployeeViewHolder) holder;
+            employeeViewHolder.itemView.setTag(mActiveEmployeesArrayList.get(position).getEmployeeID());
+            employeeViewHolder.mEmployeeNameTextView.setText(mActiveEmployeesArrayList.get(position).getEmployeeName());
+            String photoUri = mActiveEmployeesArrayList.get(position).getPhotoPath();
 
-        setChronometers(isOnBreak, currentWorked, holder.mChronometer);
+            if (photoUri.isEmpty() || photoUri.equals("null")) {
+                Glide.with(holder.itemView.getContext())
+                        .load(R.drawable.im_blank_profile)
+                        .transform(new CircleTransform(holder.itemView.getContext()))
+                        .into(employeeViewHolder.mPhotoImageView);
+            } else {
+                Glide.with(holder.itemView.getContext())
+                        .load(photoUri)
+                        .transform(new CircleTransform(holder.itemView.getContext()))
+                        .into(employeeViewHolder.mPhotoImageView);
+            }
+
+            int currentWorked = calculateCurrentWorked(position);
+            boolean isOnBreak = mActiveEmployeesArrayList.get(position).getIsOnBreak();
+
+            setChronometers(isOnBreak, currentWorked, employeeViewHolder.mChronometer);
+        }
     }
 
     @Override
@@ -132,7 +153,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.item_chronometer:
-                //case R.id.ripple_view:
                     int timeId = mActiveEmployeesArrayList.get(getAdapterPosition()).getTimeID();
                     int breakId = 0;
                     ArrayList<Break> breaksArrayList = mActiveEmployeesArrayList.get(getAdapterPosition()).getBreaksArrayList();
@@ -150,6 +170,13 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
                     break;
             }
 
+        }
+    }
+
+    private class EmployeeFooterViewHolder extends RecyclerView.ViewHolder{
+
+        EmployeeFooterViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
