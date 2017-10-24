@@ -64,15 +64,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == (getItemCount() - 1)) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_BODY;
-        }
-    }
-
-    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -120,9 +111,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         if (mActiveEmployeesArrayList != null) {
-            return mActiveEmployeesArrayList.size();
+            return mActiveEmployeesArrayList.size() + 1;    // +1 for footer
         }
         return 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mActiveEmployeesArrayList.size()) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_BODY;
+        }
     }
 
     public class EmployeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
