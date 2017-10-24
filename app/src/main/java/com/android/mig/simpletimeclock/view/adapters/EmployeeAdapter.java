@@ -173,7 +173,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private class EmployeeFooterViewHolder extends RecyclerView.ViewHolder{
+    public class EmployeeFooterViewHolder extends RecyclerView.ViewHolder{
 
         EmployeeFooterViewHolder(View itemView) {
             super(itemView);

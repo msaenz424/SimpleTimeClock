@@ -65,15 +65,17 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
-                int timeId = employeeAdapter.getTimeId(position);
-                mActiveEmployeesPresenter.onItemSwiped(timeId);
+                if (viewHolder instanceof EmployeeAdapter.EmployeeViewHolder){
+                    int position = viewHolder.getAdapterPosition();
+                    EmployeeAdapter employeeAdapter = (EmployeeAdapter) mEmployeeRecyclerView.getAdapter();
+                    int timeId = employeeAdapter.getTimeId(position);
+                    mActiveEmployeesPresenter.onItemSwiped(timeId);
+                }
             }
 
             @Override
             public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                if (viewHolder != null) {
+                if (viewHolder != null && viewHolder instanceof EmployeeAdapter.EmployeeViewHolder) {
                     final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
                     getDefaultUIUtil().onSelected(foregroundView);
                 }
@@ -81,19 +83,20 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && viewHolder instanceof EmployeeAdapter.EmployeeViewHolder) {
+                    EmployeeAdapter.EmployeeViewHolder employeeViewHolder = (EmployeeAdapter.EmployeeViewHolder) viewHolder;
                     if (dX > 0) {
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutIcon.setVisibility(View.VISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutTextView.setVisibility(View.VISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutIcon.setVisibility(View.INVISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutTextView.setVisibility(View.INVISIBLE);
+                        employeeViewHolder.mLeftClockOutIcon.setVisibility(View.VISIBLE);
+                        employeeViewHolder.mLeftClockOutTextView.setVisibility(View.VISIBLE);
+                        employeeViewHolder.mRightClockOutIcon.setVisibility(View.INVISIBLE);
+                        employeeViewHolder.mRightClockOutTextView.setVisibility(View.INVISIBLE);
                     } else {
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutIcon.setVisibility(View.VISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mRightClockOutTextView.setVisibility(View.VISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutIcon.setVisibility(View.INVISIBLE);
-                        ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mLeftClockOutTextView.setVisibility(View.INVISIBLE);
+                        employeeViewHolder.mRightClockOutIcon.setVisibility(View.VISIBLE);
+                        employeeViewHolder.mRightClockOutTextView.setVisibility(View.VISIBLE);
+                        employeeViewHolder.mLeftClockOutIcon.setVisibility(View.INVISIBLE);
+                        employeeViewHolder.mLeftClockOutTextView.setVisibility(View.INVISIBLE);
                     }
-                    final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                    final View foregroundView = employeeViewHolder.mForegroundLayout;
                     getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
                 }
 
@@ -101,14 +104,18 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
-                getDefaultUIUtil().clearView(foregroundView);
+                if (viewHolder instanceof EmployeeAdapter.EmployeeViewHolder){
+                    final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                    getDefaultUIUtil().clearView(foregroundView);
+                }
             }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
-                getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
+                if (viewHolder instanceof EmployeeAdapter.EmployeeViewHolder){
+                    final View foregroundView = ((EmployeeAdapter.EmployeeViewHolder) viewHolder).mForegroundLayout;
+                    getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
+                }
             }
         }).attachToRecyclerView(mEmployeeRecyclerView);
     }
