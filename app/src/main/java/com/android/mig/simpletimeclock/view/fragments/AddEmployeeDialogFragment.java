@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
@@ -42,6 +43,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
     private NoticeDialogListener mNoticeDialogListener;
     private PhotoPickerListener mPhotoPickerListener;
 
+    private TextView mTitleTextView;
     private ImageView mBlankImageView;
     private EditText mNameEditText;
     private EditText mWageEditText;
@@ -90,6 +92,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View rootView = inflater.inflate(R.layout.add_employee_dialog, null);
+        mTitleTextView = rootView.findViewById(R.id.dialog_title_text_view);
         mBlankImageView = rootView.findViewById(R.id.blank_image_view);
         mNameEditText = rootView.findViewById(R.id.name_edit_text);
         mWageEditText = rootView.findViewById(R.id.wage_edit_text);
@@ -128,6 +131,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
         } else {
             // if dialog was invoked from detail activity
             if (getArguments() != null) {
+                mTitleTextView.setText(getResources().getString(R.string.dialog_title_text_edit));
                 String name = getArguments().getString(EmployeeDetailsActivity.EMP_NAME_TAG);
                 String wage = String.valueOf(getArguments().getDouble(EmployeeDetailsActivity.EMP_WAGE_TAG));
                 String photoPath = getArguments().getString(EmployeeDetailsActivity.EMP_PHOTOPATH_TAG);
@@ -135,6 +139,7 @@ public class AddEmployeeDialogFragment extends DialogFragment {
                 mWageEditText.setText(wage);
                 setPhoto(photoPath);
             } else {
+                mTitleTextView.setText(getResources().getString(R.string.dialog_title_text_new));
                 setPhoto("");
             }
         }

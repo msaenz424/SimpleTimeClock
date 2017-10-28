@@ -16,8 +16,8 @@
     <!-- DialogFragment -->
     <string name="dialog_accept_button">Accept</string>
     <string name="dialog_cancel_button">Cancel</string>
-    <string name="item_title_delete">Delete</string>
-    <string name="item_title_add">Add New Employee</string>
+    <string name="dialog_title_text_new">Add a new employee</string>
+    <string name="dialog_title_text_edit">Edit employee</string>
     <string name="status_update_message">Status updated!</string>
     <string name="success_delete_message">Items deleted successfully</string>
     <string name="partial_delete_message">Some items couldn\'t be deleted</string>
@@ -32,8 +32,9 @@
     <string name="dollar_currency_symbol">$\u0020</string>
     <string name="pay_button_text">Pay</string>
     <string name="paid_earnings_message">paid</string>
-    <string name="dialog_title_text">Add a new employee</string>
     <string name="item_title_edit">Edit</string>
+    <string name="item_title_delete">Delete</string>
+    <string name="item_title_add">Add New Employee</string>
 
     <!-- AddEmployeeDialogFragment -->
     <string name="dialog_add_photo_title">Profile photo</string>
