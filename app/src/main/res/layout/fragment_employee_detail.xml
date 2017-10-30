@@ -99,28 +99,6 @@
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/det_view_work_log_button"
-                        style="@style/DetailButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_work_log_button_text" />
-
-                    <Button
-                        android:id="@+id/det_pay_button"
-                        style="@style/DetailButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pay_button_text" />
-
-                </LinearLayout>
-
-                <LinearLayout
                     style="@style/LinearLayoutVerticalMargin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,6 +145,32 @@
                         style="@style/CardViewTextItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/det_item_icon_size"
+                        android:layout_height="@dimen/det_item_icon_size" />
+
+                    <Button
+                        android:id="@+id/det_view_work_log_button"
+                        style="@style/BorderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_work_log_button_text" />
+
+                    <Button
+                        android:id="@+id/det_pay_button"
+                        style="@style/BorderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pay_button_text" />
 
                 </LinearLayout>
 

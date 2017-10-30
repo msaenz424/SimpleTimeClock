@@ -30,6 +30,8 @@
     <dimen name="init_scroll_up_distance">100dp</dimen>
     <dimen name="button_horizontal_padding">16dp</dimen>
     <dimen name="button_horizontal_margin">8dp</dimen>
+    <dimen name="button_vertical_margin">8dp</dimen>
+    <dimen name="button_vertical_margin_bottom">4dp</dimen>
 
     <!-- DialogFragment -->
     <dimen name="dialog_image_frame_size">120dp</dimen>
