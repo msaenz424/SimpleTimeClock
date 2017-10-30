@@ -43,4 +43,10 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="DetailButton" >
+        <item name="android:paddingStart">@dimen/button_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/button_horizontal_padding</item>
+        <item name="android:layout_marginEnd">@dimen/button_horizontal_margin</item>
+    </style>
+
 </resources>

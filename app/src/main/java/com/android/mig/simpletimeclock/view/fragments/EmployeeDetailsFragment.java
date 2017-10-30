@@ -44,7 +44,7 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     private TextView mUnpaidEarningsTextView;
     private TextView mTotalHoursTextView;
     private TextView mTotalEarningsTextView;
-    private Button mPayButton;
+    private Button mViewWorkLogButton, mPayButton;
 
     int mEmployeeId;
     String mUnpaidEarnings;

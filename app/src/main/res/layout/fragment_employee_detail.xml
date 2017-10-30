@@ -23,9 +23,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:transitionName="@string/transition_photo"
                 android:src="@drawable/im_blank_profile"
-                app:layout_collapseMode="parallax"/>
+                android:transitionName="@string/transition_photo"
+                app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/det_toolbar"
@@ -98,12 +98,27 @@
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray" />
 
-                <Button
-                    android:id="@+id/det_pay_button"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="@string/pay_button_text" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/det_view_work_log_button"
+                        style="@style/DetailButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_work_log_button_text" />
+
+                    <Button
+                        android:id="@+id/det_pay_button"
+                        style="@style/DetailButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pay_button_text" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     style="@style/LinearLayoutVerticalMargin"
