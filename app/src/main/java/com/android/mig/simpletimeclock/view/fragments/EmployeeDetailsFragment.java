@@ -22,6 +22,7 @@ import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenter;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenterImpl;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
+import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class EmployeeDetailsFragment extends Fragment implements EmployeeDetailsView{
@@ -46,6 +48,7 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     private TextView mTotalEarningsTextView;
     private Button mViewWorkLogButton, mPayButton;
 
+    private ArrayList<Timeclock> mTimeclockArrayList;
     int mEmployeeId;
     String mUnpaidEarnings;
 
@@ -159,6 +162,11 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         }
         EmployeeDetailsActivity employeeDetailsActivity = (EmployeeDetailsActivity) getActivity();
         employeeDetailsActivity.setEmployeeDetails(new EmployeeDetails(mEmployeeId, employeeDetails.getName(), employeeDetails.getWage(), employeeDetails.getPhotoPath()));
+    }
+
+    @Override
+    public void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList) {
+        this.mTimeclockArrayList = timeclockArrayList;
     }
 
     @Override

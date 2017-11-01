@@ -1,9 +1,11 @@
 package com.android.mig.simpletimeclock.source.model;
 
+import java.util.ArrayList;
+
 public interface EmployeeDetailsInteractor {
 
     interface OnFinishedTransactionListener{
-        void onReadSuccess(EmployeeDetails employeeDetails);
+        void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList);
 
         void onUpdateSuccess();
 

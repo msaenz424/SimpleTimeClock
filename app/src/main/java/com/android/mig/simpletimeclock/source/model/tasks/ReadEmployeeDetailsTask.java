@@ -10,8 +10,12 @@ import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
+import com.android.mig.simpletimeclock.source.model.Timeclock;
 
-public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDetails> {
+import java.util.ArrayList;
+
+
+public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmployeeDetailsTask.ResultWrapper> {
 
     private final int PAID_STATUS = 1;
     private final int UNPAID_STATUS = 0;
@@ -48,7 +52,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             TimeClockContract.Timeclock.TABLE_TIMECLOCK + " WHERE " +
             TimeClockContract.Timeclock.TIMECLOCK_EMP_ID + "=? AND " +
             TimeClockContract.Timeclock.TIMECLOCK_PAID + "=? AND " +
-            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NOT NULL";
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_OUT + " IS NOT NULL ORDER BY " +
+            TimeClockContract.Timeclock.TIMECLOCK_CLOCK_IN + " DESC";
 
     private final String EMPLOYEE_QUERY = "SELECT " +
             TimeClockContract.Employees.EMP_NAME + ", " +
@@ -72,7 +77,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
     }
 
     @Override
-    protected EmployeeDetails doInBackground(Integer... params) {
+    protected ResultWrapper doInBackground(Integer... params) {
+        ArrayList<Timeclock> timeclockArrayList = new ArrayList<>();
         EmployeeDetails employeeDetails = null;
         boolean isWorking = false;
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
@@ -85,20 +91,28 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
 
             Cursor currentCursor = db.rawQuery(ACTIVE_TIME_QUERY, new String[]{empId});
             long timeNow = (System.currentTimeMillis() / 1000);
-            long currentTime = 0;
+            int currentTime = 0;
             double currentEarnings = 0;
 
             // calculates the earning of the current active time, if there is any
             if (currentCursor.moveToFirst()) {
                 isWorking = true;
 
-                Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(currentCursor.getInt(ACTIVE_TIME_ID_INDEX))});
+                int timeId = currentCursor.getInt(ACTIVE_TIME_ID_INDEX);
+                long clockIn = currentCursor.getLong(ACTIVE_CLOCKIN_INDEX);
+                double wage = currentCursor.getDouble(ACTIVE_WAGE_INDEX);
+
+                Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(timeId)});
                 int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
-                currentTime = timeNow - currentCursor.getLong(ACTIVE_CLOCKIN_INDEX) - currentBreakTime;
+                currentTime = (int) (timeNow - clockIn - currentBreakTime);
 
                 Log.d("READEMPLOYEEDETAILSTASK", "clock in = " + String.valueOf(currentCursor.getLong(ACTIVE_CLOCKIN_INDEX)));
 
-                currentEarnings = currentCursor.getDouble(ACTIVE_WAGE_INDEX) * currentTime / 3600;
+                currentEarnings = wage * currentTime / 3600;
+
+                // adds the first row of the work log list
+                Timeclock timeclock = new Timeclock(timeId, clockIn, 0, currentTime, currentEarnings);
+                timeclockArrayList.add(timeclock);
             }
             currentCursor.close();
 
@@ -109,15 +123,23 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
             if (unpaidCursor.moveToFirst()) {
                 int currentTimeWorked;
                 do {
+                    int timeId = unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX);
                     long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
                     long clockOutTime = unpaidCursor.getLong(BY_PAID_CLOCKOUT_INDEX);
-                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
+                    double wage = unpaidCursor.getDouble(BY_PAID_WAGE_INDEX);
+                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(timeId)});
                     int unpaidBreakTime = calculateBreaks(breaksCursor, timeNow);
 
                     currentTimeWorked = (int) (clockOutTime - clockInTime - unpaidBreakTime);
+                    currentEarnings = wage * currentTimeWorked / 3600;
 
                     unpaidPreviousTime += currentTimeWorked;
-                    unpaidPreviousEarnings += unpaidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentTimeWorked / 3600;
+                    unpaidPreviousEarnings += currentEarnings;
+
+                    // adds a new row to the work log list
+                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, currentEarnings);
+                    timeclockArrayList.add(timeclock);
+
                 } while (unpaidCursor.moveToNext());
             }
             unpaidCursor.close();
@@ -165,13 +187,33 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDe
         } finally {
             db.endTransaction();
         }
-        return employeeDetails;
+        ResultWrapper resultWrapper = new ResultWrapper(employeeDetails, timeclockArrayList);
+        return resultWrapper;
     }
 
     @Override
-    protected void onPostExecute(EmployeeDetails employeeDetails) {
-        if (employeeDetails != null) {
-            this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
+    protected void onPostExecute(ResultWrapper resultWrapper) {
+        if (resultWrapper.getEmployeeDetails() != null) {
+            this.mOnFinishedTransactionListener.onReadSuccess(resultWrapper.getEmployeeDetails(), resultWrapper.getTimeclockArrayList());
+        }
+    }
+
+    class ResultWrapper{
+
+        private EmployeeDetails mEmployeeDetails;
+        private ArrayList<Timeclock> mTimeclockArrayList;
+
+        public ResultWrapper(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList) {
+            this.mEmployeeDetails = employeeDetails;
+            this.mTimeclockArrayList = timeclockArrayList;
+        }
+
+        public EmployeeDetails getEmployeeDetails() {
+            return mEmployeeDetails;
+        }
+
+        public ArrayList<Timeclock> getTimeclockArrayList() {
+            return mTimeclockArrayList;
         }
     }
 
