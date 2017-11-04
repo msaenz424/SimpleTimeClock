@@ -111,7 +111,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
                 currentEarnings = wage * currentTime / 3600;
 
                 // adds the first row of the work log list
-                Timeclock timeclock = new Timeclock(timeId, clockIn, 0, currentTime, currentEarnings);
+                Timeclock timeclock = new Timeclock(timeId, clockIn, 0, currentTime, currentBreakTime, currentEarnings);
                 timeclockArrayList.add(timeclock);
             }
             currentCursor.close();
@@ -137,7 +137,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
                     unpaidPreviousEarnings += currentEarnings;
 
                     // adds a new row to the work log list
-                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, currentEarnings);
+                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, unpaidBreakTime, currentEarnings);
                     timeclockArrayList.add(timeclock);
 
                 } while (unpaidCursor.moveToNext());

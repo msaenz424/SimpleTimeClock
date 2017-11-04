@@ -36,6 +36,11 @@
     <string name="item_title_edit">Edit</string>
     <string name="item_title_delete">Delete</string>
     <string name="item_title_add">Add New Employee</string>
+    <string name="item_header_date">Date</string>
+    <string name="item_header_hours">Hours</string>
+    <string name="item_header_breaks">Breaks</string>
+    <string name="item_header_earnings">Earned</string>
+    <string name="item_footer_total">Total</string>
 
     <!-- AddEmployeeDialogFragment -->
     <string name="dialog_add_photo_title">Profile photo</string>

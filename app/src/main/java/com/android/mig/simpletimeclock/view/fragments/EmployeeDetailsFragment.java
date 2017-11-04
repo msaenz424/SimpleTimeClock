@@ -25,6 +25,8 @@ import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
+import com.android.mig.simpletimeclock.view.activities.WorkLogActivity;
+import com.android.mig.simpletimeclock.view.adapters.WorkLogAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -71,7 +73,7 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_employee_detail, container, false);
 
         ActivityCompat.postponeEnterTransition(getActivity());
@@ -91,7 +93,18 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mUnpaidEarningsTextView     =  mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
         mTotalHoursTextView         =  mRootView.findViewById(R.id.det_total_hours_text_view);
         mTotalEarningsTextView      =  mRootView.findViewById(R.id.det_total_earnings_text_view);
+        mViewWorkLogButton          =  mRootView.findViewById(R.id.det_view_work_log_button);
         mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
+
+        mViewWorkLogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), WorkLogActivity.class);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
+                startActivity(intent);
+            }
+        });
+
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

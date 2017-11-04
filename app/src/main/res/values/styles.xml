@@ -50,7 +50,14 @@
         <item name="android:layout_marginEnd">@dimen/button_horizontal_margin</item>
         <item name="android:layout_marginTop">@dimen/button_vertical_margin</item>
         <item name="android:layout_marginBottom">@dimen/button_vertical_margin_bottom</item>
-
     </style>
 
+    <style name="WorkLogColumnItem">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingStart">@dimen/work_log_item_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/work_log_item_horizontal_padding</item>
+        <item name="android:paddingTop">@dimen/work_log_item_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/work_log_item_vertical_padding</item>
+    </style>
 </resources>
