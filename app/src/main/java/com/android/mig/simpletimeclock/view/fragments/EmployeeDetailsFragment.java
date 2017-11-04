@@ -46,8 +46,6 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     private TextView mWageTextView;
     private TextView mUnpaidHoursTextView;
     private TextView mUnpaidEarningsTextView;
-    private TextView mTotalHoursTextView;
-    private TextView mTotalEarningsTextView;
     private Button mViewWorkLogButton, mPayButton;
 
     private ArrayList<Timeclock> mTimeclockArrayList;
@@ -91,8 +89,6 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mWageTextView               =  mRootView.findViewById(R.id.det_wage_text_view);
         mUnpaidHoursTextView        =  mRootView.findViewById(R.id.det_unpaid_hours_text_view);
         mUnpaidEarningsTextView     =  mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
-        mTotalHoursTextView         =  mRootView.findViewById(R.id.det_total_hours_text_view);
-        mTotalEarningsTextView      =  mRootView.findViewById(R.id.det_total_earnings_text_view);
         mViewWorkLogButton          =  mRootView.findViewById(R.id.det_view_work_log_button);
         mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
 
@@ -157,12 +153,6 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mUnpaidHoursTextView.setText(hours + "h " + minutes + "m");
         mUnpaidEarnings = String.format(Locale.US, "%.2f", employeeDetails.getUnpaidEarnings());
         mUnpaidEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings);
-        int totalInSeconds = (int) employeeDetails.getTotalTimeWorked();
-        int totalHours = totalInSeconds / 3600;
-        int totalMinutes = (totalInSeconds % 3600) / 60;
-        mTotalHoursTextView.setText(totalHours + "h " + totalMinutes + "m");
-        String totalEarnings = String.format(Locale.US, "%.2f", employeeDetails.getTotalEarnings());
-        mTotalEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + totalEarnings);
         if (employeeDetails.getIsWorking()){
             mStatusImageView.setImageResource(R.drawable.im_green_light);
             mPayButton.setVisibility(View.GONE);

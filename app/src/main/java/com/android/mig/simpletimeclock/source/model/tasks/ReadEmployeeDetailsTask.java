@@ -146,27 +146,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
             long totalUnpaidTime = currentTime + unpaidPreviousTime;
             double totalUnpaidEarnings = currentEarnings + unpaidPreviousEarnings;
 
-            // calculates totals (paid and unpaid)
-            Cursor paidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(PAID_STATUS)});
-            long paidTime = 0;
-            double paidEarnings = 0;
-            if (paidCursor.moveToFirst()) {
-                int currentPaidTime;
-                do {
-                    long clockInTime = paidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
-                    long clockOutTime = paidCursor.getLong(BY_PAID_CLOCKOUT_INDEX);
-                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(paidCursor.getInt(BY_PAID_TIME_ID_INDEX))});
-                    int paidBreakTime = calculateBreaks(breaksCursor, timeNow);
-
-                    currentPaidTime = (int) (clockOutTime - clockInTime - paidBreakTime);
-                    paidTime += currentPaidTime;
-                    paidEarnings += paidCursor.getDouble(BY_PAID_WAGE_INDEX) * currentPaidTime / 3600;
-                } while (paidCursor.moveToNext());
-            }
-            paidCursor.close();
-            long totalTime = totalUnpaidTime + paidTime;
-            double totalEarnings = totalUnpaidEarnings + paidEarnings;
-
+            // gets employee personal info
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
             String empName = null;
             double empWage = 0;
@@ -179,7 +159,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
             }
             employeeCursor.close();
 
-            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, empPhotoUri, totalUnpaidTime, totalUnpaidEarnings, totalTime, totalEarnings, isWorking);
+            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, empPhotoUri, totalUnpaidTime, totalUnpaidEarnings, isWorking);
 
             db.setTransactionSuccessful();
         } catch (Exception e) {

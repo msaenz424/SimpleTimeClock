@@ -30,6 +30,16 @@ public class EmployeeDetails {
         this.isWorking = isWorking;
     }
 
+    public EmployeeDetails(int id, String name, double wage, String photoPath, long unpaidTimeWorked, double unpaidEarnings, boolean isWorking) {
+        this.mID = id;
+        this.mName = name;
+        this.mWage = wage;
+        this.mPhotoPath = photoPath;
+        this.mUnpaidTimeWorked = unpaidTimeWorked;
+        this.mUnpaidEarnings = unpaidEarnings;
+        this.isWorking = isWorking;
+    }
+
     public int getID() {
         return mID;
     }
