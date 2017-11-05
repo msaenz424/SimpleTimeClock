@@ -32,8 +32,8 @@
     <dimen name="button_horizontal_margin">8dp</dimen>
     <dimen name="button_vertical_margin">8dp</dimen>
     <dimen name="button_vertical_margin_bottom">4dp</dimen>
-    <dimen name="work_log_item_horizontal_padding">16dp</dimen>
-    <dimen name="work_log_item_vertical_padding">8dp</dimen>
+    <dimen name="work_log_item_horizontal_padding">4dp</dimen>
+    <dimen name="work_log_item_vertical_padding">4dp</dimen>
 
     <!-- DialogFragment -->
     <dimen name="dialog_image_frame_size">120dp</dimen>

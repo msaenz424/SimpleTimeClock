@@ -12,21 +12,24 @@
 
         <LinearLayout
             style="@style/WorkLogColumnItem"
+            android:paddingStart="8dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="6"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_work_log_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Mon, Jun 26" />
 
             <TextView
                 android:id="@+id/item_work_log_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="06:00 - 14:59" />
 
         </LinearLayout>
@@ -39,7 +42,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="13"
             android:orientation="horizontal">
 
             <TextView
@@ -47,7 +50,7 @@
                 style="@style/WorkLogColumnItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="7"
                 android:text="10h 56m" />
 
             <View
@@ -60,7 +63,7 @@
                 style="@style/WorkLogColumnItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="6"
                 android:text="1h 10m" />
 
             <View
@@ -73,7 +76,7 @@
                 style="@style/WorkLogColumnItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="7"
                 android:text="$156.25" />
 
         </LinearLayout>

@@ -29,7 +29,7 @@
     <string name="text_total_earnings">Total Earnings:\u0020</string>
     <string name="text_periodic_earnings">Unpaid Earnings:\u0020</string>
     <string name="text_periodic_worked_hours">Unpaid Time:\u0020</string>
-    <string name="dollar_currency_symbol">$\u0020</string>
+    <string name="dollar_currency_symbol">$</string>
     <string name="view_work_log_button_text">View work log</string>
     <string name="pay_button_text">Pay</string>
     <string name="paid_earnings_message">paid</string>
