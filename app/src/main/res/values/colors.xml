@@ -11,4 +11,6 @@
     <color name="active_timer">#008000</color>
     <color name="inactive_timer">#DD2C00</color>
     <color name="list_divider">@android:color/darker_gray</color>
+    <color name="header_footer_background">#a7cec6</color>
+    <color name="work_log_item_background">#deedec</color>
 </resources>

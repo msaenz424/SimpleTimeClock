@@ -42,10 +42,10 @@
             android:name=".view.activities.AllEmployeesActivity"
             android:parentActivityName=".view.activities.MainActivity" />
         <activity android:name=".view.activities.EmployeeDetailsActivity" />
+        <activity android:name=".view.activities.WorkLogActivity"/>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity android:name=".view.activities.WorkLogActivity"></activity>
     </application>
 
 </manifest>

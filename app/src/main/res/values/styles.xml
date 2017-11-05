@@ -60,4 +60,9 @@
         <item name="android:paddingTop">@dimen/work_log_item_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/work_log_item_vertical_padding</item>
     </style>
+
+    <style name="WorkLogHeaderFooterStyle" parent="WorkLogColumnItem">
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

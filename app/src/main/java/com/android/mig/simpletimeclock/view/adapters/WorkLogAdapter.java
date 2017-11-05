@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
@@ -58,11 +59,13 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof WorkLogViewHolder){
             if (position > 0 && position < mTimeclockArrayList.size() + 1) {
+                WorkLogViewHolder viewHolder = (WorkLogViewHolder) holder;
                 position--;
+                if (position % 2 != 0){
+                    viewHolder.mLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.work_log_item_background));
+                }
                 long clockIn = mTimeclockArrayList.get(position).getClockIn() * 1000L;
                 long clockOut = mTimeclockArrayList.get(position).getClockOut() * 1000L;
-
-                WorkLogViewHolder viewHolder = (WorkLogViewHolder) holder;
 
                 // sets the format of the date
                 SimpleDateFormat dayFormat = new SimpleDateFormat("EEE, MMM dd", Locale.US);
@@ -125,10 +128,12 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class WorkLogViewHolder extends RecyclerView.ViewHolder {
 
+        LinearLayout mLinearLayout;
         TextView mDateTextView, mTimeTextView, mHoursTextView, mBreaksTextView, mEarningsTextView;
 
         public WorkLogViewHolder(View itemView) {
             super(itemView);
+            mLinearLayout = itemView.findViewById(R.id.work_log_item_linear_layout);
             mDateTextView = itemView.findViewById(R.id.item_work_log_date);
             mTimeTextView = itemView.findViewById(R.id.item_work_log_time);
             mHoursTextView = itemView.findViewById(R.id.item_work_log_hours);
