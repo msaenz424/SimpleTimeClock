@@ -23,6 +23,8 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Context mContext;
     private ArrayList<Timeclock> mTimeclockArrayList;
+    private double mTotalEarnings;
+    private int mTotalHours, mTotalMinutes, mTotalBreakHours, mTotalBreakMinutes;
 
     public WorkLogAdapter(Context context) {
         this.mContext = context;
@@ -99,11 +101,35 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 int totalBreakMinutes = (totalBreaksInSeconds % 3600) / 60;
                 viewHolder.mBreaksTextView.setText(totalBreaksHours + "h " + totalBreakMinutes + "m");
 
-                String earned = String.format(Locale.US, "%.2f", mTimeclockArrayList.get(position).getEarned());
-                viewHolder.mEarningsTextView.setText(mContext.getResources().getString(R.string.dollar_currency_symbol) + earned);
+                double earned = mTimeclockArrayList.get(position).getEarned();
+                String earnedString = String.format(Locale.US, "%.2f", earned);
+                viewHolder.mEarningsTextView.setText(mContext.getResources().getString(R.string.dollar_currency_symbol) + earnedString);
+
+                // sums up totals for later use in footer
+                int minSum = mTotalMinutes + totalMinutes;
+                if (minSum >= 60) {
+                    mTotalHours++;
+                    mTotalMinutes = minSum - 60;
+                } else {
+                    mTotalMinutes += totalMinutes;
+                }
+                int minBreakSum = mTotalBreakMinutes + totalBreakMinutes;
+                if (minBreakSum >= 60){
+                    mTotalBreakHours++;
+                    mTotalBreakMinutes = minBreakSum - 60;
+                } else {
+                    mTotalBreakMinutes += totalBreakMinutes;
+                }
+                mTotalHours += totalHours;
+                mTotalBreakHours += totalBreaksHours;
+                mTotalEarnings += earned;
             }
         } else if (holder instanceof WorkLogFooterViewHolder) {
-
+                WorkLogFooterViewHolder viewHolder = (WorkLogFooterViewHolder) holder;
+                viewHolder.mHoursTextView.setText(mTotalHours + "h " + mTotalMinutes + "m");
+                viewHolder.mBreaksTextView.setText(mTotalBreakHours + "h " + mTotalBreakMinutes + "m");
+                String earnedString = String.format(Locale.US, "%.2f", mTotalEarnings);
+                viewHolder.mEarningsTextView.setText(mContext.getResources().getString(R.string.dollar_currency_symbol) + earnedString);
         }
     }
 
