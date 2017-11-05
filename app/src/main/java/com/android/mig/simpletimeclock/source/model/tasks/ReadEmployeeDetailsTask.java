@@ -12,6 +12,7 @@ import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 
@@ -108,7 +109,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
 
                 Log.d("READEMPLOYEEDETAILSTASK", "clock in = " + String.valueOf(currentCursor.getLong(ACTIVE_CLOCKIN_INDEX)));
 
-                currentEarnings = wage * currentTime / 3600;
+                currentEarnings = calculateDecimalEarnings(currentTime, wage);
 
                 // adds the first row of the work log list
                 Timeclock timeclock = new Timeclock(timeId, clockIn, 0, currentTime, currentBreakTime, currentEarnings);
@@ -119,7 +120,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
             // calculate the earnings of unpaid times (active time not included)
             Cursor unpaidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(UNPAID_STATUS)});
             long unpaidPreviousTime = 0;
-            double unpaidPreviousEarnings = 0;
+            double totalUnpaidPreviousEarnings = 0;
             if (unpaidCursor.moveToFirst()) {
                 int currentTimeWorked;
                 do {
@@ -131,20 +132,20 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
                     int unpaidBreakTime = calculateBreaks(breaksCursor, timeNow);
 
                     currentTimeWorked = (int) (clockOutTime - clockInTime - unpaidBreakTime);
-                    currentEarnings = wage * currentTimeWorked / 3600;
+                    double previousEarnings = calculateDecimalEarnings(currentTimeWorked, wage);
 
                     unpaidPreviousTime += currentTimeWorked;
-                    unpaidPreviousEarnings += currentEarnings;
+                    totalUnpaidPreviousEarnings += previousEarnings;
 
                     // adds a new row to the work log list
-                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, unpaidBreakTime, currentEarnings);
+                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, unpaidBreakTime, previousEarnings);
                     timeclockArrayList.add(timeclock);
 
                 } while (unpaidCursor.moveToNext());
             }
             unpaidCursor.close();
             long totalUnpaidTime = currentTime + unpaidPreviousTime;
-            double totalUnpaidEarnings = currentEarnings + unpaidPreviousEarnings;
+            double totalUnpaidEarnings = currentEarnings + totalUnpaidPreviousEarnings;
 
             // gets employee personal info
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
@@ -213,4 +214,17 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
         breaksCursor.close();
         return breakSum;
     }
+
+    private double calculateDecimalEarnings(int secondsWorked, double wage){
+        double earned;
+        int hours = secondsWorked / 3600;
+        int minutes = (secondsWorked % 3600) / 60;
+        double decimalMinutes = (double) minutes / 60;
+        earned = (hours * wage) + (decimalMinutes * wage);
+        BigDecimal earningsBigDecimal = new BigDecimal(String.valueOf(earned));                 // string on BigDecimal helps to preserve precision
+        earningsBigDecimal = earningsBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        earned = earningsBigDecimal.doubleValue();
+        return earned;
+    }
+
 }
