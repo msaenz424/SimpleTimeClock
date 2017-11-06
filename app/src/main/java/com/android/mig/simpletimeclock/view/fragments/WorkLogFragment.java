@@ -27,6 +27,12 @@ public class WorkLogFragment extends Fragment {
     public WorkLogFragment() {
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,5 +53,23 @@ public class WorkLogFragment extends Fragment {
         workLogAdapter.setWorkLogData(mTimeclockArrayList);
 
         return rootView;
+    }
+
+    /**
+     * Helps to retain data in fragment
+     *
+     * @param timeclockArrayList array list of Timeclock objects
+     */
+    public void setData(ArrayList<Timeclock> timeclockArrayList){
+        this.mTimeclockArrayList = timeclockArrayList;
+    }
+
+    /**
+     * Helps to retrieve data from retained fragment
+     *
+     * @return array list of Timeclock objects
+     */
+    public ArrayList<Timeclock> getData(){
+        return mTimeclockArrayList;
     }
 }
