@@ -48,134 +48,240 @@
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/cardview_margin"
-            app:cardElevation="@dimen/cardview_elevation"
-            app:contentPadding="@dimen/cardview_content_padding">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/time_status_image_view"
-                    android:layout_width="@dimen/det_status_icon_size"
-                    android:layout_height="@dimen/det_status_icon_size"
-                    android:layout_gravity="end"
-                    android:src="@drawable/im_grey_light" />
+                android:layout_margin="@dimen/cardview_margin"
+                app:cardElevation="@dimen/cardview_elevation"
+                app:contentPadding="@dimen/cardview_content_padding">
 
                 <LinearLayout
-                    style="@style/LinearLayoutVerticalMargin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="@dimen/det_item_icon_size"
-                        android:layout_height="@dimen/det_item_icon_size"
-                        android:src="@drawable/im_wage_tag" />
-
-                    <TextView
-                        style="@style/CardViewTextItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_wage" />
-
-                    <TextView
-                        android:id="@+id/det_wage_text_view"
-                        style="@style/CardViewTextItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
-
-                <LinearLayout
-                    style="@style/LinearLayoutVerticalMargin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/det_item_icon_size"
-                        android:layout_height="@dimen/det_item_icon_size"
-                        android:src="@drawable/im_hours_worked" />
+                        android:id="@+id/time_status_image_view"
+                        android:layout_width="@dimen/det_status_icon_size"
+                        android:layout_height="@dimen/det_status_icon_size"
+                        android:layout_gravity="end"
+                        android:src="@drawable/im_grey_light" />
 
-                    <TextView
-                        style="@style/CardViewTextItem"
+                    <LinearLayout
+                        style="@style/LinearLayoutVerticalMargin"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_periodic_worked_hours" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/det_unpaid_hours_text_view"
-                        style="@style/CardViewTextItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_width="@dimen/det_item_icon_size"
+                            android:layout_height="@dimen/det_item_icon_size"
+                            android:src="@drawable/im_wage_tag" />
 
-                </LinearLayout>
+                        <TextView
+                            style="@style/CardViewTextItem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_wage" />
 
-                <LinearLayout
-                    style="@style/LinearLayoutVerticalMargin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/det_wage_text_view"
+                            style="@style/CardViewTextItem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
-                    <ImageView
-                        android:layout_width="@dimen/det_item_icon_size"
-                        android:layout_height="@dimen/det_item_icon_size"
-                        android:src="@drawable/im_earnings" />
-
-                    <TextView
-                        style="@style/CardViewTextItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_periodic_earnings" />
-
-                    <TextView
-                        android:id="@+id/det_unpaid_earnings_text_view"
-                        style="@style/CardViewTextItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:orientation="horizontal">
+                    </LinearLayout>
 
                     <View
-                        android:layout_width="@dimen/det_item_icon_size"
-                        android:layout_height="@dimen/det_item_icon_size" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray" />
 
-                    <Button
-                        android:id="@+id/det_view_work_log_button"
-                        style="@style/BorderlessButtonStyle"
+                    <LinearLayout
+                        style="@style/LinearLayoutVerticalMargin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/det_item_icon_size"
+                            android:layout_height="@dimen/det_item_icon_size"
+                            android:src="@drawable/im_hours_worked" />
+
+                        <TextView
+                            style="@style/CardViewTextItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_periodic_worked_hours" />
+
+                        <TextView
+                            android:id="@+id/det_unpaid_hours_text_view"
+                            style="@style/CardViewTextItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/LinearLayoutVerticalMargin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/det_item_icon_size"
+                            android:layout_height="@dimen/det_item_icon_size"
+                            android:src="@drawable/im_earnings" />
+
+                        <TextView
+                            style="@style/CardViewTextItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_periodic_earnings" />
+
+                        <TextView
+                            android:id="@+id/det_unpaid_earnings_text_view"
+                            style="@style/CardViewTextItem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/view_work_log_button_text" />
+                        android:layout_gravity="start"
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/det_pay_button"
-                        style="@style/BorderlessButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pay_button_text" />
+                        <View
+                            android:layout_width="@dimen/det_item_icon_size"
+                            android:layout_height="@dimen/det_item_icon_size" />
+
+                        <Button
+                            android:id="@+id/det_view_work_log_button"
+                            style="@style/BorderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_work_log_button_text" />
+
+                        <Button
+                            android:id="@+id/det_pay_button"
+                            style="@style/BorderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pay_button_text" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-        </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/cardview_margin"
+                app:cardElevation="@dimen/cardview_elevation"
+                app:contentPadding="@dimen/cardview_content_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/text_custom_work_log_search"
+                        android:textSize="@dimen/det_textview_size" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:text="From"
+                            android:textSize="@dimen/det_textview_size" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:focusable="false"
+                            android:hint="mm/dd/yyyy" />
+
+                        <ImageButton
+                            style="@style/BorderlessButtonStyle"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_action_pick_date"
+                            android:tint="@color/colorAccent" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:text="To"
+                            android:textSize="@dimen/det_textview_size" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:focusable="false"
+                            android:hint="mm/dd/yyyy" />
+
+                        <ImageButton
+                            style="@style/BorderlessButtonStyle"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_action_pick_date"
+                            android:tint="@color/colorAccent" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="@dimen/det_item_icon_size"
+                            android:layout_height="@dimen/det_item_icon_size" />
+
+                        <Button
+                            android:id="@+id/det_custom_work_log_button"
+                            style="@style/BorderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_work_log_button_text" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
