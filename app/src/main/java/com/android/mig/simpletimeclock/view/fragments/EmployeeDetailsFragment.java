@@ -61,7 +61,7 @@ public class EmployeeDetailsFragment extends Fragment
     private TextView mUnpaidHoursTextView;
     private TextView mUnpaidEarningsTextView;
     private EditText mStartDateEditText, mEndDateEditText;
-    private Button mViewWorkLogButton, mPayButton;
+    private Button mViewWorkLogButton, mPayButton, mCustomWorkLogButton;
     private ImageButton mPickStartDateButton, mPickEndDateButton;
 
     private ArrayList<Timeclock> mTimeclockArrayList;
@@ -112,6 +112,7 @@ public class EmployeeDetailsFragment extends Fragment
         mEndDateEditText            =  mRootView.findViewById(R.id.end_date_edit_text);
         mPickStartDateButton        =  mRootView.findViewById(R.id.pick_start_date_button);
         mPickEndDateButton          =  mRootView.findViewById(R.id.pick_end_date_button);
+        mCustomWorkLogButton        =  mRootView.findViewById(R.id.det_custom_work_log_button);
 
         mViewWorkLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +161,15 @@ public class EmployeeDetailsFragment extends Fragment
             public void onClick(View view) {
                 mDatePickId = PICK_END_DATE_CODE;
                 openDatePicker();
+            }
+        });
+
+        mCustomWorkLogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               long startDate = convertDateToSeconds(mStartDateEditText.getText().toString());
+               long endDate = convertDateToSeconds(mEndDateEditText.getText().toString());
+               /** TODO pass date range to Work Log Activity*/
             }
         });
 
@@ -248,5 +258,17 @@ public class EmployeeDetailsFragment extends Fragment
                 mEndDateEditText.setText(stringDate);
                 break;
         }
+    }
+
+    private long convertDateToSeconds(String stringDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        Date date = null;
+        try {
+            date = dateFormat.parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long seconds = date.getTime() / 1000;
+        return seconds;
     }
 }
