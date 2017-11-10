@@ -215,13 +215,16 @@
                             android:textSize="@dimen/det_textview_size" />
 
                         <EditText
+                            android:id="@+id/start_date_edit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:focusable="false"
+                            android:inputType="datetime"
                             android:hint="mm/dd/yyyy" />
 
                         <ImageButton
+                            android:id="@+id/pick_start_date_button"
                             style="@style/BorderlessButtonStyle"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
@@ -244,13 +247,16 @@
                             android:textSize="@dimen/det_textview_size" />
 
                         <EditText
+                            android:id="@+id/end_date_edit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:focusable="false"
+                            android:inputType="datetime"
                             android:hint="mm/dd/yyyy" />
 
                         <ImageButton
+                            android:id="@+id/pick_end_date_button"
                             style="@style/BorderlessButtonStyle"
                             android:layout_width="48dp"
                             android:layout_height="48dp"

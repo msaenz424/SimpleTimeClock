@@ -1,19 +1,22 @@
 package com.android.mig.simpletimeclock.view.fragments;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +34,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.util.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
-public class EmployeeDetailsFragment extends Fragment implements EmployeeDetailsView{
+public class EmployeeDetailsFragment extends Fragment
+        implements EmployeeDetailsView, DatePickerDialog.OnDateSetListener{
+
+    private static final int PICK_START_DATE_CODE = 0;
+    private static final int PICK_END_DATE_CODE = 1;
+    private static final String DATE_PICKER_DIALOG_TAG = "DatePickerDialog";
 
     private EmployeeDetailsPresenter mEmployeeDetailsPresenter;
 
@@ -46,11 +60,14 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
     private TextView mWageTextView;
     private TextView mUnpaidHoursTextView;
     private TextView mUnpaidEarningsTextView;
+    private EditText mStartDateEditText, mEndDateEditText;
     private Button mViewWorkLogButton, mPayButton;
+    private ImageButton mPickStartDateButton, mPickEndDateButton;
 
     private ArrayList<Timeclock> mTimeclockArrayList;
     int mEmployeeId;
     String mUnpaidEarnings;
+    private int mDatePickId;
 
     private RequestListener<String, GlideDrawable> mRequestListener = new RequestListener<String, GlideDrawable>() {
         @Override
@@ -91,6 +108,10 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
         mUnpaidEarningsTextView     =  mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
         mViewWorkLogButton          =  mRootView.findViewById(R.id.det_view_work_log_button);
         mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
+        mStartDateEditText          =  mRootView.findViewById(R.id.start_date_edit_text);
+        mEndDateEditText            =  mRootView.findViewById(R.id.end_date_edit_text);
+        mPickStartDateButton        =  mRootView.findViewById(R.id.pick_start_date_button);
+        mPickEndDateButton          =  mRootView.findViewById(R.id.pick_end_date_button);
 
         mViewWorkLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +144,22 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage("Pay " + getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings + "?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
+
+        mPickStartDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatePickId = PICK_START_DATE_CODE;
+                openDatePicker();
+            }
+        });
+
+        mPickEndDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatePickId = PICK_END_DATE_CODE;
+                openDatePicker();
             }
         });
 
@@ -187,5 +224,29 @@ public class EmployeeDetailsFragment extends Fragment implements EmployeeDetails
 
     public EmployeeDetailsPresenter getPresenter(){
         return mEmployeeDetailsPresenter;
+    }
+
+    private void openDatePicker(){
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(),DATE_PICKER_DIALOG_TAG);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String stringDate = String.valueOf(monthOfYear) + "/" +  String.valueOf(dayOfMonth) + "/" +  String.valueOf(year);
+        switch (mDatePickId){
+            case PICK_START_DATE_CODE:
+                mStartDateEditText.setText(stringDate);
+                break;
+            case PICK_END_DATE_CODE:
+                mEndDateEditText.setText(stringDate);
+                break;
+        }
     }
 }

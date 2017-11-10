@@ -40,7 +40,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity
 
         if (savedInstanceState == null){
             mEmployeeDetailsFragment = new EmployeeDetailsFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.employee_detail_container, mEmployeeDetailsFragment)
                     .commit();
