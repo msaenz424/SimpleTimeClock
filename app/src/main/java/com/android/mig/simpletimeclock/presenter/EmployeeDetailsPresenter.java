@@ -8,4 +8,6 @@ public interface EmployeeDetailsPresenter {
 
     void onPayButtonClicked(int empId);
 
+    void onCustomWorkLogButtonClicked(int empId, long dateStart, long dateEnd);
+
 }

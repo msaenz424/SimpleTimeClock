@@ -50,6 +50,7 @@ public class EmployeeDetailsFragment extends Fragment
     private static final int PICK_START_DATE_CODE = 0;
     private static final int PICK_END_DATE_CODE = 1;
     private static final String DATE_PICKER_DIALOG_TAG = "DatePickerDialog";
+    private static final int ONE_DAY_IN_SECONDS = 86400;
 
     private EmployeeDetailsPresenter mEmployeeDetailsPresenter;
 
@@ -168,8 +169,9 @@ public class EmployeeDetailsFragment extends Fragment
             @Override
             public void onClick(View view) {
                long startDate = convertDateToSeconds(mStartDateEditText.getText().toString());
-               long endDate = convertDateToSeconds(mEndDateEditText.getText().toString());
-               /** TODO pass date range to Work Log Activity*/
+               long endDate = convertDateToSeconds(mEndDateEditText.getText().toString()) + ONE_DAY_IN_SECONDS; // ensures day picked is included
+
+               mEmployeeDetailsPresenter.onCustomWorkLogButtonClicked(mEmployeeId, startDate, endDate);
             }
         });
 
@@ -217,6 +219,13 @@ public class EmployeeDetailsFragment extends Fragment
     @Override
     public void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList) {
         this.mTimeclockArrayList = timeclockArrayList;
+    }
+
+    @Override
+    public void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList) {
+        Intent intent = new Intent(getContext(), WorkLogActivity.class);
+        intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, timeclockArrayList);
+        startActivity(intent);
     }
 
     @Override

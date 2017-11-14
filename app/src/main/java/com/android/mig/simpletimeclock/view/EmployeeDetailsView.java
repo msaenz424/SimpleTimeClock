@@ -11,6 +11,8 @@ public interface EmployeeDetailsView {
 
     void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList);
 
+    void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList);
+
     void showPaidMessage();
 
     void refreshEmployeeInfo();

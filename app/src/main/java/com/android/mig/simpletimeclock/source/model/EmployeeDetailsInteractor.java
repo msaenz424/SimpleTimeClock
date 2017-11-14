@@ -7,12 +7,16 @@ public interface EmployeeDetailsInteractor {
     interface OnFinishedTransactionListener{
         void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList);
 
+        void onReadWorkLogByDateRangeSuccess(ArrayList<Timeclock> timeclockArrayList);
+
         void onUpdateSuccess();
 
         void onUpdateUnpaidTimeSuccess();
     }
 
     void readEmployeeDetails(int empId, OnFinishedTransactionListener onFinishedTransactionListener);
+
+    void readWorkLogByDateRange(int empId, long dateStart, long dateEnd, OnFinishedTransactionListener onFinishedTransactionListener);
 
     void editEmployeeDetails(int empId, String name, double wage, String photoPath, OnFinishedTransactionListener onFinishedTransactionListener);
 

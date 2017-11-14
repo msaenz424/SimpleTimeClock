@@ -37,9 +37,19 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     }
 
     @Override
+    public void onCustomWorkLogButtonClicked(int empId, long dateStart, long dateEnd) {
+        mEmployeeDetailsInteractor.readWorkLogByDateRange(empId, dateStart, dateEnd, this);
+    }
+
+    @Override
     public void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList) {
         mEmployeeDetailsView.showEmployeeInfo(employeeDetails);
         mEmployeeDetailsView.saveWorkLogInfo(timeclockArrayList);
+    }
+
+    @Override
+    public void onReadWorkLogByDateRangeSuccess(ArrayList<Timeclock> timeclockArrayList) {
+        mEmployeeDetailsView.showWorkLogByDateRange(timeclockArrayList);
     }
 
     @Override
