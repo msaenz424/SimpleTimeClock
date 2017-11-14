@@ -258,7 +258,7 @@ public class EmployeeDetailsFragment extends Fragment
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String stringDate = String.valueOf(monthOfYear) + "/" +  String.valueOf(dayOfMonth) + "/" +  String.valueOf(year);
+        String stringDate = String.valueOf(monthOfYear + 1) + "/" +  String.valueOf(dayOfMonth) + "/" +  String.valueOf(year);
         switch (mDatePickId){
             case PICK_START_DATE_CODE:
                 mStartDateEditText.setText(stringDate);
