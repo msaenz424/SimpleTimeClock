@@ -41,6 +41,12 @@ public class WorkLogFragment extends Fragment {
         final Toolbar toolbar = rootView.findViewById(R.id.work_log_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
 
         mWorkLogRecyclerView = rootView.findViewById(R.id.work_log_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
