@@ -100,7 +100,7 @@ public class EmployeeDetailsFragment extends Fragment
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mEmployeeId = getActivity().getIntent().getIntExtra(Intent.EXTRA_UID, 0);
-        mEmployeeDetailsPresenter = new EmployeeDetailsPresenterImpl(this, getContext());
+        mEmployeeDetailsPresenter = new EmployeeDetailsPresenterImpl(this, getActivity());
 
         mCollapsingToolbarLayout    =  mRootView.findViewById(R.id.det_collapsing_layout);
         mPhotoImageView             =  mRootView.findViewById(R.id.det_photo_image_view);
