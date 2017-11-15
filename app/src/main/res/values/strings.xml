@@ -42,6 +42,7 @@
     <string name="item_header_breaks">Breaks</string>
     <string name="item_header_earnings">Earned</string>
     <string name="item_footer_total">Total</string>
+    <string name="message_invalid_date_range">Pick a valid date</string>
 
     <!-- AddEmployeeDialogFragment -->
     <string name="dialog_add_photo_title">Profile photo</string>

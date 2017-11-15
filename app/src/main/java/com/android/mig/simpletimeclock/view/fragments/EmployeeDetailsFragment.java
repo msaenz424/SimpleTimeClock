@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -168,10 +169,16 @@ public class EmployeeDetailsFragment extends Fragment
         mCustomWorkLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               long startDate = convertDateToSeconds(mStartDateEditText.getText().toString());
-               long endDate = convertDateToSeconds(mEndDateEditText.getText().toString()) + ONE_DAY_IN_SECONDS; // ensures day picked is included
-
-               mEmployeeDetailsPresenter.onCustomWorkLogButtonClicked(mEmployeeId, startDate, endDate);
+                String startDateString = mStartDateEditText.getText().toString();
+                String endDateString = mEndDateEditText.getText().toString();
+                if (!startDateString.isEmpty() && !endDateString.isEmpty()){
+                    long startDate = convertDateToSeconds(startDateString);
+                    long endDate = convertDateToSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
+                    mEmployeeDetailsPresenter.onCustomWorkLogButtonClicked(mEmployeeId, startDate, endDate);
+                } else {
+                    Snackbar mySnackbar = Snackbar.make(mRootView, R.string.message_invalid_date_range, Snackbar.LENGTH_SHORT);
+                    mySnackbar.show();
+                }
             }
         });
 
