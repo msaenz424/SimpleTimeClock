@@ -197,7 +197,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="@dimen/date_text_view_start_margin"
                         android:text="@string/text_custom_work_log_search"
                         android:textSize="@dimen/det_textview_size" />
 
@@ -207,11 +207,11 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="64dp"
+                            android:layout_width="@dimen/date_text_view_width"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="4dp"
-                            android:text="From"
+                            android:layout_marginStart="@dimen/date_text_view_start_margin"
+                            android:text="@string/start_date_text"
                             android:textSize="@dimen/det_textview_size" />
 
                         <EditText
@@ -220,14 +220,15 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:focusable="false"
-                            android:inputType="datetime"
-                            android:hint="mm/dd/yyyy" />
+                            android:hint="mm/dd/yyyy"
+                            android:inputType="datetime" />
 
                         <ImageButton
                             android:id="@+id/pick_start_date_button"
-                            style="@style/BorderlessButtonStyle"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="@dimen/image_button_dimension"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/image_button_padding"
                             android:src="@drawable/ic_action_pick_date"
                             android:tint="@color/colorAccent" />
 
@@ -239,11 +240,11 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="64dp"
+                            android:layout_width="@dimen/date_text_view_width"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="4dp"
-                            android:text="To"
+                            android:layout_marginStart="@dimen/date_text_view_start_margin"
+                            android:text="@string/end_date_text"
                             android:textSize="@dimen/det_textview_size" />
 
                         <EditText
@@ -252,14 +253,15 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:focusable="false"
-                            android:inputType="datetime"
-                            android:hint="mm/dd/yyyy" />
+                            android:hint="mm/dd/yyyy"
+                            android:inputType="datetime" />
 
                         <ImageButton
                             android:id="@+id/pick_end_date_button"
-                            style="@style/BorderlessButtonStyle"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="@dimen/image_button_dimension"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/image_button_padding"
                             android:src="@drawable/ic_action_pick_date"
                             android:tint="@color/colorAccent" />
 

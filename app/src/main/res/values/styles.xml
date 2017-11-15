@@ -45,8 +45,7 @@
 
     <style name="BorderlessButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:paddingStart">@dimen/button_horizontal_padding</item>
-        <item name="android:paddingEnd">@dimen/button_horizontal_padding</item>
+        <item name="android:padding">@dimen/button_padding</item>
         <item name="android:layout_marginEnd">@dimen/button_horizontal_margin</item>
         <item name="android:layout_marginTop">@dimen/button_vertical_margin</item>
         <item name="android:layout_marginBottom">@dimen/button_vertical_margin_bottom</item>
