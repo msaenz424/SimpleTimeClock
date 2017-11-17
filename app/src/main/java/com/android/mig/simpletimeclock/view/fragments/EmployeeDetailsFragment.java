@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,7 +61,7 @@ public class EmployeeDetailsFragment extends Fragment
     private TextView mWageTextView;
     private TextView mUnpaidHoursTextView;
     private TextView mUnpaidEarningsTextView;
-    private EditText mStartDateEditText, mEndDateEditText;
+    private TextView mStartDateTextView, mEndDateTextView;
     private Button mViewWorkLogButton, mPayButton, mCustomWorkLogButton;
     private ImageButton mPickStartDateButton, mPickEndDateButton;
 
@@ -110,8 +109,8 @@ public class EmployeeDetailsFragment extends Fragment
         mUnpaidEarningsTextView     =  mRootView.findViewById(R.id.det_unpaid_earnings_text_view);
         mViewWorkLogButton          =  mRootView.findViewById(R.id.det_view_work_log_button);
         mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
-        mStartDateEditText          =  mRootView.findViewById(R.id.start_date_edit_text);
-        mEndDateEditText            =  mRootView.findViewById(R.id.end_date_edit_text);
+        mStartDateTextView          =  mRootView.findViewById(R.id.start_date_text_view);
+        mEndDateTextView            =  mRootView.findViewById(R.id.end_date_text_view);
         mPickStartDateButton        =  mRootView.findViewById(R.id.pick_start_date_button);
         mPickEndDateButton          =  mRootView.findViewById(R.id.pick_end_date_button);
         mCustomWorkLogButton        =  mRootView.findViewById(R.id.det_custom_work_log_button);
@@ -166,11 +165,25 @@ public class EmployeeDetailsFragment extends Fragment
             }
         });
 
+        mStartDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPickStartDateButton.callOnClick();
+            }
+        });
+
+        mEndDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPickEndDateButton.callOnClick();
+            }
+        });
+
         mCustomWorkLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String startDateString = mStartDateEditText.getText().toString();
-                String endDateString = mEndDateEditText.getText().toString();
+                String startDateString = mStartDateTextView.getText().toString();
+                String endDateString = mEndDateTextView.getText().toString();
                 if (!startDateString.isEmpty() && !endDateString.isEmpty()){
                     long startDate = convertDateToSeconds(startDateString);
                     long endDate = convertDateToSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
@@ -268,10 +281,10 @@ public class EmployeeDetailsFragment extends Fragment
         String stringDate = String.valueOf(monthOfYear + 1) + "/" +  String.valueOf(dayOfMonth) + "/" +  String.valueOf(year);
         switch (mDatePickId){
             case PICK_START_DATE_CODE:
-                mStartDateEditText.setText(stringDate);
+                mStartDateTextView.setText(stringDate);
                 break;
             case PICK_END_DATE_CODE:
-                mEndDateEditText.setText(stringDate);
+                mEndDateTextView.setText(stringDate);
                 break;
         }
     }
