@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,10 +59,8 @@ public class EmployeeDetailsFragment extends Fragment
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ImageView mPhotoImageView;
     private ImageView mStatusImageView;
-    private TextView mWageTextView;
-    private TextView mUnpaidHoursTextView;
-    private TextView mUnpaidEarningsTextView;
-    private TextView mStartDateTextView, mEndDateTextView;
+    private TextView mWageTextView, mUnpaidHoursTextView, mUnpaidEarningsTextView, mStartDateTextView, mEndDateTextView;
+    private LinearLayout mStartDateLinearLayout, mEndDateLinearLayout;
     private Button mViewWorkLogButton, mPayButton, mCustomWorkLogButton;
     private ImageButton mPickStartDateButton, mPickEndDateButton;
 
@@ -111,6 +110,8 @@ public class EmployeeDetailsFragment extends Fragment
         mPayButton                  =  mRootView.findViewById(R.id.det_pay_button);
         mStartDateTextView          =  mRootView.findViewById(R.id.start_date_text_view);
         mEndDateTextView            =  mRootView.findViewById(R.id.end_date_text_view);
+        mStartDateLinearLayout      =  mRootView.findViewById(R.id.start_date_linear_layout);
+        mEndDateLinearLayout        =  mRootView.findViewById(R.id.end_date_linear_layout);
         mPickStartDateButton        =  mRootView.findViewById(R.id.pick_start_date_button);
         mPickEndDateButton          =  mRootView.findViewById(R.id.pick_end_date_button);
         mCustomWorkLogButton        =  mRootView.findViewById(R.id.det_custom_work_log_button);
@@ -165,14 +166,14 @@ public class EmployeeDetailsFragment extends Fragment
             }
         });
 
-        mStartDateTextView.setOnClickListener(new View.OnClickListener() {
+        mStartDateLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPickStartDateButton.callOnClick();
             }
         });
 
-        mEndDateTextView.setOnClickListener(new View.OnClickListener() {
+        mEndDateLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPickEndDateButton.callOnClick();

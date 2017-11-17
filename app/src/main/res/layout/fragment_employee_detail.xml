@@ -202,9 +202,12 @@
                         android:textSize="@dimen/det_textview_size" />
 
                     <LinearLayout
+                        android:id="@+id/start_date_linear_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple_date_text_view"
+                        android:clickable="true">
 
                         <TextView
                             android:layout_width="@dimen/date_text_view_width"
@@ -219,8 +222,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/ripple_date_text_view"
-                            android:clickable="true"
                             android:text="mm/dd/yyyy"
                             android:textSize="@dimen/det_textview_size" />
 
@@ -236,9 +237,12 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/end_date_linear_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple_date_text_view"
+                        android:clickable="true">
 
                         <TextView
                             android:layout_width="@dimen/date_text_view_width"
@@ -253,8 +257,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="@drawable/ripple_date_text_view"
-                            android:clickable="true"
                             android:text="mm/dd/yyyy"
                             android:textSize="@dimen/det_textview_size" />
 
