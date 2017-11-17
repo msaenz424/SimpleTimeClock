@@ -219,9 +219,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:focusable="false"
+                            android:background="@drawable/ripple_date_text_view"
+                            android:clickable="true"
                             android:text="mm/dd/yyyy"
-                            android:textSize="@dimen/det_textview_size"/>
+                            android:textSize="@dimen/det_textview_size" />
 
                         <ImageButton
                             android:id="@+id/pick_start_date_button"
@@ -252,8 +253,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:background="@drawable/ripple_date_text_view"
+                            android:clickable="true"
                             android:text="mm/dd/yyyy"
-                            android:textSize="@dimen/det_textview_size"/>
+                            android:textSize="@dimen/det_textview_size" />
 
                         <ImageButton
                             android:id="@+id/pick_end_date_button"
