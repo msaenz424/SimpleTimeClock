@@ -185,7 +185,7 @@ public class EmployeeDetailsFragment extends Fragment
             public void onClick(View view) {
                 String startDateString = mStartDateTextView.getText().toString();
                 String endDateString = mEndDateTextView.getText().toString();
-                if (!startDateString.isEmpty() && !endDateString.isEmpty()){
+                if (!startDateString.equals(getResources().getString(R.string.default_date_text)) && !endDateString.equals(getResources().getString(R.string.default_date_text))){
                     long startDate = convertDateToSeconds(startDateString);
                     long endDate = convertDateToSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
                     mEmployeeDetailsPresenter.onCustomWorkLogButtonClicked(mEmployeeId, startDate, endDate);
@@ -291,14 +291,21 @@ public class EmployeeDetailsFragment extends Fragment
     }
 
     private long convertDateToSeconds(String stringDate){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        Date date = null;
-        try {
-            date = dateFormat.parse(stringDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (stringDate != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+            Date date = null;
+            try {
+                date = dateFormat.parse(stringDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long seconds = 0;
+            if (date != null) {
+                seconds = date.getTime() / 1000;
+            }
+            return seconds;
+        } else {
+            return 0;
         }
-        long seconds = date.getTime() / 1000;
-        return seconds;
     }
 }
