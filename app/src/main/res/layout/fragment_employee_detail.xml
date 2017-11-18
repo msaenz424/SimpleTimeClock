@@ -221,11 +221,12 @@
 
                     <LinearLayout
                         android:id="@+id/start_date_linear_layout"
+                        style="@style/LinearLayoutVerticalMargin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:background="@drawable/ripple_date_text_view"
-                        android:clickable="true">
+                        android:clickable="true"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="@dimen/date_text_view_width"
@@ -258,9 +259,9 @@
                         android:id="@+id/end_date_linear_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:background="@drawable/ripple_date_text_view"
-                        android:clickable="true">
+                        android:clickable="true"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="@dimen/date_text_view_width"
