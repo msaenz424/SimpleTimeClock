@@ -224,7 +224,6 @@
                         style="@style/LinearLayoutVerticalMargin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ripple_date_text_view"
                         android:clickable="true"
                         android:orientation="horizontal">
 
@@ -259,7 +258,6 @@
                         android:id="@+id/end_date_linear_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ripple_date_text_view"
                         android:clickable="true"
                         android:orientation="horizontal">
 

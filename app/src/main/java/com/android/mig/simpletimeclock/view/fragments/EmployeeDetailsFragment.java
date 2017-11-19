@@ -3,6 +3,7 @@ package com.android.mig.simpletimeclock.view.fragments;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -119,7 +120,7 @@ public class EmployeeDetailsFragment extends Fragment
         mViewWorkLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), WorkLogActivity.class);
+                Intent intent = new Intent(getActivity(), WorkLogActivity.class);
                 intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
                 startActivity(intent);
             }
@@ -166,6 +167,10 @@ public class EmployeeDetailsFragment extends Fragment
             }
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mStartDateLinearLayout.setBackground(getResources().getDrawable(R.drawable.ripple_date_text_view, null));
+            mEndDateLinearLayout.setBackground(getResources().getDrawable(R.drawable.ripple_date_text_view, null));
+        }
         mStartDateLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -244,7 +249,7 @@ public class EmployeeDetailsFragment extends Fragment
 
     @Override
     public void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList) {
-        Intent intent = new Intent(getContext(), WorkLogActivity.class);
+        Intent intent = new Intent(getActivity(), WorkLogActivity.class);
         intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, timeclockArrayList);
         startActivity(intent);
     }
