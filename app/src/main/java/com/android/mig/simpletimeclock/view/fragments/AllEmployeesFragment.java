@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
@@ -29,7 +28,6 @@ import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenterImpl;
 import com.android.mig.simpletimeclock.view.AllEmployeesView;
 import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
-import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter;
 
 public class AllEmployeesFragment extends Fragment
         implements AllEmployeesView, AllEmployeesAdapter.OnListTapHandler{
