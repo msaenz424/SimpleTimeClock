@@ -26,7 +26,7 @@ import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenter;
 import com.android.mig.simpletimeclock.presenter.AllEmployeesPresenterImpl;
 import com.android.mig.simpletimeclock.view.AllEmployeesView;
-import com.android.mig.simpletimeclock.view.activities.EmployeeDetailsActivity;
+import com.android.mig.simpletimeclock.view.ui.EmployeeDetailsActivity;
 import com.android.mig.simpletimeclock.view.adapters.AllEmployeesAdapter;
 
 public class AllEmployeesFragment extends Fragment

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Kotlin2JsCompilerArguments">
+    <option name="sourceMapEmbedSources" />
+    <option name="sourceMapPrefix" />
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
@@ -29,6 +33,13 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="app" />
+      </set>
+    </option>
   </component>
   <component name="masterDetails">
     <states>

@@ -31,18 +31,21 @@
                 android:resource="@xml/picker_provider_paths" />
         </provider>
 
-        <activity android:name=".view.activities.MainActivity">
+        <activity
+            android:name=".view.ui.LaunchScreen"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.ui.MainActivity" />
         <activity
-            android:name=".view.activities.AllEmployeesActivity"
-            android:parentActivityName=".view.activities.MainActivity" />
-        <activity android:name=".view.activities.EmployeeDetailsActivity" />
-        <activity android:name=".view.activities.WorkLogActivity"/>
+            android:name=".view.ui.AllEmployeesActivity"
+            android:parentActivityName=".view.ui.MainActivity" />
+        <activity android:name=".view.ui.EmployeeDetailsActivity" />
+        <activity android:name=".view.ui.WorkLogActivity" />
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />

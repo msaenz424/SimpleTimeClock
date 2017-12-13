@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.view.activities;
+package com.android.mig.simpletimeclock.view.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
