@@ -20,6 +20,7 @@ import com.android.mig.simpletimeclock.view.MainView
 import com.android.mig.simpletimeclock.view.adapters.EmployeeAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import org.jetbrains.anko.toast
 
 import java.util.ArrayList
 
@@ -147,5 +148,10 @@ class MainActivity : AppCompatActivity(), MainView, EmployeeAdapter.OnClickHandl
 
     override fun onItemTimerClick(timeId: Int, breakId: Int, isOnBreak: Boolean) {
         mActiveEmployeesPresenter!!.onItemTimerClicked(timeId, breakId, isOnBreak)
+        if (isOnBreak) {
+            toast(R.string.break_ended_toast_message)
+        } else {
+            toast(R.string.break_started_toast_message)
+        }
     }
 }

@@ -4,6 +4,8 @@
     <!-- MainActivity -->
     <string name="main_activity_title">Active Employees</string>
     <string name="clock_out_text">Clock out</string>
+    <string name="break_ended_toast_message">Break ended</string>
+    <string name="break_started_toast_message">Break started</string>
 
     <string name="all_employees_activity_title">All Employees</string>
     <string name="error_text_insert">There was a problem when trying to add a new employee, please try it again</string>
