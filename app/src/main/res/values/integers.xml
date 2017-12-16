@@ -3,4 +3,6 @@
     <integer name="det_scroll_delay">300</integer>
     <integer name="det_scroll_duration">800</integer>
     <integer name="det_scroll_height_value">-800</integer>
+    <integer name="card_flip_time_full">500</integer>
+    <integer name="card_flip_time_half">200</integer>
 </resources>

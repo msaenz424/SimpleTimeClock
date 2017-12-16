@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.utils.CircleTransform;
+import com.android.mig.simpletimeclock.view.utils.FlipAnimator;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -87,12 +89,14 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     class AllEmployeesViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
+        RelativeLayout mIconBackRelativeLayout;
         LinearLayout mItemLinearLayout;
         ImageView mPhotoImageView;
         TextView mNameTextView;
 
         AllEmployeesViewHolder(View itemView) {
             super(itemView);
+            mIconBackRelativeLayout = itemView.findViewById(R.id.icon_back_relative_layout);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
             mPhotoImageView = itemView.findViewById(R.id.item_all_photo_image_view);
             mNameTextView = itemView.findViewById(R.id.employee_name_text_view);
@@ -123,12 +127,20 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
             if (mSelectedItems.contains(item)) {
                 mSelectedItems.remove(Integer.valueOf(item));
                 mItemLinearLayout.setBackgroundColor(Color.WHITE);
+                FlipAnimator.flipView(mContext, mPhotoImageView, mIconBackRelativeLayout, true);
+                mIconBackRelativeLayout.setVisibility(View.GONE);
+                mPhotoImageView.setVisibility(View.VISIBLE);
+                mPhotoImageView.setAlpha(0.5f);
                 if (mSelectedItems.isEmpty()) {
                     mOnTapHandler.onLastSelectionItemRemoved();
                 }
             } else {
                 mSelectedItems.add(item);
                 mItemLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.action_mode_item_selected));
+                FlipAnimator.flipView(mContext, mPhotoImageView, mIconBackRelativeLayout, false);
+                mPhotoImageView.setVisibility(View.GONE);
+                mIconBackRelativeLayout.setVisibility(View.VISIBLE);
+                mIconBackRelativeLayout.setAlpha(0.5f);
             }
         }
     }

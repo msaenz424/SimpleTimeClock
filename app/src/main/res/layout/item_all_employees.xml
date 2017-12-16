@@ -10,12 +10,33 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <RelativeLayout
+            android:id="@+id/icon_back_relative_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/item_photo_size"
+                android:layout_height="@dimen/item_photo_size"
+                android:padding="@dimen/item_photo_padding"
+                android:src="@drawable/bg_circle" />
+
+            <ImageView
+                android:layout_width="@dimen/flip_icon_done_width"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_action_done" />
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/item_all_photo_image_view"
             android:layout_width="@dimen/item_photo_size"
             android:layout_height="@dimen/item_photo_size"
             android:padding="@dimen/item_photo_padding"
-            android:transitionName="@string/transition_photo"/>
+            android:transitionName="@string/transition_photo" />
 
         <TextView
             android:id="@+id/employee_name_text_view"

@@ -14,4 +14,5 @@
     <color name="list_divider">@android:color/darker_gray</color>
     <color name="header_footer_background">#a7cec6</color>
     <color name="work_log_item_background">#deedec</color>
+    <color name="bg_circle_default">#757575</color>
 </resources>
