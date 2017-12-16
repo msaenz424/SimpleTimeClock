@@ -128,7 +128,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
                 }
             } else {
                 mSelectedItems.add(item);
-                mItemLinearLayout.setBackgroundColor(Color.LTGRAY);
+                mItemLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.action_mode_item_selected));
             }
         }
     }
