@@ -19,7 +19,7 @@
     <dimen name="item_chronometer_ripple_radius">80dp</dimen>
 
     <!-- AllEmployeesActivity -->
-    <dimen name="flip_icon_done_width">25dp</dimen>
+    <dimen name="check_icon_size">35dp</dimen>
 
     <!-- EmployeeDetailsActivity -->
     <dimen name="det_textview_size">16sp</dimen>

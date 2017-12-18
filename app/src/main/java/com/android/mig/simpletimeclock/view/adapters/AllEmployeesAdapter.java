@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,7 +16,6 @@ import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.utils.CircleTransform;
-import com.android.mig.simpletimeclock.view.utils.FlipAnimator;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     private Cursor mAllEmployeesCursor = null;
     private OnListTapHandler mOnTapHandler;
     private ArrayList<Integer> mSelectedItems = new ArrayList<>();
+    private ArrayList<View> mSelectedCheckViews = new ArrayList<>();
 
     public AllEmployeesAdapter(Context context, OnListTapHandler onTapHandler) {
         this.mContext = context;
@@ -45,8 +47,12 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         return ids;
     }
 
-    public void clearSelection(){
+    public void clearSelection() {
+        for (View view: mSelectedCheckViews){
+            view.setVisibility(View.GONE);
+        }
         mSelectedItems.clear();
+        mSelectedCheckViews.clear();
     }
 
     @Override
@@ -65,7 +71,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         holder.mNameTextView.setText(mAllEmployeesCursor.getString(EMPLOYEE_COL_NAME_INDEX));
         String photoUri = mAllEmployeesCursor.getString(EMPLOYEE_COL_PHOTO_INDEX);
 
-        if (photoUri.isEmpty() || photoUri.equals("null")){
+        if (photoUri.isEmpty() || photoUri.equals("null")) {
             Glide.with(mContext)
                     .load(R.drawable.im_blank_profile)
                     .transform(new CircleTransform(mContext))
@@ -89,17 +95,20 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
     class AllEmployeesViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
-        RelativeLayout mIconBackRelativeLayout;
+        RelativeLayout mCheckIconRelativeLayout;
         LinearLayout mItemLinearLayout;
         ImageView mPhotoImageView;
         TextView mNameTextView;
+        Animation mScaleUpAnimation, mScaleDownAnimation;
 
         AllEmployeesViewHolder(View itemView) {
             super(itemView);
-            mIconBackRelativeLayout = itemView.findViewById(R.id.icon_back_relative_layout);
+            mCheckIconRelativeLayout = itemView.findViewById(R.id.check_icon_relative_layout);
             mItemLinearLayout = itemView.findViewById(R.id.item_all_employees_linear_layout);
             mPhotoImageView = itemView.findViewById(R.id.item_all_photo_image_view);
             mNameTextView = itemView.findViewById(R.id.employee_name_text_view);
+            mScaleUpAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_scale_up);
+            mScaleDownAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_scale_down);
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
         }
@@ -107,7 +116,7 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
         @Override
         public void onClick(View view) {
             // if Selection exists
-            if (!mSelectedItems.isEmpty()){
+            if (!mSelectedItems.isEmpty()) {
                 onLongClick(view);
             } else {
                 int empId = Integer.valueOf(view.getTag().toString());
@@ -127,20 +136,18 @@ public class AllEmployeesAdapter extends RecyclerView.Adapter<AllEmployeesAdapte
             if (mSelectedItems.contains(item)) {
                 mSelectedItems.remove(Integer.valueOf(item));
                 mItemLinearLayout.setBackgroundColor(Color.WHITE);
-                FlipAnimator.flipView(mContext, mPhotoImageView, mIconBackRelativeLayout, true);
-                mIconBackRelativeLayout.setVisibility(View.GONE);
-                mPhotoImageView.setVisibility(View.VISIBLE);
-                mPhotoImageView.setAlpha(0.5f);
+                mCheckIconRelativeLayout.startAnimation(mScaleDownAnimation);
+                mCheckIconRelativeLayout.setVisibility(View.GONE);
+                mSelectedCheckViews.remove(mCheckIconRelativeLayout);
                 if (mSelectedItems.isEmpty()) {
                     mOnTapHandler.onLastSelectionItemRemoved();
                 }
             } else {
                 mSelectedItems.add(item);
                 mItemLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.action_mode_item_selected));
-                FlipAnimator.flipView(mContext, mPhotoImageView, mIconBackRelativeLayout, false);
-                mPhotoImageView.setVisibility(View.GONE);
-                mIconBackRelativeLayout.setVisibility(View.VISIBLE);
-                mIconBackRelativeLayout.setAlpha(0.5f);
+                mCheckIconRelativeLayout.startAnimation(mScaleUpAnimation);
+                mCheckIconRelativeLayout.setVisibility(View.VISIBLE);
+                mSelectedCheckViews.add(mCheckIconRelativeLayout);
             }
         }
     }

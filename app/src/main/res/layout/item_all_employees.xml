@@ -10,33 +10,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/icon_back_relative_layout"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone">
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/item_all_photo_image_view"
                 android:layout_width="@dimen/item_photo_size"
                 android:layout_height="@dimen/item_photo_size"
                 android:padding="@dimen/item_photo_padding"
-                android:src="@drawable/bg_circle" />
+                android:transitionName="@string/transition_photo" />
 
-            <ImageView
-                android:layout_width="@dimen/flip_icon_done_width"
+            <RelativeLayout
+                android:id="@+id/check_icon_relative_layout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_action_done" />
+                android:layout_gravity="end|bottom"
+                android:visibility="gone">
 
-        </RelativeLayout>
+                <ImageView
+                    android:layout_width="@dimen/check_icon_size"
+                    android:layout_height="@dimen/check_icon_size"
+                    android:src="@drawable/bg_circle" />
 
-        <ImageView
-            android:id="@+id/item_all_photo_image_view"
-            android:layout_width="@dimen/item_photo_size"
-            android:layout_height="@dimen/item_photo_size"
-            android:padding="@dimen/item_photo_padding"
-            android:transitionName="@string/transition_photo" />
+                <ImageView
+                    android:layout_width="@dimen/check_icon_size"
+                    android:layout_height="@dimen/check_icon_size"
+                    android:src="@drawable/ic_check_circle_black_18px"
+                    android:tint="@color/colorAccent" />
+
+            </RelativeLayout>
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/employee_name_text_view"
