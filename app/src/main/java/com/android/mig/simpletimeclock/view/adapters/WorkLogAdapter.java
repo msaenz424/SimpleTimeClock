@@ -21,13 +21,15 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_BODY = 1;
     private static final int TYPE_FOOTER = 2;
 
+    private OnClickHandler mOnClickHandler;
     private Context mContext;
     private ArrayList<Timeclock> mTimeclockArrayList;
     private double mTotalEarnings;
     private int mTotalHours, mTotalMinutes, mTotalBreakHours, mTotalBreakMinutes;
 
-    public WorkLogAdapter(Context context) {
+    public WorkLogAdapter(Context context, OnClickHandler onClickHandler) {
         this.mContext = context;
+        mOnClickHandler = onClickHandler;
     }
 
     public void setWorkLogData(ArrayList<Timeclock> timeclockArrayList) {
@@ -152,7 +154,7 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class WorkLogViewHolder extends RecyclerView.ViewHolder {
+    public class WorkLogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         LinearLayout mLinearLayout;
         TextView mDateTextView, mTimeTextView, mHoursTextView, mBreaksTextView, mEarningsTextView;
@@ -165,6 +167,13 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mHoursTextView = itemView.findViewById(R.id.item_work_log_hours);
             mBreaksTextView = itemView.findViewById(R.id.item_work_log_breaks);
             mEarningsTextView = itemView.findViewById(R.id.item_work_log_earnings);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Timeclock timeclock = mTimeclockArrayList.get(getAdapterPosition() - 1);
+            mOnClickHandler.onItemClick(timeclock);
         }
     }
 
@@ -186,4 +195,9 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mEarningsTextView = itemView.findViewById(R.id.item_work_log_footer_earnings);
         }
     }
+
+    public interface OnClickHandler {
+        void onItemClick(Timeclock timeclock);
+    }
+
 }

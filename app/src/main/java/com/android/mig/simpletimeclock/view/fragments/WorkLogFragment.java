@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
@@ -18,7 +19,7 @@ import com.android.mig.simpletimeclock.view.adapters.WorkLogAdapter;
 
 import java.util.ArrayList;
 
-public class WorkLogFragment extends Fragment {
+public class WorkLogFragment extends Fragment implements WorkLogAdapter.OnClickHandler{
 
     private ArrayList<Timeclock> mTimeclockArrayList;
 
@@ -54,7 +55,7 @@ public class WorkLogFragment extends Fragment {
         mWorkLogRecyclerView.hasFixedSize();
 
         mTimeclockArrayList = getArguments().getParcelableArrayList(Intent.EXTRA_TEXT);
-        WorkLogAdapter workLogAdapter = new WorkLogAdapter(getContext());
+        WorkLogAdapter workLogAdapter = new WorkLogAdapter(getContext(), this);
         mWorkLogRecyclerView.setAdapter(workLogAdapter);
         workLogAdapter.setWorkLogData(mTimeclockArrayList);
 
@@ -77,5 +78,10 @@ public class WorkLogFragment extends Fragment {
      */
     public ArrayList<Timeclock> getData(){
         return mTimeclockArrayList;
+    }
+
+    @Override
+    public void onItemClick(Timeclock timeclock) {
+        Toast.makeText(getContext(), String.valueOf(timeclock.getTimeId()), Toast.LENGTH_LONG).show();
     }
 }
