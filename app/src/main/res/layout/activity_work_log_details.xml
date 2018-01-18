@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.android.mig.simpletimeclock.view.ui.WorkLogDetailsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/worklog_card_margin"
+        android:elevation="@dimen/worklog_card_resting_elevation"
+        app:cardCornerRadius="@dimen/worklog_card_resting_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/worklog_card_bottom_padding"
+            android:paddingEnd="@dimen/worklog_card_horizontal_padding"
+            android:paddingStart="@dimen/worklog_card_horizontal_padding"
+            android:paddingTop="@dimen/worklog_card_vertical_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/worklog_detail_clocked_in_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/worklog_detail_clocked_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/edit_start_date_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="@dimen/image_button_dimension"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/image_button_padding"
+                    android:src="@drawable/ic_action_pick_date"
+                    android:tint="@color/colorAccent" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/worklog_detail_clocked_out_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/worklog_detail_clocked_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/edit_end_date_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="@dimen/image_button_dimension"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/image_button_padding"
+                    android:src="@drawable/ic_action_pick_date"
+                    android:tint="@color/colorAccent" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/breaks_text"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

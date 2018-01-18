@@ -50,4 +50,13 @@
     <dimen name="dialog_add_photo_icon_padding">12dp</dimen>
     <dimen name="dialog_edit_text_height">56dp</dimen>
 
+    <!-- WorkLogDetails -->
+    <dimen name="worklog_card_margin">8dp</dimen>
+    <dimen name="worklog_card_resting_elevation">2dp</dimen>
+    <dimen name="worklog_card_corner_radius">2dp</dimen>
+    <dimen name="worklog_card_horizontal_padding">16dp</dimen>
+    <dimen name="worklog_card_vertical_padding">16dp</dimen>
+    <dimen name="worklog_card_bottom_padding">24dp</dimen>
+    <dimen name="worklog_attribute_vertical_margin">8dp</dimen>
+
 </resources>
