@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.view.adapters.WorkLogAdapter;
+import com.android.mig.simpletimeclock.view.ui.WorkLogDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -82,6 +83,10 @@ public class WorkLogFragment extends Fragment implements WorkLogAdapter.OnClickH
 
     @Override
     public void onItemClick(Timeclock timeclock) {
-        Toast.makeText(getContext(), String.valueOf(timeclock.getTimeId()), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getActivity(), WorkLogDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Intent.EXTRA_TEXT, timeclock);
+        intent.putExtra(Intent.EXTRA_INTENT, bundle);
+        startActivity(intent);
     }
 }

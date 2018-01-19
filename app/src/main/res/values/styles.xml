@@ -73,4 +73,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="WorkLogRelevantText">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/black_text</item>
+    </style>
+
 </resources>

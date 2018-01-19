@@ -58,5 +58,7 @@
     <dimen name="worklog_card_vertical_padding">16dp</dimen>
     <dimen name="worklog_card_bottom_padding">24dp</dimen>
     <dimen name="worklog_attribute_vertical_margin">8dp</dimen>
+    <dimen name="worklog_label_text_size">12sp</dimen>
+    <dimen name="worklog_item_bottom_padding">8dp</dimen>
 
 </resources>
