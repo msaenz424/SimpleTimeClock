@@ -78,4 +78,10 @@
         <item name="android:textColor">@color/black_text</item>
     </style>
 
+    <style name="BreakItemTextView">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+    </style>
+
 </resources>
