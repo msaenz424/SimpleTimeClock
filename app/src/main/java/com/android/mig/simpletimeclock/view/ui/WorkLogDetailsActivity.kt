@@ -61,8 +61,14 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home ->
+            android.R.id.home -> {
                 super.onBackPressed()
+            }
+            R.id.menu_item_update_worklog -> {
+                val timeClock = retrieveTimeClockData()
+                /** TODO create an array list for breaks to pass as second argument */
+                mWorkLogDetailsPresenter.onActionSaveClick(timeClock, ArrayList())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -79,6 +85,10 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
         val date = Date(time)
         val formatter = SimpleDateFormat("EEE, MMM dd, h:mm a", Locale.US)
         return formatter.format(date).toString()
+    }
+
+    private fun retrieveTimeClockData(): Timeclock{
+        return Timeclock(mTimeClock.timeId, mTimeClock.clockIn, mTimeClock.clockOut)
     }
 
 }

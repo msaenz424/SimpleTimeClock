@@ -20,6 +20,12 @@ public class Timeclock implements Parcelable {
         this.mEarned = earned;
     }
 
+    public Timeclock(int timeId, long clockIn, long clockOut){
+        this.mTimeId = timeId;
+        this.mClockIn = clockIn;
+        this.mClockOut = clockOut;
+    }
+
     protected Timeclock(Parcel in) {
         mTimeId = in.readInt();
         mClockIn = in.readLong();
