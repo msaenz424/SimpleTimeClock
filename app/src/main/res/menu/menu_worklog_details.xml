@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_favorite"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_save_white_24px"
+        android:title="@string/menu_item_save" />
+
+</menu>

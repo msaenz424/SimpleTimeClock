@@ -4,6 +4,9 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import com.android.mig.simpletimeclock.R
 import com.android.mig.simpletimeclock.presenter.WorkLogDetailsPresenter
 import com.android.mig.simpletimeclock.presenter.WorkLogDetailsPresenterImpl
@@ -25,7 +28,11 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_log_details)
-        //actionBar.setDisplayHomeAsUpEnabled(true)
+        val toolbar = findViewById<Toolbar>(R.id.worklog_deatils_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = resources.getString(R.string.worklog_details_activity_title)
+        toolbar.setNavigationOnClickListener {onBackPressed() }
 
         val bundle = intent.getBundleExtra(Intent.EXTRA_INTENT)
         mTimeClock = bundle.getParcelable(Intent.EXTRA_TEXT) as Timeclock
@@ -45,6 +52,19 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
         breaks_recycler_view.layoutManager = layoutManager
         breaks_recycler_view.adapter = breaksAdapter
         displayWorkLogDetails(mTimeClock)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_worklog_details, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home ->
+                super.onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun displayCorrectionSuccessMessage() {

@@ -8,7 +8,7 @@
     tools:context="com.android.mig.simpletimeclock.view.ui.WorkLogDetailsActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/worklog_deatils_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
