@@ -15,6 +15,7 @@ import com.android.mig.simpletimeclock.source.model.Timeclock
 import com.android.mig.simpletimeclock.view.WorkLogDetailsView
 import com.android.mig.simpletimeclock.view.adapters.BreaksAdapter
 import kotlinx.android.synthetic.main.activity_work_log_details.*
+import org.jetbrains.anko.design.snackbar
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -75,7 +76,7 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
     }
 
     override fun displayCorrectionSuccessMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        snackbar(worklog_details_linear_layout,resources.getString(R.string.update_success_message))
     }
 
     override fun displayCorrectionFailMessage() {

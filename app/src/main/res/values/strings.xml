@@ -58,6 +58,7 @@
     <string name="worklog_detail_clocked_out_text">Clocked out</string>
     <string name="breaks_text">Breaks</string>
     <string name="menu_item_save">Save</string>
+    <string name="update_success_message">Changes saved</string>
 
     <!-- Banner Ad -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
