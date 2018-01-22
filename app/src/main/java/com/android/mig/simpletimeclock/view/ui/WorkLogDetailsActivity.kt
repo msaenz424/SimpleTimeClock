@@ -24,6 +24,7 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
 
     private lateinit var mWorkLogDetailsPresenter: WorkLogDetailsPresenter
     private lateinit var mTimeClock: Timeclock
+    private lateinit var mBreaksAdapter: BreaksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +49,9 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
 
     override fun displayWorkLogBreaks(breaksArrayList: ArrayList<Break>) {
         val layoutManager = LinearLayoutManager(this)
-        val breaksAdapter = BreaksAdapter(breaksArrayList)
+        mBreaksAdapter = BreaksAdapter(breaksArrayList)
         breaks_recycler_view.layoutManager = layoutManager
-        breaks_recycler_view.adapter = breaksAdapter
+        breaks_recycler_view.adapter = mBreaksAdapter
         displayWorkLogDetails(mTimeClock)
     }
 
@@ -66,8 +67,8 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
             }
             R.id.menu_item_update_worklog -> {
                 val timeClock = retrieveTimeClockData()
-                /** TODO create an array list for breaks to pass as second argument */
-                mWorkLogDetailsPresenter.onActionSaveClick(timeClock, ArrayList())
+                val breaksArrayList = retrieveBreaks()
+                mWorkLogDetailsPresenter.onActionSaveClick(timeClock, breaksArrayList)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -89,6 +90,10 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView {
 
     private fun retrieveTimeClockData(): Timeclock{
         return Timeclock(mTimeClock.timeId, mTimeClock.clockIn, mTimeClock.clockOut)
+    }
+
+    private fun retrieveBreaks(): ArrayList<Break>{
+        return mBreaksAdapter.getBreaksArrayList()
     }
 
 }

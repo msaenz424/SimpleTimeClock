@@ -10,10 +10,15 @@ import com.android.mig.simpletimeclock.source.model.Break
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>) : RecyclerView.Adapter<BreaksAdapter.BreaksViewHolder>() {
 
     private var mBreaksArrayList: ArrayList<Break> = breaksArrayList
+
+    fun getBreaksArrayList(): ArrayList<Break>{
+        return mBreaksArrayList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BreaksViewHolder {
         val inflater = LayoutInflater.from(parent.context)
