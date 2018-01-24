@@ -8,6 +8,7 @@ import com.android.mig.simpletimeclock.source.model.WorkLogDetailsInteractorImpl
 import com.android.mig.simpletimeclock.view.WorkLogDetailsView
 
 class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetailsView, context: Context) : WorkLogDetailsPresenter, WorkLogDetailsInteractor.OnFinishedTransactionListener {
+
     val mWorkLogDetailsInteractor: WorkLogDetailsInteractor = WorkLogDetailsInteractorImpl(context)
     val mWorkLogDetailsView = workLogDetailsView
 
@@ -25,6 +26,14 @@ class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetails
 
     override fun onUpdateSuccess() {
         mWorkLogDetailsView.displayCorrectionSuccessMessage()
+    }
+
+    override fun onClockedInButtonClicked(clockedIntTime: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onClockedOutButtonClicked(clockedOutTime: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

@@ -9,4 +9,8 @@ interface WorkLogDetailsPresenter {
 
     fun onActionSaveClick(timeclock: Timeclock, breaksArrayList: ArrayList<Break>)
 
+    fun onClockedInButtonClicked(clockedIntTime: Long)
+
+    fun onClockedOutButtonClicked(clockedOutTime: Long)
+
 }
