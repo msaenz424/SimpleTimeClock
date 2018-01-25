@@ -98,9 +98,11 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
         when (mPickerTag) {
             CLOCK_IN_TIME_PICKER_TAG -> {
                 mTimeClock.clockIn = convertDateToSeconds(mClockedInDate, hourOfDay, minute)
+                worklog_detail_clocked_in.text = formatTime(mTimeClock.clockIn * 1000L)
             }
             CLOCK_OUT_TIME_PICKER_TAG -> {
                 mTimeClock.clockOut = convertDateToSeconds(mClockedOutDate, hourOfDay, minute)
+                worklog_detail_clocked_out.text = formatTime(mTimeClock.clockOut * 1000L)
             }
         }
     }
