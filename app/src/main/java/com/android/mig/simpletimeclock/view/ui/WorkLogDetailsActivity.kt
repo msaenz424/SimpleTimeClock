@@ -60,7 +60,7 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
         }
 
         edit_end_date_button.setOnClickListener {
-            openDatePicker(mTimeClock.clockOut * 1000, CLOCK_IN_DATE_PICKER_TAG)
+            openDatePicker(mTimeClock.clockOut * 1000, CLOCK_OUT_DATE_PICKER_TAG)
         }
     }
 
@@ -97,11 +97,10 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         when (mPickerTag) {
             CLOCK_IN_TIME_PICKER_TAG -> {
-                /** TODO replace these logs with actual logic to save new date to DB */
-                Log.d("onTimeSet", convertDateToSeconds(mClockedInDate, hourOfDay, minute).toString())
+                mTimeClock.clockIn = convertDateToSeconds(mClockedInDate, hourOfDay, minute)
             }
             CLOCK_OUT_TIME_PICKER_TAG -> {
-                Log.d("onTimeSet", convertDateToSeconds(mClockedOutDate, hourOfDay, minute).toString())
+                mTimeClock.clockOut = convertDateToSeconds(mClockedOutDate, hourOfDay, minute)
             }
         }
     }
