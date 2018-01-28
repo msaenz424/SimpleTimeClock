@@ -29,6 +29,11 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
         notifyDataSetChanged()
     }
 
+    fun updateBreakItem(position: Int){
+        mBreaksArrayList.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     fun getBreakStart(position: Int): Long {
         return mBreaksArrayList[position].breakStart
     }
@@ -54,6 +59,7 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
         holder.mBreakEndTextView.text = formatTime(mBreaksArrayList[position].breakEnd * 1000L)
         holder.mBreakStartButton.setOnClickListener { mOnClickHandler.onStartBreakClicked(position) }
         holder.mBreakEndButton.setOnClickListener { mOnClickHandler.onEndBreakClicked(position) }
+        holder.mBreakDeleteButton.setOnClickListener{ mOnClickHandler.onDeleteBreakClicked(mBreaksArrayList[position].breakID) }
     }
 
     override fun getItemCount(): Int {
@@ -65,6 +71,7 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
         var mBreakEndTextView: TextView = itemView.findViewById(R.id.item_break_end)
         var mBreakStartButton: ImageButton = itemView.findViewById(R.id.item_break_start_button)
         var mBreakEndButton: ImageButton = itemView.findViewById(R.id.item_break_end_button)
+        var mBreakDeleteButton: ImageButton = itemView.findViewById(R.id.item_break_delete)
     }
 
     private fun formatTime(time: Long): String {
@@ -79,6 +86,8 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
         fun onStartBreakClicked(position: Int)
 
         fun onEndBreakClicked(position: Int)
+
+        fun onDeleteBreakClicked(breakId: Int)
 
     }
 }

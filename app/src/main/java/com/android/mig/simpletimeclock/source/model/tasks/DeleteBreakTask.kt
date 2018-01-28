@@ -21,7 +21,7 @@ class DeleteBreakTask constructor(context: Context, onFinishedTransactionListene
         try {
             db.beginTransaction()
 
-            val sqlUpdateQuery = "DELETE * FROM " + TimeClockContract.Breaks.TABLE_BREAKS + " WHERE " +
+            val sqlUpdateQuery = "DELETE FROM " + TimeClockContract.Breaks.TABLE_BREAKS + " WHERE " +
                     TimeClockContract.Breaks.BREAK_ID + " =?"
             val sqLiteStatement = db.compileStatement(sqlUpdateQuery)
 

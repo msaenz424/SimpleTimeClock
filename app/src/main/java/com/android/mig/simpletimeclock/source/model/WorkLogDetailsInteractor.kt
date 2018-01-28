@@ -16,4 +16,6 @@ interface WorkLogDetailsInteractor {
 
     fun updateWorkLog(timeclock: Timeclock, breakArrayList: ArrayList<Break>, onFinishedTransactionListener: OnFinishedTransactionListener)
 
+    fun deleteBreak(breakId: Int, onFinishedTransactionListener: OnFinishedTransactionListener)
+
 }

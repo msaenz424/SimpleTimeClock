@@ -13,4 +13,6 @@ interface WorkLogDetailsView {
 
     fun displayCorrectionFailMessage()
 
+    fun displayDeleteSuccessMessage()
+
 }

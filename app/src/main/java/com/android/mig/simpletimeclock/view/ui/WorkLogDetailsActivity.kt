@@ -159,6 +159,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun displayDeleteSuccessMessage() {
+        snackbar(worklog_details_linear_layout, resources.getString(R.string.deleted_break_message))
+    }
+
     override fun onStartBreakClicked(position: Int) {
         mAdapterPosition = position
         if (!isSameDay()) {
@@ -175,6 +179,11 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         } else {
             openTimePicker(mBreaksAdapter.getBreakEnd(position), BREAK_END_TIME_PICKER_TAG)
         }
+    }
+
+    override fun onDeleteBreakClicked(breakId: Int) {
+        mWorkLogDetailsPresenter.onDeleteBreakClicked(breakId)
+        mBreaksAdapter.updateBreakItem(mAdapterPosition)
     }
 
     private fun getDayOfWeek(timeInMillis: Long): Int {
