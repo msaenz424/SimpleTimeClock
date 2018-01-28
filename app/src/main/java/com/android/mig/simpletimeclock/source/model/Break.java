@@ -23,4 +23,12 @@ public class Break {
     public long getBreakEnd() {
         return mBreakEnd;
     }
+
+    public void setBreakStart(long breakStart) {
+        this.mBreakStart = breakStart;
+    }
+
+    public void setBreakEnd(long breakEnd) {
+        this.mBreakEnd = breakEnd;
+    }
 }

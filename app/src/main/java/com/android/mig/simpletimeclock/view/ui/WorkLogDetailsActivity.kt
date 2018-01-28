@@ -24,12 +24,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class WorkLogDetailsActivity : AppCompatActivity(),
+        WorkLogDetailsView,
+        DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener,
+        BreaksAdapter.OnClickHandler {
 
     private val CLOCK_IN_DATE_PICKER_TAG = "ClockInDatePicker"
     private val CLOCK_OUT_DATE_PICKER_TAG = "ClockOutDatePicker"
     private val CLOCK_IN_TIME_PICKER_TAG = "ClockInTimePicker"
     private val CLOCK_OUT_TIME_PICKER_TAG = "ClockOutTimePicker"
+    private val BREAK_START_DATE_PICKER_TAG = "BreakStartDatePicker"
+    private val BREAK_END_DATE_PICKER_TAG = "BreakEndDatePicker"
+    private val BREAK_START_TIME_PICKER_TAG = "BreakStartTimePicker"
+    private val BREAK_END_TIME_PICKER_TAG = "BreakEndTimePicker"
 
     private lateinit var mWorkLogDetailsPresenter: WorkLogDetailsPresenter
     private lateinit var mTimeClock: Timeclock
@@ -37,6 +45,9 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
     private lateinit var mPickerTag: String
     private lateinit var mClockedInDate: String
     private lateinit var mClockedOutDate: String
+    private lateinit var mBreakStartDate: String
+    private lateinit var mBreakEndDate: String
+    private var mAdapterPosition: Int = 0
     private var mClockedInDay: Int = 0
     private var mClockedOutDay: Int = 0
 
@@ -65,15 +76,15 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
     }
 
     override fun displayWorkLogDetails(timeclock: Timeclock) {
-        mClockedInDay = getDayOfWeek(timeclock.clockIn)
-        mClockedOutDay = getDayOfWeek(timeclock.clockOut)
+        mClockedInDay = getDayOfWeek(timeclock.clockIn * 1000)
+        mClockedOutDay = getDayOfWeek(timeclock.clockOut * 1000)
         worklog_detail_clocked_in.text = formatTime(timeclock.clockIn * 1000L)
         worklog_detail_clocked_out.text = formatTime(timeclock.clockOut * 1000L)
     }
 
     override fun displayWorkLogBreaks(breaksArrayList: ArrayList<Break>) {
         val layoutManager = LinearLayoutManager(this)
-        mBreaksAdapter = BreaksAdapter(breaksArrayList)
+        mBreaksAdapter = BreaksAdapter(breaksArrayList, this)
         breaks_recycler_view.layoutManager = layoutManager
         breaks_recycler_view.adapter = mBreaksAdapter
         displayWorkLogDetails(mTimeClock)
@@ -84,12 +95,20 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
             CLOCK_IN_DATE_PICKER_TAG -> {
                 mClockedInDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
                 mClockedInDay = dayOfMonth
-                openTimePicker(mTimeClock.clockIn, CLOCK_IN_TIME_PICKER_TAG)
+                openTimePicker(mTimeClock.clockIn * 1000, CLOCK_IN_TIME_PICKER_TAG)
             }
             CLOCK_OUT_DATE_PICKER_TAG -> {
                 mClockedOutDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
                 mClockedOutDay = dayOfMonth
-                openTimePicker(mTimeClock.clockOut, CLOCK_OUT_TIME_PICKER_TAG)
+                openTimePicker(mTimeClock.clockOut * 1000, CLOCK_OUT_TIME_PICKER_TAG)
+            }
+            BREAK_START_DATE_PICKER_TAG -> {
+                mBreakStartDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
+                openTimePicker(mBreaksAdapter.getBreakStart(mAdapterPosition), BREAK_START_TIME_PICKER_TAG)
+            }
+            BREAK_END_DATE_PICKER_TAG -> {
+                mBreakEndDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
+                openTimePicker(mBreaksAdapter.getBreakEnd(mAdapterPosition), BREAK_END_TIME_PICKER_TAG)
             }
         }
     }
@@ -103,6 +122,12 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
             CLOCK_OUT_TIME_PICKER_TAG -> {
                 mTimeClock.clockOut = convertDateToSeconds(mClockedOutDate, hourOfDay, minute)
                 worklog_detail_clocked_out.text = formatTime(mTimeClock.clockOut * 1000L)
+            }
+            BREAK_START_TIME_PICKER_TAG -> {
+                mBreaksAdapter.updateBreakStart(convertDateToSeconds(mBreakStartDate, hourOfDay, minute), mAdapterPosition)
+            }
+            BREAK_END_TIME_PICKER_TAG -> {
+                mBreaksAdapter.updateBreakEnd(convertDateToSeconds(mBreakEndDate, hourOfDay, minute), mAdapterPosition)
             }
         }
     }
@@ -132,6 +157,24 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
 
     override fun displayCorrectionFailMessage() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStartBreakClicked(position: Int) {
+        mAdapterPosition = position
+        if (!isSameDay()) {
+            openDatePicker(mBreaksAdapter.getBreakStart(position) * 1000, BREAK_START_DATE_PICKER_TAG)
+        } else {
+            openTimePicker(mBreaksAdapter.getBreakStart(position), BREAK_START_TIME_PICKER_TAG)
+        }
+    }
+
+    override fun onEndBreakClicked(position: Int) {
+        mAdapterPosition = position
+        if (!isSameDay()) {
+            openDatePicker(mBreaksAdapter.getBreakEnd(position) * 1000, BREAK_END_DATE_PICKER_TAG)
+        } else {
+            openTimePicker(mBreaksAdapter.getBreakEnd(position), BREAK_END_TIME_PICKER_TAG)
+        }
     }
 
     private fun getDayOfWeek(timeInMillis: Long): Int {
@@ -171,6 +214,7 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
         mPickerTag = tag
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = timeInMillis
+        Log.d("time", timeInMillis.toString())
         val tpd = TimePickerDialog.newInstance(
                 this,
                 calendar.get(Calendar.HOUR_OF_DAY),
@@ -188,7 +232,12 @@ class WorkLogDetailsActivity : AppCompatActivity(), WorkLogDetailsView, DatePick
         val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
         val date = dateFormat.parse(finalStringDate)
 
+        Log.d("convert", date.time.toString())
         return date.time / 1000
+    }
+
+    private fun isSameDay(): Boolean {
+        return mClockedInDay == mClockedOutDay
     }
 
 }

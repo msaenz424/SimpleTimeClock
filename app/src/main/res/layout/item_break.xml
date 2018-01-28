@@ -11,6 +11,7 @@
         android:layout_height="wrap_content" />
 
     <ImageButton
+        android:id="@+id/item_break_start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_pick_date"
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content" />
 
     <ImageButton
+        android:id="@+id/item_break_end_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_pick_date"
