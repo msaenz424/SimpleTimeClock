@@ -8,6 +8,8 @@ interface WorkLogDetailsInteractor {
 
         fun onUpdateSuccess()
 
+        fun onDeleteSuccess()
+
     }
 
     fun readBreaks(timeId: Int, onFinishedTransactionListener: OnFinishedTransactionListener)
