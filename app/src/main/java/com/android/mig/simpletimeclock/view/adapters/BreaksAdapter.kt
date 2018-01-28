@@ -70,7 +70,7 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
     private fun formatTime(time: Long): String {
         Log.d("format", time.toString())
         val date = Date(time)
-        val formatter = SimpleDateFormat("MMM dd, h:mm a", Locale.US)
+        val formatter = SimpleDateFormat("h:mm a", Locale.US)
         return formatter.format(date).toString()
     }
 
