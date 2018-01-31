@@ -132,10 +132,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
                 worklog_detail_clocked_out.text = formatTime(mTimeClock.clockOut * 1000L)
             }
             BREAK_START_TIME_PICKER_TAG -> {
-                mBreaksAdapter.updateBreakStart(convertDateToSeconds(mBreakStartDate, hourOfDay, minute), mAdapterPosition)
+                mBreaksAdapter.updateBreakStart(convertDateToSeconds(hourOfDay = hourOfDay, minute = minute), mAdapterPosition)
             }
             BREAK_END_TIME_PICKER_TAG -> {
-                mBreaksAdapter.updateBreakEnd(convertDateToSeconds(mBreakEndDate, hourOfDay, minute), mAdapterPosition)
+                mBreaksAdapter.updateBreakEnd(convertDateToSeconds(hourOfDay = hourOfDay, minute = minute), mAdapterPosition)
             }
         }
     }
@@ -244,9 +244,16 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         return year.toString() + "-" + monthOfYear + "-" + dayOfMonth + " "
     }
 
-    private fun convertDateToSeconds(stringDate: String, hourOfDay: Int, minute: Int): Long {
-        val finalStringDate = stringDate + hourOfDay.toString() + ":" + minute.toString() + ":00"
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
+    private fun convertDateToSeconds(stringDate: String = "", hourOfDay: Int, minute: Int): Long {
+        val finalStringDate: String
+        val dateFormat: SimpleDateFormat
+        if (stringDate != "") {
+            finalStringDate = stringDate + hourOfDay.toString() + ":" + minute.toString() + ":00"
+            dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
+        } else {
+            finalStringDate = hourOfDay.toString() + ":" + minute.toString() + ":00"
+            dateFormat = SimpleDateFormat("hh:mm:ss", Locale.US)
+        }
         val date = dateFormat.parse(finalStringDate)
 
         Log.d("convert", date.time.toString())
