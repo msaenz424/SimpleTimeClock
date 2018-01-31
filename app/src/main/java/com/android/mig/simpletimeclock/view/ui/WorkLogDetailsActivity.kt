@@ -73,6 +73,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         edit_end_date_button.setOnClickListener {
             openDatePicker(mTimeClock.clockOut * 1000, CLOCK_OUT_DATE_PICKER_TAG)
         }
+
+        add_break_button.setOnClickListener {
+            mWorkLogDetailsPresenter.onAddBreakClicked(mTimeClock.timeId, System.currentTimeMillis() / 1000, System.currentTimeMillis() / 1000)
+        }
     }
 
     override fun displayWorkLogDetails(timeclock: Timeclock) {
@@ -88,6 +92,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         breaks_recycler_view.layoutManager = layoutManager
         breaks_recycler_view.adapter = mBreaksAdapter
         displayWorkLogDetails(mTimeClock)
+    }
+
+    override fun displayAddedBreakItem(breakObject: Break) {
+        mBreaksAdapter.addBreakItem(breakObject)
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {

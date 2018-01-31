@@ -1,10 +1,7 @@
 package com.android.mig.simpletimeclock.source.model
 
 import android.content.Context
-import com.android.mig.simpletimeclock.source.model.tasks.DeleteBreakTask
-import com.android.mig.simpletimeclock.source.model.tasks.ReadBreaks
-import com.android.mig.simpletimeclock.source.model.tasks.UpdateBreaksTask
-import com.android.mig.simpletimeclock.source.model.tasks.UpdateWorkLogTask
+import com.android.mig.simpletimeclock.source.model.tasks.*
 
 class WorkLogDetailsInteractorImpl constructor(context: Context): WorkLogDetailsInteractor{
     private val mContext = context
@@ -26,6 +23,12 @@ class WorkLogDetailsInteractorImpl constructor(context: Context): WorkLogDetails
             updateBreaks.execute(breakArrayList)
         }
     }
+
+    override fun addBreak(timeId: Int, breakStart: Long, breakEnd: Long, onFinishedTransactionListener: WorkLogDetailsInteractor.OnFinishedTransactionListener) {
+        val addBreak = InsertBreakTask(mContext, onFinishedTransactionListener)
+        addBreak.execute(timeId, breakStart.toInt(), breakEnd.toInt())
+    }
+
 
     override fun deleteBreak(breakId: Int, onFinishedTransactionListener: WorkLogDetailsInteractor.OnFinishedTransactionListener) {
         val deleteBreak = DeleteBreakTask(mContext, onFinishedTransactionListener)

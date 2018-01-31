@@ -19,6 +19,11 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
     private var mOnClickHandler: OnClickHandler = onClickHandler
     private var mBreaksArrayList: ArrayList<Break> = breaksArrayList
 
+    fun addBreakItem(breakObject: Break){
+        mBreaksArrayList.add(breakObject)
+        notifyDataSetChanged()
+    }
+
     fun updateBreakStart(breakStart: Long, position: Int) {
         mBreaksArrayList[position].breakStart = breakStart
         notifyDataSetChanged()

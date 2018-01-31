@@ -20,6 +20,10 @@ class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetails
         mWorkLogDetailsInteractor.updateWorkLog(timeclock, breaksArrayList, this)
     }
 
+    override fun onAddBreakClicked(timeId: Int, breakStart: Long, breakEnd: Long) {
+        mWorkLogDetailsInteractor.addBreak(timeId, breakStart, breakEnd, this)
+    }
+
     override fun onDeleteBreakClicked(breakId: Int) {
         mWorkLogDetailsInteractor.deleteBreak(breakId,this)
     }
@@ -30,6 +34,10 @@ class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetails
 
     override fun onUpdateSuccess() {
         mWorkLogDetailsView.displayCorrectionSuccessMessage()
+    }
+
+    override fun onBreakInsertSuccess(breakObject: Break) {
+        mWorkLogDetailsView.displayAddedBreakItem(breakObject)
     }
 
     override fun onDeleteSuccess() {

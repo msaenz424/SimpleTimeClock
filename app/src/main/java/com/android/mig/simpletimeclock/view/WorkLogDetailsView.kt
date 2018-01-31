@@ -9,6 +9,8 @@ interface WorkLogDetailsView {
 
     fun displayWorkLogBreaks(breaksArrayList: ArrayList<Break>)
 
+    fun displayAddedBreakItem(breakObject: Break)
+
     fun displayCorrectionSuccessMessage()
 
     fun displayCorrectionFailMessage()
