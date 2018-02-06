@@ -171,6 +171,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         snackbar(worklog_details_linear_layout, resources.getString(R.string.deleted_break_message))
     }
 
+    override fun passTimeClockArray(timeClockArrayList: ArrayList<Timeclock>) {
+
+    }
+
     override fun onStartBreakClicked(position: Int) {
         mAdapterPosition = position
         if (!isSameDay()) {

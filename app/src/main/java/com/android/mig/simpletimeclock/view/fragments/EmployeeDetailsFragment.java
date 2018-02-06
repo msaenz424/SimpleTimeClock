@@ -46,6 +46,9 @@ import java.util.Locale;
 public class EmployeeDetailsFragment extends Fragment
         implements EmployeeDetailsView, DatePickerDialog.OnDateSetListener{
 
+    private static final int VIEW_UNPAID_WORKLOG = 1;
+    private static final int VIEW_DATE_RANGE_WORKLOG = 2;
+
     private static final int PICK_START_DATE_CODE = 0;
     private static final int PICK_END_DATE_CODE = 1;
     private static final String DATE_PICKER_DIALOG_TAG = "DatePickerDialog";
@@ -118,6 +121,7 @@ public class EmployeeDetailsFragment extends Fragment
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), WorkLogActivity.class);
+                intent.putExtra(Intent.EXTRA_UID, VIEW_UNPAID_WORKLOG);
                 intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
                 startActivity(intent);
             }
@@ -247,6 +251,7 @@ public class EmployeeDetailsFragment extends Fragment
     @Override
     public void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList) {
         Intent intent = new Intent(getActivity(), WorkLogActivity.class);
+        intent.putExtra(Intent.EXTRA_UID, VIEW_DATE_RANGE_WORKLOG);
         intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, timeclockArrayList);
         startActivity(intent);
     }
