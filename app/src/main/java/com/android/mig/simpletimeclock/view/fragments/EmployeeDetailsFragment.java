@@ -46,6 +46,9 @@ import java.util.Locale;
 public class EmployeeDetailsFragment extends Fragment
         implements EmployeeDetailsView, DatePickerDialog.OnDateSetListener{
 
+    private static final String INTENT_DATE_START = "date_start";
+    private static final String INTENT_DATE_END = "date_end";
+
     private static final int VIEW_UNPAID_WORKLOG = 1;
     private static final int VIEW_DATE_RANGE_WORKLOG = 2;
 
@@ -121,8 +124,9 @@ public class EmployeeDetailsFragment extends Fragment
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), WorkLogActivity.class);
-                intent.putExtra(Intent.EXTRA_UID, VIEW_UNPAID_WORKLOG);
-                intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
+                intent.putExtra(Intent.EXTRA_UID, mEmployeeId);
+                intent.putExtra(Intent.EXTRA_TEXT, VIEW_UNPAID_WORKLOG);
+                //intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
                 startActivity(intent);
             }
         });
@@ -194,7 +198,13 @@ public class EmployeeDetailsFragment extends Fragment
                 if (!startDateString.equals(getResources().getString(R.string.default_date_text)) && !endDateString.equals(getResources().getString(R.string.default_date_text))){
                     long startDate = convertDateToSeconds(startDateString);
                     long endDate = convertDateToSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
-                    mEmployeeDetailsPresenter.onCustomWorkLogButtonClicked(mEmployeeId, startDate, endDate);
+
+                    Intent intent = new Intent(getActivity(), WorkLogActivity.class);
+                    intent.putExtra(Intent.EXTRA_UID, mEmployeeId);
+                    intent.putExtra(Intent.EXTRA_TEXT, VIEW_DATE_RANGE_WORKLOG);
+                    intent.putExtra(INTENT_DATE_START, startDate);
+                    intent.putExtra(INTENT_DATE_END, endDate);
+                    startActivity(intent);
                 } else {
                     Snackbar mySnackbar = Snackbar.make(mRootView, R.string.message_invalid_date_range, Snackbar.LENGTH_SHORT);
                     mySnackbar.show();
@@ -246,14 +256,6 @@ public class EmployeeDetailsFragment extends Fragment
     @Override
     public void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList) {
         this.mTimeclockArrayList = timeclockArrayList;
-    }
-
-    @Override
-    public void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList) {
-        Intent intent = new Intent(getActivity(), WorkLogActivity.class);
-        intent.putExtra(Intent.EXTRA_UID, VIEW_DATE_RANGE_WORKLOG);
-        intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, timeclockArrayList);
-        startActivity(intent);
     }
 
     @Override

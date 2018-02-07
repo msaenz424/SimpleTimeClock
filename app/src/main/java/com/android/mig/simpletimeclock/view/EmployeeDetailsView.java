@@ -22,13 +22,6 @@ public interface EmployeeDetailsView {
     void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList);
 
     /**
-     * Displays the work log by date range
-     *
-     * @param timeclockArrayList    work log
-     */
-    void showWorkLogByDateRange(ArrayList<Timeclock> timeclockArrayList);
-
-    /**
      * Displays a message when payment was made
      */
     void showPaidMessage();

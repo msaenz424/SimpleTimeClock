@@ -15,6 +15,9 @@ import java.util.ArrayList;
 
 public class WorkLogActivity extends AppCompatActivity implements WorkLogView {
 
+    private static final String INTENT_DATE_START = "date_start";
+    private static final String INTENT_DATE_END = "date_end";
+
     private static final int VIEW_UNPAID_WORKLOG = 1;
     private static final int VIEW_DATE_RANGE_WORKLOG = 2;
     private static final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
@@ -22,7 +25,9 @@ public class WorkLogActivity extends AppCompatActivity implements WorkLogView {
     private WorkLogFragment mWorkLogFragment;
     FragmentManager mFragmentManager;
     private WorkLogPresenter mWorkLogPresenter;
-    private int mCurrentWorkLogView;
+    private int mWorkLogTypeIdentifier;
+    private int mEmployeeId;
+    private long mDateStart, mDateEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +39,24 @@ public class WorkLogActivity extends AppCompatActivity implements WorkLogView {
         FragmentManager fragmentManager = getSupportFragmentManager();
         mWorkLogFragment = (WorkLogFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
         if (mWorkLogFragment == null) {
-            mCurrentWorkLogView = getIntent().getIntExtra(Intent.EXTRA_UID, 1);
-            ArrayList<Timeclock> timeclockArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_TEXT);
-            mWorkLogFragment = new WorkLogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(Intent.EXTRA_TEXT, timeclockArrayList);
-            mWorkLogFragment.setArguments(bundle);
-
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.work_log_container, mWorkLogFragment, TAG_RETAINED_FRAGMENT)
-                    .commit();
-            mWorkLogFragment.setData(timeclockArrayList);
+            mEmployeeId = getIntent().getIntExtra(Intent.EXTRA_UID, 0);
+            mWorkLogTypeIdentifier = getIntent().getIntExtra(Intent.EXTRA_TEXT, 0);
+            mDateStart = getIntent().getLongExtra(INTENT_DATE_START, 0);
+            mDateEnd = getIntent().getLongExtra(INTENT_DATE_END, 0);
         }
     }
 
     @Override
     protected void onResume() {
-        /** TODO below empId is placeholder until actual empId is passed to this activity */
-        int empId = 1;
-        switch (mCurrentWorkLogView){
-            case VIEW_UNPAID_WORKLOG :
-                mWorkLogPresenter.onResume(empId);
+        switch (mWorkLogTypeIdentifier) {
+            case VIEW_UNPAID_WORKLOG:
+                /** TODO find out why default parameters cannot be used here */
+                mWorkLogPresenter.onResume(mEmployeeId, mDateStart, mDateEnd);
                 break;
-            case VIEW_DATE_RANGE_WORKLOG :
-                /** TODO this case needs to be implemented */
+            case VIEW_DATE_RANGE_WORKLOG:
+                mWorkLogPresenter.onResume(mEmployeeId, mDateStart, mDateEnd);
+                break;
+            default:
                 break;
         }
 
@@ -76,16 +74,13 @@ public class WorkLogActivity extends AppCompatActivity implements WorkLogView {
 
     @Override
     public void displayWorkLog(ArrayList<Timeclock> timeClockArrayList) {
-        mFragmentManager.beginTransaction()
-                .remove(mWorkLogFragment)
-                .commit();
         mWorkLogFragment = new WorkLogFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Intent.EXTRA_TEXT, timeClockArrayList);
         mWorkLogFragment.setArguments(bundle);
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction()
-                .add(R.id.work_log_container, mWorkLogFragment, TAG_RETAINED_FRAGMENT)
+                .replace(R.id.work_log_container, mWorkLogFragment, TAG_RETAINED_FRAGMENT)
                 .commit();
         mWorkLogFragment.setData(timeClockArrayList);
     }

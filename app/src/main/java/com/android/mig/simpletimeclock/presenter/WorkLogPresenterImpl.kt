@@ -11,11 +11,19 @@ class WorkLogPresenterImpl constructor(workLogView: WorkLogView, context: Contex
     val mWorkLogView = workLogView
     val mWorkLogInteractor : WorkLogInteractor = WorkLogInteractorImpl(context)
 
-    override fun onResume(empId: Int) {
-        mWorkLogInteractor.readWorkLogByEmployee(empId, this)
+    override fun onResume(empId: Int, dateStart: Long, dateEnd: Long) {
+        if (dateStart.toInt() == 0 && dateEnd.toInt() == 0){
+            mWorkLogInteractor.readWorkLogByEmployee(empId, this)
+        } else {
+            mWorkLogInteractor.readWorkLogByDateRange(empId, dateStart, dateEnd, this)
+        }
     }
 
     override fun onReadWorkLogByEmployeeSuccess(timeClockArrayList: ArrayList<Timeclock>) {
+        mWorkLogView.displayWorkLog(timeClockArrayList)
+    }
+
+    override fun onReadWorkLogByDateRangeSuccess(timeClockArrayList: ArrayList<Timeclock>) {
         mWorkLogView.displayWorkLog(timeClockArrayList)
     }
 

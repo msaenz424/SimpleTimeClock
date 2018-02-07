@@ -8,8 +8,8 @@ import android.util.Log;
 
 import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
-import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
+import com.android.mig.simpletimeclock.source.model.WorkLogInteractor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,9 +42,9 @@ public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timecl
             TimeClockContract.Breaks.BREAK_TIMECLOCK_ID + "=?";
 
     private Context mContext;
-    EmployeeDetailsInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
+    WorkLogInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
 
-    public ReadWorkLogRangeTask(Context context, EmployeeDetailsInteractor.OnFinishedTransactionListener onFinishedTransactionListener) {
+    public ReadWorkLogRangeTask(Context context, WorkLogInteractor.OnFinishedTransactionListener onFinishedTransactionListener) {
         this.mContext = context;
         this.mOnFinishedTransactionListener = onFinishedTransactionListener;
     }
@@ -56,14 +56,14 @@ public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timecl
         final SQLiteDatabase db = mTimeClockDbHelper.getReadableDatabase();
 
         String empIdString = String.valueOf(params[0]);
-        String clockInString = String.valueOf(params[1]);
-        String clockOutString = String.valueOf(params[2]);
-        Log.d("clockin input", clockInString);
-        Log.d("clockout input", clockOutString);
+        String dateStart = String.valueOf(params[1]);
+        String dateEnd = String.valueOf(params[2]);
+        Log.d("clockin input", dateStart);
+        Log.d("clockout input", dateEnd);
 
         try {
             db.beginTransaction();
-            Cursor timeclockCursor = db.rawQuery(DATE_RANGE_WORKLOG_QUERY, new String[]{empIdString, clockInString, clockOutString});
+            Cursor timeclockCursor = db.rawQuery(DATE_RANGE_WORKLOG_QUERY, new String[]{empIdString, dateStart, dateEnd});
             if (timeclockCursor.moveToFirst()) {
                 long timeNow = (System.currentTimeMillis() / 1000);
                 do {
@@ -101,9 +101,9 @@ public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timecl
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Timeclock> timeclockArrayList) {
-        if (timeclockArrayList != null) {
-            mOnFinishedTransactionListener.onReadWorkLogByDateRangeSuccess(timeclockArrayList);
+    protected void onPostExecute(ArrayList<Timeclock> timeClockArrayList) {
+        if (timeClockArrayList != null) {
+            mOnFinishedTransactionListener.onReadWorkLogByDateRangeSuccess(timeClockArrayList);
         }
     }
 

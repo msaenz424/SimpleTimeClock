@@ -26,13 +26,4 @@ public interface EmployeeDetailsPresenter {
      */
     void onPayButtonClicked(int empId);
 
-    /**
-     * Called when the button to search work log by date range is clicked
-     *
-     * @param empId         employee id
-     * @param dateStart     start date
-     * @param dateEnd       end date
-     */
-    void onCustomWorkLogButtonClicked(int empId, long dateStart, long dateEnd);
-
 }

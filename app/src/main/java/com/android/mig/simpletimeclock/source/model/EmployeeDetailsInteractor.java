@@ -14,13 +14,6 @@ public interface EmployeeDetailsInteractor {
         void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList);
 
         /**
-         * Triggers a response after a successful query by date range
-         *
-         * @param timeclockArrayList    a work log
-         */
-        void onReadWorkLogByDateRangeSuccess(ArrayList<Timeclock> timeclockArrayList);
-
-        /**
          * Triggers a response after a successful update against the database
          */
         void onUpdateSuccess();
@@ -38,16 +31,6 @@ public interface EmployeeDetailsInteractor {
      * @param onFinishedTransactionListener     callback listener
      */
     void readEmployeeDetails(int empId, OnFinishedTransactionListener onFinishedTransactionListener);
-
-    /**
-     * Retrieves a work log by date range
-     *
-     * @param empId                             employee id
-     * @param dateStart                         starting date
-     * @param dateEnd                           ending date
-     * @param onFinishedTransactionListener     callback listener
-     */
-    void readWorkLogByDateRange(int empId, long dateStart, long dateEnd, OnFinishedTransactionListener onFinishedTransactionListener);
 
     /**
      * Updates an employee's info
