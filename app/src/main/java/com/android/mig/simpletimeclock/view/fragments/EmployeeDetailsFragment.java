@@ -212,9 +212,13 @@ public class EmployeeDetailsFragment extends Fragment
             }
         });
 
-        mEmployeeDetailsPresenter.onResume(mEmployeeId);
-
         return mRootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mEmployeeDetailsPresenter.onResume(mEmployeeId);
     }
 
     @Override
