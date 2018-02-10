@@ -71,6 +71,8 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
 
     private Context mContext;
     private EmployeeDetailsInteractor.OnFinishedTransactionListener mOnFinishedTransactionListener;
+    private int mTotalTimeWorkedInMinutes = 0;
+    private double mTotalEarnings = 0;
 
     public ReadEmployeeDetailsTask(Context context, EmployeeDetailsInteractor.OnFinishedTransactionListener onFinishedTransactionListener) {
         this.mContext = context;
@@ -90,64 +92,37 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
         try {
             db.beginTransaction();
 
+            // calculate the earnings of an active time if there is any
             Cursor currentCursor = db.rawQuery(ACTIVE_TIME_QUERY, new String[]{empId});
-            long timeNow = (System.currentTimeMillis() / 1000);
-            int currentTime = 0;
-            double currentEarnings = 0;
-
-            // calculates the earning of the current active time, if there is any
             if (currentCursor.moveToFirst()) {
                 isWorking = true;
-
                 int timeId = currentCursor.getInt(ACTIVE_TIME_ID_INDEX);
                 long clockIn = currentCursor.getLong(ACTIVE_CLOCKIN_INDEX);
                 double wage = currentCursor.getDouble(ACTIVE_WAGE_INDEX);
+                long timeNow = (System.currentTimeMillis() / 1000);
 
-                Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(timeId)});
-                int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
-                currentTime = (int) (timeNow - clockIn - currentBreakTime);
-
-                Log.d("READEMPLOYEEDETAILSTASK", "clock in = " + String.valueOf(currentCursor.getLong(ACTIVE_CLOCKIN_INDEX)));
-
-                currentEarnings = calculateDecimalEarnings(currentTime, wage);
-
-                // adds the first row of the work log list
-                Timeclock timeclock = new Timeclock(timeId, clockIn, 0, currentTime, currentBreakTime, currentEarnings);
+                Timeclock timeclock = createTimeClockItem(db, timeId, clockIn, timeNow, wage);
                 timeclockArrayList.add(timeclock);
             }
             currentCursor.close();
 
             // calculate the earnings of unpaid times (active time not included)
             Cursor unpaidCursor = db.rawQuery(BY_PAID_TIME_QUERY, new String[]{empId, String.valueOf(UNPAID_STATUS)});
-            long unpaidPreviousTime = 0;
-            double totalUnpaidPreviousEarnings = 0;
             if (unpaidCursor.moveToFirst()) {
-                int currentTimeWorked;
                 do {
                     int timeId = unpaidCursor.getInt(BY_PAID_TIME_ID_INDEX);
                     long clockInTime = unpaidCursor.getLong(BY_PAID_CLOCKIN_INDEX);
                     long clockOutTime = unpaidCursor.getLong(BY_PAID_CLOCKOUT_INDEX);
                     double wage = unpaidCursor.getDouble(BY_PAID_WAGE_INDEX);
-                    Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(timeId)});
-                    int unpaidBreakTime = calculateBreaks(breaksCursor, timeNow);
 
-                    currentTimeWorked = (int) (clockOutTime - clockInTime - unpaidBreakTime);
-                    double previousEarnings = calculateDecimalEarnings(currentTimeWorked, wage);
-
-                    unpaidPreviousTime += currentTimeWorked;
-                    totalUnpaidPreviousEarnings += previousEarnings;
-
-                    // adds a new row to the work log list
-                    Timeclock timeclock = new Timeclock(timeId, clockInTime, clockOutTime, currentTimeWorked, unpaidBreakTime, previousEarnings);
+                    Timeclock timeclock = createTimeClockItem(db, timeId, clockInTime, clockOutTime, wage);
                     timeclockArrayList.add(timeclock);
 
                 } while (unpaidCursor.moveToNext());
             }
             unpaidCursor.close();
-            long totalUnpaidTime = currentTime + unpaidPreviousTime;
-            double totalUnpaidEarnings = currentEarnings + totalUnpaidPreviousEarnings;
 
-            // gets employee personal info
+            // gets employee's personal info
             Cursor employeeCursor = db.rawQuery(EMPLOYEE_QUERY, new String[]{empId});
             String empName = null;
             double empWage = 0;
@@ -160,7 +135,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
             }
             employeeCursor.close();
 
-            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, empPhotoUri, totalUnpaidTime, totalUnpaidEarnings, isWorking);
+            employeeDetails = new EmployeeDetails(Integer.valueOf(empId), empName, empWage, empPhotoUri, mTotalTimeWorkedInMinutes, mTotalEarnings, isWorking);
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -198,8 +173,15 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
         }
     }
 
-    private int calculateBreaks(Cursor breaksCursor, long timeNow){
-        int breakSum = 0;
+    /**
+     * Calculates the breaks in minutes
+     *
+     * @param breaksCursor  cursor containing breaks from db
+     * @param timeNow       system time used as starting point
+     * @return              total break rounded in minutes
+     */
+    private int calculateBreakInMinutes(Cursor breaksCursor, long timeNow){
+        double breakSum = 0;
         if (breaksCursor.getCount() > 0){
             breaksCursor.moveToFirst();
             do {
@@ -212,19 +194,74 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
             } while (breaksCursor.moveToNext());
         }
         breaksCursor.close();
-        return breakSum;
+        int breakInMinutes = (int) Math.round(breakSum / 60);
+        return breakInMinutes;
     }
 
-    private double calculateDecimalEarnings(int secondsWorked, double wage){
+    /**
+     * Calculates the earning in decimals
+     *
+     * @param minutesWorked actual minutes worked
+     * @param wage          employee's wage
+     * @return              decimal expression of earnings
+     */
+    private double calculateEarningsInDecimals(int minutesWorked, double wage){
         double earned;
-        int hours = secondsWorked / 3600;
-        int minutes = (secondsWorked % 3600) / 60;
-        double decimalMinutes = (double) minutes / 60;
-        earned = (hours * wage) + (decimalMinutes * wage);
+        double decimalHours = (double) minutesWorked / 60;
+        earned = (decimalHours * wage);
         BigDecimal earningsBigDecimal = new BigDecimal(String.valueOf(earned));                 // string on BigDecimal helps to preserve precision
         earningsBigDecimal = earningsBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
         earned = earningsBigDecimal.doubleValue();
         return earned;
+    }
+
+    /**
+     * Calculates time span from two values
+     *
+     * @param clockOutTime  end time value
+     * @param clockInTime   start time value
+     * @return              time span in minutes
+     */
+    private int calculateTimeSpanInMinutes(long clockOutTime, long clockInTime) {
+        double doubleClockOutTime = (double) clockOutTime;
+        double doubleClockIntTime = (double) clockInTime;
+        int workedTimeInMinutes = (int) Math.round((doubleClockOutTime - doubleClockIntTime) / 60);
+        return workedTimeInMinutes;
+    }
+
+    /**
+     * Adds up the totals of time worked and earnings
+     *
+     * @param timeWorked    time worked in minutes
+     * @param earned        earning
+     */
+    private void sumTotals(int timeWorked, double earned){
+        mTotalTimeWorkedInMinutes += timeWorked;
+        mTotalEarnings += earned;
+    }
+
+    /**
+     * Creates a new Timeclock object
+     *
+     * @param db            database
+     * @param timeId        timeclock id
+     * @param clockStart    clock in time in seconds
+     * @param clockEnd      clock out time in seconds
+     * @param wage          employee's wage
+     * @return              a new Timeclock object
+     */
+    private Timeclock createTimeClockItem(SQLiteDatabase db, int timeId, long clockStart, long clockEnd, double wage){
+        Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(timeId)});
+        int currentBreakInMinutes = calculateBreakInMinutes(breaksCursor, clockEnd);
+        int currentTimeSpanInMinutes = calculateTimeSpanInMinutes(clockEnd, clockStart);
+
+        int currentTimeWorkedInMinutes =  currentTimeSpanInMinutes - currentBreakInMinutes;
+        double currentEarningsInDecimals = calculateEarningsInDecimals(currentTimeWorkedInMinutes, wage);
+
+        sumTotals(currentTimeWorkedInMinutes, currentEarningsInDecimals);
+
+        Timeclock timeclock = new Timeclock(timeId, clockStart, clockEnd, currentTimeWorkedInMinutes, currentBreakInMinutes, currentEarningsInDecimals);
+        return timeclock;
     }
 
 }

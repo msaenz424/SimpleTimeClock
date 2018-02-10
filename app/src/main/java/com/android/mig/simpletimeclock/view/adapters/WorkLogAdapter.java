@@ -93,12 +93,14 @@ public class WorkLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 viewHolder.mTimeTextView.setText(startTimeString + " - " + endTimeString);
 
-                int totalInSeconds = mTimeclockArrayList.get(position).getHoursInSecondsWorked();
+                /** TODO needs to use calcs using minutes, not seconds (subtract break (in min) from time worked (in min) */
+
+                int totalInSeconds = mTimeclockArrayList.get(position).getHoursWorkedInMinutes();
                 int totalHours = totalInSeconds / 3600;
                 int totalMinutes = (totalInSeconds % 3600) / 60;
                 viewHolder.mHoursTextView.setText(totalHours + "h " + totalMinutes + "m");
 
-                int totalBreaksInSeconds = mTimeclockArrayList.get(position).getBreaksInSeconds();
+                int totalBreaksInSeconds = mTimeclockArrayList.get(position).getBreaksInMinutes();
                 int totalBreaksHours = totalBreaksInSeconds / 3600;
                 int totalBreakMinutes = (totalBreaksInSeconds % 3600) / 60;
                 viewHolder.mBreaksTextView.setText(totalBreaksHours + "h " + totalBreakMinutes + "m");

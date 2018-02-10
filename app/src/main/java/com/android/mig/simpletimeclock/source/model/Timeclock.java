@@ -7,16 +7,16 @@ public class Timeclock implements Parcelable {
 
     private int mTimeId;
     private long mClockIn, mClockOut;
-    private int mHoursWorkedInSeconds, mBreaksInSeconds;
+    private int mHoursWorkedInMinutes, mBreaksInMinutes;
     private double mEarned;
 
-    public Timeclock(int timeId, long clockIn, long clockOut, int hoursWorkedInSeconds, int breaksInSeconds, double earned) {
+    public Timeclock(int timeId, long clockIn, long clockOut, int hoursWorkedInMinutes, int breaksInMinutes, double earned) {
 
         this.mTimeId = timeId;
         this.mClockIn = clockIn;
         this.mClockOut = clockOut;
-        this.mHoursWorkedInSeconds = hoursWorkedInSeconds;
-        this.mBreaksInSeconds = breaksInSeconds;
+        this.mHoursWorkedInMinutes = hoursWorkedInMinutes;
+        this.mBreaksInMinutes = breaksInMinutes;
         this.mEarned = earned;
     }
 
@@ -30,8 +30,8 @@ public class Timeclock implements Parcelable {
         mTimeId = in.readInt();
         mClockIn = in.readLong();
         mClockOut = in.readLong();
-        mHoursWorkedInSeconds = in.readInt();
-        mBreaksInSeconds = in.readInt();
+        mHoursWorkedInMinutes = in.readInt();
+        mBreaksInMinutes = in.readInt();
         mEarned = in.readDouble();
     }
 
@@ -71,16 +71,16 @@ public class Timeclock implements Parcelable {
         this.mClockOut = clockOut;
     }
 
-    public int getHoursInSecondsWorked() {
-        return mHoursWorkedInSeconds;
+    public int getHoursWorkedInMinutes() {
+        return mHoursWorkedInMinutes;
     }
 
-    public void setHoursWorked(int hoursWorked) {
-        this.mHoursWorkedInSeconds = hoursWorked;
+    public void setHoursWorkedInMinutes(int hoursWorkedInMinutes) {
+        this.mHoursWorkedInMinutes = hoursWorkedInMinutes;
     }
 
-    public int getBreaksInSeconds() {
-        return mBreaksInSeconds;
+    public int getBreaksInMinutes() {
+        return mBreaksInMinutes;
     }
 
     public double getEarned() {
@@ -101,8 +101,8 @@ public class Timeclock implements Parcelable {
         parcel.writeInt(mTimeId);
         parcel.writeLong(mClockIn);
         parcel.writeLong(mClockOut);
-        parcel.writeInt(mHoursWorkedInSeconds);
-        parcel.writeInt(mBreaksInSeconds);
+        parcel.writeInt(mHoursWorkedInMinutes);
+        parcel.writeInt(mBreaksInMinutes);
         parcel.writeDouble(mEarned);
     }
 }

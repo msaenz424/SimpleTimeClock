@@ -237,9 +237,9 @@ public class EmployeeDetailsFragment extends Fragment
         }
 
         mWageTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + String.valueOf(employeeDetails.getWage()));
-        int unpaidInSeconds = (int) employeeDetails.getUnpaidTimeWorked();
-        int hours = unpaidInSeconds / 3600;
-        int minutes = (unpaidInSeconds % 3600) / 60;
+        int unpaidInMinutes = (int) employeeDetails.getUnpaidTimeWorked();
+        int hours = unpaidInMinutes / 60;
+        int minutes = unpaidInMinutes % 60;
         mUnpaidHoursTextView.setText(hours + "h " + minutes + "m");
         mUnpaidEarnings = String.format(Locale.US, "%.2f", employeeDetails.getUnpaidEarnings());
         mUnpaidEarningsTextView.setText(getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings);
@@ -249,7 +249,7 @@ public class EmployeeDetailsFragment extends Fragment
         } else {
             mStatusImageView.setImageResource(R.drawable.im_grey_light);
             mPayButton.setVisibility(View.VISIBLE);
-            if (unpaidInSeconds == 0) {
+            if (unpaidInMinutes == 0) {
                 mPayButton.setEnabled(false);
             }
         }
