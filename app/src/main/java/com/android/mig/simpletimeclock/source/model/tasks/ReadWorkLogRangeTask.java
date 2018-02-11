@@ -5,13 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.source.model.WorkLogInteractor;
-
-import java.math.BigDecimal;
+import com.android.mig.simpletimeclock.utils.TimeCalculations;
 import java.util.ArrayList;
 
 public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timeclock>> {
@@ -65,29 +63,15 @@ public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timecl
             db.beginTransaction();
             Cursor timeclockCursor = db.rawQuery(DATE_RANGE_WORKLOG_QUERY, new String[]{empIdString, dateStart, dateEnd});
             if (timeclockCursor.moveToFirst()) {
-                long timeNow = (System.currentTimeMillis() / 1000);
                 do {
                     int timeId = timeclockCursor.getInt(ACTIVE_TIME_ID_INDEX);
                     long clockIn = timeclockCursor.getLong(ACTIVE_CLOCKIN_INDEX);
                     long clockOut = timeclockCursor.getLong(ACTIVE_CLOCKOUT_INDEX);
-                    Log.d("clockIn", String.valueOf(clockIn));
-                    Log.d("clockOut", String.valueOf(clockOut));
-
                     double wage = timeclockCursor.getDouble(ACTIVE_WAGE_INDEX);
-                    int currentTime = 0;
-                    double currentEarnings = 0;
 
                     Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[]{String.valueOf(timeId)});
-                    int currentBreakTime = calculateBreaks(breaksCursor, timeNow);
-                    if (clockOut == 0) {
-                        currentTime = (int) (timeNow - clockIn - currentBreakTime);
-                    } else {
-                        currentTime = (int) (clockOut - clockIn - currentBreakTime);
-                    }
 
-                    currentEarnings = calculateDecimalEarnings(currentTime, wage);
-
-                    Timeclock timeclock = new Timeclock(timeId, clockIn, clockOut, currentTime, currentBreakTime, currentEarnings);
+                    Timeclock timeclock = TimeCalculations.Factory.createTimeClockItem(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockIn, clockOut, wage);
                     timeclockArrayList.add(timeclock);
                 } while (timeclockCursor.moveToNext());
             }
@@ -105,35 +89,6 @@ public class ReadWorkLogRangeTask extends AsyncTask<Long, Void, ArrayList<Timecl
         if (timeClockArrayList != null) {
             mOnFinishedTransactionListener.onReadWorkLogByDateRangeSuccess(timeClockArrayList);
         }
-    }
-
-    private int calculateBreaks(Cursor breaksCursor, long timeNow){
-        int breakSum = 0;
-        if (breaksCursor.getCount() > 0){
-            breaksCursor.moveToFirst();
-            do {
-                long breakStart = breaksCursor.getLong(BREAKS_START_INDEX);
-                long breakEnd = breaksCursor.getLong(BREAKS_END_INDEX);
-                if (breakEnd == 0) {
-                    breakEnd = timeNow;
-                }
-                breakSum += (int) (breakEnd - breakStart);
-            } while (breaksCursor.moveToNext());
-        }
-        breaksCursor.close();
-        return breakSum;
-    }
-
-    private double calculateDecimalEarnings(int secondsWorked, double wage){
-        double earned;
-        int hours = secondsWorked / 3600;
-        int minutes = (secondsWorked % 3600) / 60;
-        double decimalMinutes = (double) minutes / 60;
-        earned = (hours * wage) + (decimalMinutes * wage);
-        BigDecimal earningsBigDecimal = new BigDecimal(String.valueOf(earned));                 // string on BigDecimal helps to preserve precision
-        earningsBigDecimal = earningsBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
-        earned = earningsBigDecimal.doubleValue();
-        return earned;
     }
 
 }
