@@ -55,12 +55,8 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
                 do {
                     val timeId = timeClockCursor.getInt(UNPAID_TIME_ID_INDEX)
                     val clockIn = timeClockCursor.getLong(UNPAID_TIME_CLOCK_IN_INDEX)
-                    var clockOut = timeClockCursor.getLong(UNPAID_TIME_CLOCK_OUT_INDEX)
+                    val clockOut = timeClockCursor.getLong(UNPAID_TIME_CLOCK_OUT_INDEX)
                     val wage = timeClockCursor.getDouble(UNPAID_TIME_WAGE_INDEX)
-
-                    if (clockOut == 0L){
-                        clockOut = System.currentTimeMillis() / 1000
-                    }
 
                     val breaksCursor = db.rawQuery(BREAKS_QUERY, arrayOf(timeId.toString()))
 

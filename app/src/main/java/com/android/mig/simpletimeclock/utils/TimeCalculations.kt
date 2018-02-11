@@ -92,7 +92,12 @@ class TimeCalculations {
      * @return              time span in minutes
      */
     private fun calculateTimeSpanInMinutes(clockOutTime: Long, clockInTime: Long): Int {
-        val doubleClockOutTime = clockOutTime.toDouble()
+
+        val doubleClockOutTime = if (clockOutTime == 0L) {
+            (System.currentTimeMillis() / 1000).toDouble()
+        } else {
+            clockOutTime.toDouble()
+        }
         val doubleClockIntTime = clockInTime.toDouble()
         return Math.round((doubleClockOutTime - doubleClockIntTime) / 60).toInt()
     }
