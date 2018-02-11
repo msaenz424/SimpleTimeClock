@@ -2,6 +2,7 @@ package com.android.mig.simpletimeclock.source.model.tasks
 
 import android.content.Context
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.os.AsyncTask
 import android.util.Log
 import com.android.mig.simpletimeclock.source.TimeClockContract
@@ -53,26 +54,17 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
             db.beginTransaction()
             val timeClockCursor = db.rawQuery(UNPAID_WORKLOG_QUERY, arrayOf(empIdString, unpaidTimeString))
             if (timeClockCursor.moveToFirst()) {
-                val timeNow = System.currentTimeMillis() / 1000
                 do {
                     val timeId = timeClockCursor.getInt(UNPAID_TIME_ID_INDEX)
                     val clockIn = timeClockCursor.getLong(UNPAID_TIME_CLOCK_IN_INDEX)
-                    val clockOut = timeClockCursor.getLong(UNPAID_TIME_CLOCK_OUT_INDEX)
+                    var clockOut = timeClockCursor.getLong(UNPAID_TIME_CLOCK_OUT_INDEX)
                     val wage = timeClockCursor.getDouble(UNPAID_TIME_WAGE_INDEX)
-                    var currentTime = 0
-                    var currentEarnings = 0.0
 
-                    val breaksCursor = db.rawQuery(BREAKS_QUERY, arrayOf(timeId.toString()))
-                    val currentBreakTime = calculateBreaks(breaksCursor, timeNow)
-                    currentTime = if (clockOut == 0L) {
-                        (timeNow - clockIn - currentBreakTime.toLong()).toInt()
-                    } else {
-                        (clockOut - clockIn - currentBreakTime.toLong()).toInt()
+                    if (clockOut == 0L){
+                        clockOut = System.currentTimeMillis() / 1000
                     }
 
-                    currentEarnings = calculateDecimalEarnings(currentTime, wage)
-
-                    val timeClock = Timeclock(timeId, clockIn, clockOut, currentTime, currentBreakTime, currentEarnings)
+                    val timeClock = createTimeClockItem(db, timeId, clockIn, clockOut, wage)
                     timeClockArrayList.add(timeClock)
                 } while (timeClockCursor.moveToNext())
             }
@@ -90,8 +82,14 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
         mOnFinishedTransactionListener.onReadWorkLogByEmployeeSuccess(result)
     }
 
-    private fun calculateBreaks(breaksCursor: Cursor, timeNow: Long): Int {
-        var breakSum = 0
+    private fun calculateTimeSpanInMinutes(clockOutTime: Long, clockInTime: Long): Int {
+        val doubleClockOutTime = clockOutTime.toDouble()
+        val doubleClockIntTime = clockInTime.toDouble()
+        return Math.round((doubleClockOutTime - doubleClockIntTime) / 60).toInt()
+    }
+
+    private fun calculateBreakInMinutes(breaksCursor: Cursor, timeNow: Long): Int {
+        var breakSum = 0.0
         if (breaksCursor.count > 0) {
             breaksCursor.moveToFirst()
             do {
@@ -100,23 +98,31 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
                 if (breakEnd == 0L) {
                     breakEnd = timeNow
                 }
-                breakSum += (breakEnd - breakStart).toInt()
+                breakSum += (breakEnd - breakStart)
             } while (breaksCursor.moveToNext())
         }
         breaksCursor.close()
-        return breakSum
+        return Math.round(breakSum / 60).toInt()
     }
 
-    private fun calculateDecimalEarnings(secondsWorked: Int, wage: Double): Double {
+    private fun calculateEarningsInDecimals(minutesWorked: Int, wage: Double): Double {
         var earned: Double
-        val hours = secondsWorked / 3600
-        val minutes = secondsWorked % 3600 / 60
-        val decimalMinutes = minutes.toDouble() / 60
-        earned = hours * wage + decimalMinutes * wage
+        val decimalHours = minutesWorked.toDouble() / 60
+        earned = decimalHours * wage
         var earningsBigDecimal = BigDecimal(earned.toString())                 // string on BigDecimal helps to preserve precision
         earningsBigDecimal = earningsBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP)
         earned = earningsBigDecimal.toDouble()
         return earned
+    }
+
+    private fun createTimeClockItem(db: SQLiteDatabase, timeId: Int, clockStart: Long, clockEnd: Long, wage: Double): Timeclock {
+        val breaksCursor = db.rawQuery(BREAKS_QUERY, arrayOf(timeId.toString()))
+        val currentBreakInMinutes = calculateBreakInMinutes(breaksCursor, clockEnd)
+        val currentTimeSpanInMinutes = calculateTimeSpanInMinutes(clockEnd, clockStart)
+        val currentTimeWorkedInMinutes = currentTimeSpanInMinutes - currentBreakInMinutes
+        val currentEarningsInDecimals = calculateEarningsInDecimals(currentTimeWorkedInMinutes, wage)
+
+        return Timeclock(timeId, clockStart, clockEnd, currentTimeWorkedInMinutes, currentBreakInMinutes, currentEarningsInDecimals)
     }
 
 }
