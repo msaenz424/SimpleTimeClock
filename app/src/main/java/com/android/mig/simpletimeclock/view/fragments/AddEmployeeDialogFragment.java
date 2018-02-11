@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.view.ui.EmployeeDetailsActivity;
-import com.android.mig.simpletimeclock.view.utils.CircleTransform;
+import com.android.mig.simpletimeclock.utils.CircleTransform;
 import com.bumptech.glide.Glide;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;

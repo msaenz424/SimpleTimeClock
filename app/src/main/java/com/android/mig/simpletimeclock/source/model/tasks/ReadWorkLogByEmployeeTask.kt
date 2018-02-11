@@ -1,15 +1,13 @@
 package com.android.mig.simpletimeclock.source.model.tasks
 
 import android.content.Context
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.os.AsyncTask
 import android.util.Log
 import com.android.mig.simpletimeclock.source.TimeClockContract
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper
 import com.android.mig.simpletimeclock.source.model.Timeclock
 import com.android.mig.simpletimeclock.source.model.WorkLogInteractor
-import java.math.BigDecimal
+import com.android.mig.simpletimeclock.utils.TimeCalculations
 
 class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransactionListener: WorkLogInteractor.OnFinishedTransactionListener) : AsyncTask<Int, Void, ArrayList<Timeclock>>() {
 
@@ -64,7 +62,9 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
                         clockOut = System.currentTimeMillis() / 1000
                     }
 
-                    val timeClock = createTimeClockItem(db, timeId, clockIn, clockOut, wage)
+                    val breaksCursor = db.rawQuery(BREAKS_QUERY, arrayOf(timeId.toString()))
+
+                    val timeClock = TimeCalculations.Factory.createTimeClockItem(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockIn, clockOut, wage)
                     timeClockArrayList.add(timeClock)
                 } while (timeClockCursor.moveToNext())
             }
@@ -80,49 +80,6 @@ class ReadWorkLogByEmployeeTask constructor(context: Context, onFinishedTransact
 
     override fun onPostExecute(result: ArrayList<Timeclock>) {
         mOnFinishedTransactionListener.onReadWorkLogByEmployeeSuccess(result)
-    }
-
-    private fun calculateTimeSpanInMinutes(clockOutTime: Long, clockInTime: Long): Int {
-        val doubleClockOutTime = clockOutTime.toDouble()
-        val doubleClockIntTime = clockInTime.toDouble()
-        return Math.round((doubleClockOutTime - doubleClockIntTime) / 60).toInt()
-    }
-
-    private fun calculateBreakInMinutes(breaksCursor: Cursor, timeNow: Long): Int {
-        var breakSum = 0.0
-        if (breaksCursor.count > 0) {
-            breaksCursor.moveToFirst()
-            do {
-                val breakStart = breaksCursor.getLong(BREAKS_START_INDEX)
-                var breakEnd = breaksCursor.getLong(BREAKS_END_INDEX)
-                if (breakEnd == 0L) {
-                    breakEnd = timeNow
-                }
-                breakSum += (breakEnd - breakStart)
-            } while (breaksCursor.moveToNext())
-        }
-        breaksCursor.close()
-        return Math.round(breakSum / 60).toInt()
-    }
-
-    private fun calculateEarningsInDecimals(minutesWorked: Int, wage: Double): Double {
-        var earned: Double
-        val decimalHours = minutesWorked.toDouble() / 60
-        earned = decimalHours * wage
-        var earningsBigDecimal = BigDecimal(earned.toString())                 // string on BigDecimal helps to preserve precision
-        earningsBigDecimal = earningsBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP)
-        earned = earningsBigDecimal.toDouble()
-        return earned
-    }
-
-    private fun createTimeClockItem(db: SQLiteDatabase, timeId: Int, clockStart: Long, clockEnd: Long, wage: Double): Timeclock {
-        val breaksCursor = db.rawQuery(BREAKS_QUERY, arrayOf(timeId.toString()))
-        val currentBreakInMinutes = calculateBreakInMinutes(breaksCursor, clockEnd)
-        val currentTimeSpanInMinutes = calculateTimeSpanInMinutes(clockEnd, clockStart)
-        val currentTimeWorkedInMinutes = currentTimeSpanInMinutes - currentBreakInMinutes
-        val currentEarningsInDecimals = calculateEarningsInDecimals(currentTimeWorkedInMinutes, wage)
-
-        return Timeclock(timeId, clockStart, clockEnd, currentTimeWorkedInMinutes, currentBreakInMinutes, currentEarningsInDecimals)
     }
 
 }

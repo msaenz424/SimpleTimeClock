@@ -1,4 +1,4 @@
-package com.android.mig.simpletimeclock.view.utils;
+package com.android.mig.simpletimeclock.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

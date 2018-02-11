@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.source.model.ActiveEmployee;
 import com.android.mig.simpletimeclock.source.model.Break;
-import com.android.mig.simpletimeclock.view.utils.CircleTransform;
+import com.android.mig.simpletimeclock.utils.CircleTransform;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
