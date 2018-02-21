@@ -27,6 +27,7 @@ import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenter;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenterImpl;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
+import com.android.mig.simpletimeclock.utils.TimeConverter;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 import com.android.mig.simpletimeclock.view.ui.EmployeeDetailsActivity;
 import com.android.mig.simpletimeclock.view.ui.WorkLogActivity;
@@ -196,8 +197,8 @@ public class EmployeeDetailsFragment extends Fragment
                 String startDateString = mStartDateTextView.getText().toString();
                 String endDateString = mEndDateTextView.getText().toString();
                 if (!startDateString.equals(getResources().getString(R.string.default_date_text)) && !endDateString.equals(getResources().getString(R.string.default_date_text))){
-                    long startDate = convertDateToSeconds(startDateString);
-                    long endDate = convertDateToSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
+                    long startDate = TimeConverter.Factory.getSeconds(startDateString);
+                    long endDate = TimeConverter.Factory.getSeconds(endDateString) + ONE_DAY_IN_SECONDS; // ensures day picked is included
 
                     Intent intent = new Intent(getActivity(), WorkLogActivity.class);
                     intent.putExtra(Intent.EXTRA_UID, mEmployeeId);
@@ -303,22 +304,4 @@ public class EmployeeDetailsFragment extends Fragment
         }
     }
 
-    private long convertDateToSeconds(String stringDate){
-        if (stringDate != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-            Date date = null;
-            try {
-                date = dateFormat.parse(stringDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            long seconds = 0;
-            if (date != null) {
-                seconds = date.getTime() / 1000;
-            }
-            return seconds;
-        } else {
-            return 0;
-        }
-    }
 }

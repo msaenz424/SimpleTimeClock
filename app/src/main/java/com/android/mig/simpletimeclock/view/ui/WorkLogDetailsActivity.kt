@@ -13,6 +13,7 @@ import com.android.mig.simpletimeclock.presenter.WorkLogDetailsPresenter
 import com.android.mig.simpletimeclock.presenter.WorkLogDetailsPresenterImpl
 import com.android.mig.simpletimeclock.source.model.Break
 import com.android.mig.simpletimeclock.source.model.Timeclock
+import com.android.mig.simpletimeclock.utils.TimeConverter
 import com.android.mig.simpletimeclock.view.WorkLogDetailsView
 import com.android.mig.simpletimeclock.view.adapters.BreaksAdapter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -50,6 +51,14 @@ class WorkLogDetailsActivity : AppCompatActivity(),
     private var mAdapterPosition: Int = 0
     private var mClockedInDay: Int = 0
     private var mClockedOutDay: Int = 0
+    private var mClockedInMonth: Int = 0
+    private var mClockedOutMonth: Int = 0
+    private var mClockedInYear: Int = 0
+    private var mClockedOutYear: Int = 0
+
+    private var mYear: Int = 0
+    private var mMonth: Int = 0
+    private var mDay: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +89,14 @@ class WorkLogDetailsActivity : AppCompatActivity(),
     }
 
     override fun displayWorkLogDetails(timeclock: Timeclock) {
-        mClockedInDay = getDayOfWeek(timeclock.clockIn * 1000)
-        mClockedOutDay = getDayOfWeek(timeclock.clockOut * 1000)
+        val clockInTimeInMillis = timeclock.clockIn * 1000
+        val clockOutTimeInMillis = timeclock.clockOut * 1000
+        mClockedInDay = TimeConverter.Factory.getDayOfMonth(clockInTimeInMillis)
+        mClockedOutDay = TimeConverter.Factory.getDayOfMonth(clockOutTimeInMillis)
+        mClockedInMonth = TimeConverter.Factory.getMonth(clockInTimeInMillis)
+        mClockedOutMonth = TimeConverter.Factory.getMonth(clockOutTimeInMillis)
+        mClockedInYear = TimeConverter.Factory.getYear(clockInTimeInMillis)
+        mClockedOutYear = TimeConverter.Factory.getYear(clockOutTimeInMillis)
         worklog_detail_clocked_in.text = formatTime(timeclock.clockIn * 1000L)
         worklog_detail_clocked_out.text = formatTime(timeclock.clockOut * 1000L)
     }
@@ -99,6 +114,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        mYear = year
+        mMonth = monthOfYear
+        mDay = dayOfMonth
+
         when (mPickerTag) {
             CLOCK_IN_DATE_PICKER_TAG -> {
                 mClockedInDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
@@ -112,11 +131,11 @@ class WorkLogDetailsActivity : AppCompatActivity(),
             }
             BREAK_START_DATE_PICKER_TAG -> {
                 mBreakStartDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
-                openTimePicker(mBreaksAdapter.getBreakStart(mAdapterPosition), BREAK_START_TIME_PICKER_TAG)
+                openTimePicker(mBreaksAdapter.getBreakStart(mAdapterPosition) * 1000, BREAK_START_TIME_PICKER_TAG)
             }
             BREAK_END_DATE_PICKER_TAG -> {
                 mBreakEndDate = convertDateToString(year, monthOfYear + 1, dayOfMonth)
-                openTimePicker(mBreaksAdapter.getBreakEnd(mAdapterPosition), BREAK_END_TIME_PICKER_TAG)
+                openTimePicker(mBreaksAdapter.getBreakEnd(mAdapterPosition) * 1000, BREAK_END_TIME_PICKER_TAG)
             }
         }
     }
@@ -124,18 +143,18 @@ class WorkLogDetailsActivity : AppCompatActivity(),
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         when (mPickerTag) {
             CLOCK_IN_TIME_PICKER_TAG -> {
-                mTimeClock.clockIn = convertDateToSeconds(mClockedInDate, hourOfDay, minute)
+                mTimeClock.clockIn = TimeConverter.Factory.getSeconds(mYear, mMonth, mDay, hourOfDay, minute)
                 worklog_detail_clocked_in.text = formatTime(mTimeClock.clockIn * 1000L)
             }
             CLOCK_OUT_TIME_PICKER_TAG -> {
-                mTimeClock.clockOut = convertDateToSeconds(mClockedOutDate, hourOfDay, minute)
+                mTimeClock.clockOut = TimeConverter.Factory.getSeconds(mYear, mMonth, mDay, hourOfDay, minute)
                 worklog_detail_clocked_out.text = formatTime(mTimeClock.clockOut * 1000L)
             }
             BREAK_START_TIME_PICKER_TAG -> {
-                mBreaksAdapter.updateBreakStart(convertDateToSeconds(hourOfDay = hourOfDay, minute = minute), mAdapterPosition)
+                mBreaksAdapter.updateBreakStart(TimeConverter.Factory.getSeconds(mYear, mMonth, mDay, hourOfDay, minute), mAdapterPosition)
             }
             BREAK_END_TIME_PICKER_TAG -> {
-                mBreaksAdapter.updateBreakEnd(convertDateToSeconds(hourOfDay = hourOfDay, minute = minute), mAdapterPosition)
+                mBreaksAdapter.updateBreakEnd(TimeConverter.Factory.getSeconds(mYear, mMonth, mDay, hourOfDay, minute), mAdapterPosition)
             }
         }
     }
@@ -180,7 +199,10 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         if (!isSameDay()) {
             openDatePicker(mBreaksAdapter.getBreakStart(position) * 1000, BREAK_START_DATE_PICKER_TAG)
         } else {
-            openTimePicker(mBreaksAdapter.getBreakStart(position), BREAK_START_TIME_PICKER_TAG)
+            mYear = mClockedInYear
+            mMonth = mClockedInMonth
+            mDay = mClockedInDay
+            openTimePicker(mBreaksAdapter.getBreakStart(position) * 1000, BREAK_START_TIME_PICKER_TAG)
         }
     }
 
@@ -189,19 +211,16 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         if (!isSameDay()) {
             openDatePicker(mBreaksAdapter.getBreakEnd(position) * 1000, BREAK_END_DATE_PICKER_TAG)
         } else {
-            openTimePicker(mBreaksAdapter.getBreakEnd(position), BREAK_END_TIME_PICKER_TAG)
+            mYear = mClockedInYear
+            mMonth = mClockedInMonth
+            mDay = mClockedInDay
+            openTimePicker(mBreaksAdapter.getBreakEnd(position) * 1000, BREAK_END_TIME_PICKER_TAG)
         }
     }
 
     override fun onDeleteBreakClicked(breakId: Int) {
         mWorkLogDetailsPresenter.onDeleteBreakClicked(breakId)
         mBreaksAdapter.updateBreakItem(mAdapterPosition)
-    }
-
-    private fun getDayOfWeek(timeInMillis: Long): Int {
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = timeInMillis
-        return calendar.get(Calendar.DAY_OF_MONTH)
     }
 
     private fun formatTime(time: Long): String {
@@ -240,7 +259,7 @@ class WorkLogDetailsActivity : AppCompatActivity(),
                 this,
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
-                true)
+                false)
         tpd.show(fragmentManager, tag)
     }
 
@@ -248,24 +267,8 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         return year.toString() + "-" + monthOfYear + "-" + dayOfMonth + " "
     }
 
-    private fun convertDateToSeconds(stringDate: String = "", hourOfDay: Int, minute: Int): Long {
-        val finalStringDate: String
-        val dateFormat: SimpleDateFormat
-        if (stringDate != "") {
-            finalStringDate = stringDate + hourOfDay.toString() + ":" + minute.toString() + ":00"
-            dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
-        } else {
-            finalStringDate = hourOfDay.toString() + ":" + minute.toString() + ":00"
-            dateFormat = SimpleDateFormat("hh:mm:ss", Locale.US)
-        }
-        val date = dateFormat.parse(finalStringDate)
-
-        Log.d("convert", date.time.toString())
-        return date.time / 1000
-    }
-
     private fun isSameDay(): Boolean {
-        return mClockedInDay == mClockedOutDay
+        return mClockedInDay == mClockedOutDay && mClockedInMonth == mClockedOutMonth && mClockedInYear == mClockedOutYear
     }
 
 }

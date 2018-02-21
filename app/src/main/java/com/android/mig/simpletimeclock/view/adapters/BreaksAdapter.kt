@@ -59,7 +59,7 @@ class BreaksAdapter constructor(breaksArrayList: ArrayList<Break>, onClickHandle
     }
 
     override fun onBindViewHolder(holder: BreaksViewHolder, position: Int) {
-        Log.d("onBind", mBreaksArrayList[position].breakStart.toString())
+        Log.d("onBind", (mBreaksArrayList[position].breakStart * 1000L).toString())
         holder.mBreakStartTextView.text = formatTime(mBreaksArrayList[position].breakStart * 1000L)
         holder.mBreakEndTextView.text = formatTime(mBreaksArrayList[position].breakEnd * 1000L)
         holder.mBreakStartButton.setOnClickListener { mOnClickHandler.onStartBreakClicked(position) }
