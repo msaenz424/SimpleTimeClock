@@ -51,7 +51,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity
             android:name=".view.ui.WorkLogDetailsActivity"
-            android:parentActivityName=".view.ui.WorkLogActivity" />
+            android:parentActivityName=".view.ui.WorkLogActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
     </application>
 
 </manifest>
