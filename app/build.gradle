@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 def keystorePropertiesFile = file('E:/_AndKeystores/gradleProperties/SimpleTimeClock/keystore.properties')
 def keystoreProperties = new Properties()
@@ -48,10 +49,15 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.jrvansuita:PickImage:2.1.4'
     compile 'com.wdullaer:materialdatetimepicker:3.4.0'
-    compile 'com.google.firebase:firebase-ads:11.6.0'
+    compile 'com.google.firebase:firebase-ads:11.8.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
+        transitive = true
+    }
+    compile 'com.google.firebase:firebase-core:11.8.0'
     testCompile 'junit:junit:4.12'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 }
+apply plugin: 'com.google.gms.google-services'
