@@ -124,7 +124,6 @@ public class EmployeeDetailsFragment extends Fragment
                 Intent intent = new Intent(getActivity(), WorkLogActivity.class);
                 intent.putExtra(Intent.EXTRA_UID, mEmployeeId);
                 intent.putExtra(Intent.EXTRA_TEXT, VIEW_UNPAID_WORKLOG);
-                //intent.putParcelableArrayListExtra(Intent.EXTRA_TEXT, mTimeclockArrayList);
                 startActivity(intent);
             }
         });

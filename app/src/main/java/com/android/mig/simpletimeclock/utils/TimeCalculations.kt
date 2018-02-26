@@ -26,7 +26,7 @@ class TimeCalculations {
          * @return                  a new Timeclock object
          */
         fun createTimeClockItemWithTotals(breaksCursor: Cursor, breakStartIndex: Int, breakEndIndex: Int, timeId: Int, clockStart: Long, clockEnd: Long, wage: Double): Timeclock {
-            val currentBreakInMinutes = mTimeCalculations.calculateBreakInMinutes(breaksCursor, breakStartIndex, breakEndIndex, clockEnd)
+            val currentBreakInMinutes = mTimeCalculations.calculateBreakInMinutes(breaksCursor, breakStartIndex, breakEndIndex)
             val currentTimeSpanInMinutes = mTimeCalculations.calculateTimeSpanInMinutes(clockEnd, clockStart)
             val currentTimeWorkedInMinutes = currentTimeSpanInMinutes - currentBreakInMinutes
             val currentEarningsInDecimals = mTimeCalculations.calculateEarningsInDecimals(currentTimeWorkedInMinutes, wage)
@@ -48,7 +48,7 @@ class TimeCalculations {
          * @return                  a new Timeclock object
          */
         fun createTimeClockItem(breaksCursor: Cursor, breakStartIndex: Int, breakEndIndex: Int, timeId: Int, clockStart: Long, clockEnd: Long, wage: Double): Timeclock {
-            val currentBreakInMinutes = mTimeCalculations.calculateBreakInMinutes(breaksCursor, breakStartIndex, breakEndIndex, clockEnd)
+            val currentBreakInMinutes = mTimeCalculations.calculateBreakInMinutes(breaksCursor, breakStartIndex, breakEndIndex)
             val currentTimeSpanInMinutes = mTimeCalculations.calculateTimeSpanInMinutes(clockEnd, clockStart)
             val currentTimeWorkedInMinutes = currentTimeSpanInMinutes - currentBreakInMinutes
             val currentEarningsInDecimals = mTimeCalculations.calculateEarningsInDecimals(currentTimeWorkedInMinutes, wage)
@@ -64,10 +64,9 @@ class TimeCalculations {
      * @param breaksCursor      cursor containing breaks from db
      * @param breakStartIndex   index of break start in cursor
      * @param breakEndIndex     index of break end in cursor
-     * @param timeNow           system time used as starting point
      * @return                  total break rounded in minutes
      */
-    private fun calculateBreakInMinutes(breaksCursor: Cursor, breakStartIndex: Int, breakEndIndex: Int, timeNow: Long): Int {
+    private fun calculateBreakInMinutes(breaksCursor: Cursor, breakStartIndex: Int, breakEndIndex: Int): Int {
         var breakSum = 0.0
         if (breaksCursor.count > 0) {
             breaksCursor.moveToFirst()
@@ -75,7 +74,7 @@ class TimeCalculations {
                 val breakStart = breaksCursor.getLong(breakStartIndex)
                 var breakEnd = breaksCursor.getLong(breakEndIndex)
                 if (breakEnd == 0L) {
-                    breakEnd = timeNow
+                    breakEnd = System.currentTimeMillis() / 1000
                 }
                 breakSum += (breakEnd - breakStart).toInt().toDouble()
             } while (breaksCursor.moveToNext())
