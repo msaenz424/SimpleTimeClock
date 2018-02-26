@@ -200,10 +200,6 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         snackbar(worklog_details_linear_layout, resources.getString(R.string.deleted_break_message))
     }
 
-    override fun passTimeClockArray(timeClockArrayList: ArrayList<Timeclock>) {
-
-    }
-
     override fun finishActivity() {
         toast(resources.getString(R.string.deleted_time_message))
         finish()

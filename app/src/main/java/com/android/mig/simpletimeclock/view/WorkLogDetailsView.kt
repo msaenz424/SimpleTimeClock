@@ -17,8 +17,6 @@ interface WorkLogDetailsView {
 
     fun displayDeleteSuccessMessage()
 
-    fun passTimeClockArray(timeClockArrayList: ArrayList<Timeclock>)
-
     fun finishActivity()
 
 }
