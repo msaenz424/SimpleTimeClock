@@ -19,7 +19,9 @@ import com.android.mig.simpletimeclock.view.adapters.BreaksAdapter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_work_log_details.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.toast
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,6 +88,14 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         add_break_button.setOnClickListener {
             mWorkLogDetailsPresenter.onAddBreakClicked(mTimeClock.timeId, System.currentTimeMillis() / 1000, System.currentTimeMillis() / 1000)
         }
+
+        worklog_delete_button.setOnClickListener {
+            alert(resources.getString(R.string.worklog_detail_delete_dialog_text)){
+                positiveButton(resources.getString(R.string.worklog_detail_delete_dialog_yes)) { mWorkLogDetailsPresenter.onDeleteTimeClicked(mTimeClock.timeId) }
+                negativeButton(resources.getString(R.string.worklog_detail_delete_dialog_no)) {}
+            }.show()
+        }
+
     }
 
     override fun displayWorkLogDetails(timeclock: Timeclock) {
@@ -192,6 +202,11 @@ class WorkLogDetailsActivity : AppCompatActivity(),
 
     override fun passTimeClockArray(timeClockArrayList: ArrayList<Timeclock>) {
 
+    }
+
+    override fun finishActivity() {
+        toast(resources.getString(R.string.deleted_time_message))
+        finish()
     }
 
     override fun onStartBreakClicked(position: Int) {

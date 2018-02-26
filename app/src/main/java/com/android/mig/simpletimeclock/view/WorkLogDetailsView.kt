@@ -19,4 +19,6 @@ interface WorkLogDetailsView {
 
     fun passTimeClockArray(timeClockArrayList: ArrayList<Timeclock>)
 
+    fun finishActivity()
+
 }

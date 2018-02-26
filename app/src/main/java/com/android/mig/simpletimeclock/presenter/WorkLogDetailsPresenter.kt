@@ -17,4 +17,6 @@ interface WorkLogDetailsPresenter {
 
     fun onClockedOutButtonClicked(clockedOutTime: Long)
 
+    fun onDeleteTimeClicked(timeId: Int)
+
 }

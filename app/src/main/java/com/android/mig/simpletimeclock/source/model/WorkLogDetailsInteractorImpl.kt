@@ -35,5 +35,9 @@ class WorkLogDetailsInteractorImpl constructor(context: Context): WorkLogDetails
         deleteBreak.execute(breakId)
     }
 
+    override fun deleteTime(timeId: Int, onFinishedTransactionListener: WorkLogDetailsInteractor.OnFinishedTransactionListener) {
+        val deleteTime = DeleteTimeTask(mContext, onFinishedTransactionListener)
+        deleteTime.execute(timeId)
+    }
 
 }

@@ -12,6 +12,8 @@ interface WorkLogDetailsInteractor {
 
         fun onDeleteSuccess()
 
+        fun onDeleteTimeSuccess()
+
     }
 
     fun readBreaks(timeId: Int, onFinishedTransactionListener: OnFinishedTransactionListener)
@@ -22,4 +24,5 @@ interface WorkLogDetailsInteractor {
 
     fun deleteBreak(breakId: Int, onFinishedTransactionListener: OnFinishedTransactionListener)
 
+    fun deleteTime(timeId: Int, onFinishedTransactionListener: OnFinishedTransactionListener)
 }

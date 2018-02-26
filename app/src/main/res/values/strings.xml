@@ -61,6 +61,11 @@
     <string name="update_success_message">Changes saved</string>
     <string name="deleted_break_message">Break entry deleted</string>
     <string name="worklog_detail_text_warning">Please use this functionality with caution! Double check your dates before saving! \nIn case you get negative results, come back and try again. This screen is still in Beta version. If you face any issue, contact the developer (screenshots are always helpful).</string>
+    <string name="worklog_detail_delete_text">Delete</string>
+    <string name="worklog_detail_delete_dialog_text">Delete current work log?</string>
+    <string name="worklog_detail_delete_dialog_yes">Yes</string>
+    <string name="worklog_detail_delete_dialog_no">No</string>
+    <string name="deleted_time_message">Work Log Deleted</string>
 
     <!-- Banner Ad -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>

@@ -28,6 +28,11 @@ class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetails
         mWorkLogDetailsInteractor.deleteBreak(breakId,this)
     }
 
+    override fun onDeleteTimeClicked(timeId: Int) {
+        mWorkLogDetailsInteractor.deleteTime(timeId, this)
+    }
+
+
     override fun onReadSuccess(breakArrayList: ArrayList<Break>) {
         mWorkLogDetailsView.displayWorkLogBreaks(breakArrayList)
     }
@@ -50,6 +55,10 @@ class WorkLogDetailsPresenterImpl constructor(workLogDetailsView: WorkLogDetails
 
     override fun onClockedOutButtonClicked(clockedOutTime: Long) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onDeleteTimeSuccess() {
+        mWorkLogDetailsView.finishActivity()
     }
 
 }
