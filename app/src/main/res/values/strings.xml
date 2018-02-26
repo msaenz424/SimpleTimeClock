@@ -52,6 +52,9 @@
     <!-- AddEmployeeDialogFragment -->
     <string name="dialog_add_photo_title">Profile photo</string>
 
+    <!-- WorkLog Activity -->
+    <string name="cannot_edit_time_text">You cannot edit an active time</string>
+
     <!-- WorkLog details -->
     <string name="worklog_details_activity_title">Edit Times</string>
     <string name="worklog_detail_clocked_in_text">Clocked in</string>

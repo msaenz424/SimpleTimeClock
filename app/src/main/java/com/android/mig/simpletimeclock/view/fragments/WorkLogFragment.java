@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.source.model.Timeclock;
@@ -82,10 +83,24 @@ public class WorkLogFragment extends Fragment implements WorkLogAdapter.OnClickH
 
     @Override
     public void onItemClick(Timeclock timeclock) {
-        Intent intent = new Intent(getActivity(), WorkLogDetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Intent.EXTRA_TEXT, timeclock);
-        intent.putExtra(Intent.EXTRA_INTENT, bundle);
-        startActivity(intent);
+        if (!isActiveTime(timeclock.getClockOut())) {
+            Intent intent = new Intent(getActivity(), WorkLogDetailsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Intent.EXTRA_TEXT, timeclock);
+            intent.putExtra(Intent.EXTRA_INTENT, bundle);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.cannot_edit_time_text), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Checks if clock out is zero which means that selected time is still active
+     *
+     * @param clockOut      clock out time
+     * @return              true if active, false if inactive
+     */
+    private boolean isActiveTime(long clockOut){
+        return clockOut == 0;
     }
 }
