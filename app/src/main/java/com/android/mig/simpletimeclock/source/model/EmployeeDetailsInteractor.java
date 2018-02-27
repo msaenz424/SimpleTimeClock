@@ -1,7 +1,5 @@
 package com.android.mig.simpletimeclock.source.model;
 
-import java.util.ArrayList;
-
 public interface EmployeeDetailsInteractor {
 
     interface OnFinishedTransactionListener{
@@ -9,9 +7,8 @@ public interface EmployeeDetailsInteractor {
          * Triggers a response after a successful query
          *
          * @param employeeDetails
-         * @param timeclockArrayList
          */
-        void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList);
+        void onReadSuccess(EmployeeDetails employeeDetails);
 
         /**
          * Triggers a response after a successful update against the database

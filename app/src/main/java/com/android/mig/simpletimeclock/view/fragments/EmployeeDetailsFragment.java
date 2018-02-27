@@ -21,12 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.mig.simpletimeclock.R;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenter;
 import com.android.mig.simpletimeclock.presenter.EmployeeDetailsPresenterImpl;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
-import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.utils.TimeConverter;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
 import com.android.mig.simpletimeclock.view.ui.EmployeeDetailsActivity;
@@ -36,8 +34,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -66,7 +62,6 @@ public class EmployeeDetailsFragment extends Fragment
     private Button mViewWorkLogButton, mPayButton, mCustomWorkLogButton;
     private ImageButton mPickStartDateButton, mPickEndDateButton;
 
-    private ArrayList<Timeclock> mTimeclockArrayList;
     int mEmployeeId;
     String mUnpaidEarnings;
     private int mDatePickId;
@@ -252,11 +247,6 @@ public class EmployeeDetailsFragment extends Fragment
         }
         EmployeeDetailsActivity employeeDetailsActivity = (EmployeeDetailsActivity) getActivity();
         employeeDetailsActivity.setEmployeeDetails(new EmployeeDetails(mEmployeeId, employeeDetails.getName(), employeeDetails.getWage(), employeeDetails.getPhotoPath()));
-    }
-
-    @Override
-    public void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList) {
-        this.mTimeclockArrayList = timeclockArrayList;
     }
 
     @Override

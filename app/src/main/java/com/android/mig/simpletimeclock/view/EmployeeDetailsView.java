@@ -15,13 +15,6 @@ public interface EmployeeDetailsView {
     void showEmployeeInfo(EmployeeDetails employeeDetails);
 
     /**
-     * Holds the unpaid work log in memory
-     *
-     * @param timeclockArrayList    work log
-     */
-    void saveWorkLogInfo(ArrayList<Timeclock> timeclockArrayList);
-
-    /**
      * Displays a message when payment was made
      */
     void showPaidMessage();

@@ -5,10 +5,7 @@ import android.content.Context;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractorImpl;
-import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.view.EmployeeDetailsView;
-
-import java.util.ArrayList;
 
 public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
         EmployeeDetailsInteractor.OnFinishedTransactionListener{
@@ -37,9 +34,8 @@ public class EmployeeDetailsPresenterImpl implements EmployeeDetailsPresenter,
     }
 
     @Override
-    public void onReadSuccess(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList) {
+    public void onReadSuccess(EmployeeDetails employeeDetails) {
         mEmployeeDetailsView.showEmployeeInfo(employeeDetails);
-        mEmployeeDetailsView.saveWorkLogInfo(timeclockArrayList);
     }
 
 

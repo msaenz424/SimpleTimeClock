@@ -9,11 +9,9 @@ import com.android.mig.simpletimeclock.source.TimeClockContract;
 import com.android.mig.simpletimeclock.source.TimeClockDbHelper;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetails;
 import com.android.mig.simpletimeclock.source.model.EmployeeDetailsInteractor;
-import com.android.mig.simpletimeclock.source.model.Timeclock;
 import com.android.mig.simpletimeclock.utils.TimeCalculations;
-import java.util.ArrayList;
 
-public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmployeeDetailsTask.ResultWrapper> {
+public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, EmployeeDetails> {
 
     private final int PAID_STATUS = 1;
     private final int UNPAID_STATUS = 0;
@@ -75,8 +73,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
     }
 
     @Override
-    protected ResultWrapper doInBackground(Integer... params) {
-        ArrayList<Timeclock> timeclockArrayList = new ArrayList<>();
+    protected EmployeeDetails doInBackground(Integer... params) {
         EmployeeDetails employeeDetails = null;
         boolean isWorking = false;
         TimeClockDbHelper mTimeClockDbHelper = new TimeClockDbHelper(mContext);
@@ -98,8 +95,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
 
                 Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(timeId)});
 
-                Timeclock timeclock = TimeCalculations.Factory.createTimeClockItemWithTotals(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockIn, timeNow, wage);
-                timeclockArrayList.add(timeclock);
+                TimeCalculations.Factory.createTimeClockItemWithTotals(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockIn, timeNow, wage);
             }
             currentCursor.close();
 
@@ -114,8 +110,7 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
 
                     Cursor breaksCursor = db.rawQuery(BREAKS_QUERY, new String[] {String.valueOf(timeId)});
 
-                    Timeclock timeclock = TimeCalculations.Factory.createTimeClockItemWithTotals(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockInTime, clockOutTime, wage);
-                    timeclockArrayList.add(timeclock);
+                    TimeCalculations.Factory.createTimeClockItemWithTotals(breaksCursor, BREAKS_START_INDEX, BREAKS_END_INDEX, timeId, clockInTime, clockOutTime, wage);
 
                 } while (unpaidCursor.moveToNext());
             }
@@ -147,33 +142,13 @@ public class ReadEmployeeDetailsTask extends AsyncTask<Integer, Void, ReadEmploy
         } finally {
             db.endTransaction();
         }
-        ResultWrapper resultWrapper = new ResultWrapper(employeeDetails, timeclockArrayList);
-        return resultWrapper;
+        return employeeDetails;
     }
 
     @Override
-    protected void onPostExecute(ResultWrapper resultWrapper) {
-        if (resultWrapper.getEmployeeDetails() != null) {
-            this.mOnFinishedTransactionListener.onReadSuccess(resultWrapper.getEmployeeDetails(), resultWrapper.getTimeclockArrayList());
-        }
-    }
-
-    class ResultWrapper{
-
-        private EmployeeDetails mEmployeeDetails;
-        private ArrayList<Timeclock> mTimeclockArrayList;
-
-        public ResultWrapper(EmployeeDetails employeeDetails, ArrayList<Timeclock> timeclockArrayList) {
-            this.mEmployeeDetails = employeeDetails;
-            this.mTimeclockArrayList = timeclockArrayList;
-        }
-
-        public EmployeeDetails getEmployeeDetails() {
-            return mEmployeeDetails;
-        }
-
-        public ArrayList<Timeclock> getTimeclockArrayList() {
-            return mTimeclockArrayList;
+    protected void onPostExecute(EmployeeDetails employeeDetails) {
+        if (employeeDetails != null) {
+            this.mOnFinishedTransactionListener.onReadSuccess(employeeDetails);
         }
     }
 
