@@ -43,9 +43,6 @@ class ReadBreaks constructor(context: Context, onFinishedTransactionListener: Wo
     }
 
     override fun onPostExecute(result: ArrayList<Break>) {
-        if (mFinishedTransactionListener == null){
-            Log.d("finished", "is null")
-        }
         mFinishedTransactionListener.onReadSuccess(result)
     }
 }

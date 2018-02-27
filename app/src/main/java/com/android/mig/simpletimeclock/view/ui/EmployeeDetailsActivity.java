@@ -76,7 +76,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity
     @Override
     public void onEnterAnimationComplete() {
         super.onEnterAnimationComplete();
-        final AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.det_appbar_layout);
+        final AppBarLayout mAppBarLayout = findViewById(R.id.det_appbar_layout);
 
         int scrollValue = 0;
         int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;

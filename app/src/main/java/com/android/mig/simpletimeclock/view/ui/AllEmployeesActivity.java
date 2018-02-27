@@ -26,7 +26,7 @@ public class AllEmployeesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_employees);
-        Toolbar mContextualToolbar = (Toolbar) findViewById(R.id.action_context_toolbar);
+        Toolbar mContextualToolbar = findViewById(R.id.action_context_toolbar);
         setSupportActionBar(mContextualToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
