@@ -26,3 +26,8 @@
   public static *** w(...);
   public static *** e(...);
 }
+-ignorewarnings
+
+-keep class * {
+    public private *;
+}
