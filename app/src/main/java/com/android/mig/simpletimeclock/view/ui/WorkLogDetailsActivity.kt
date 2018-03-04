@@ -1,8 +1,10 @@
 package com.android.mig.simpletimeclock.view.ui
 
 import android.content.Intent
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -90,7 +92,7 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         }
 
         worklog_delete_button.setOnClickListener {
-            alert(resources.getString(R.string.worklog_detail_delete_dialog_text)){
+            alert(resources.getString(R.string.worklog_detail_delete_dialog_text)) {
                 positiveButton(resources.getString(R.string.worklog_detail_delete_dialog_yes)) { mWorkLogDetailsPresenter.onDeleteTimeClicked(mTimeClock.timeId) }
                 negativeButton(resources.getString(R.string.worklog_detail_delete_dialog_no)) {}
             }.show()
@@ -182,7 +184,13 @@ class WorkLogDetailsActivity : AppCompatActivity(),
             R.id.menu_item_update_worklog -> {
                 val timeClock = retrieveTimeClockData()
                 val breaksArrayList = retrieveBreaks()
-                mWorkLogDetailsPresenter.onActionSaveClick(timeClock, breaksArrayList)
+
+                if (validateDates(timeClock, breaksArrayList)) {
+                    mWorkLogDetailsPresenter.onActionSaveClick(timeClock, breaksArrayList)
+                } else {
+                    displayIncoherentDatesMessage()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -282,4 +290,39 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         return mClockedInDay == mClockedOutDay && mClockedInMonth == mClockedOutMonth && mClockedInYear == mClockedOutYear
     }
 
+    /**
+     * Validates if dates on fields are coherent
+     *
+     * @return  boolean value, true if coherent or false if it's not
+     */
+    private fun validateDates(timeClock: Timeclock, breaksArrayList: ArrayList<Break>): Boolean {
+        for (breakItem in breaksArrayList) {
+            if (breakItem.breakStart > breakItem.breakEnd) {
+                return false
+            } else if (breakItem.breakStart < timeClock.clockIn || breakItem.breakStart > timeClock.clockOut) {
+                return false
+            } else if (breakItem.breakEnd < timeClock.clockIn || breakItem.breakEnd > timeClock.clockOut) {
+                return false
+            }
+        }
+
+        if (timeClock.clockIn > timeClock.clockOut) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun displayIncoherentDatesMessage(){
+        val snackBar = Snackbar.make(worklog_details_linear_layout, resources.getString(R.string.snackbar_incoherent_dates_message), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(resources.getString(R.string.snackbar_ok_button), {snackBar.dismiss()})
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            snackBar.setActionTextColor(resources.getColor(android.R.color.white, theme))
+            snackBar.view.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
+        } else {
+            snackBar.setActionTextColor(resources.getColor(android.R.color.white))
+            snackBar.view.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
+        }
+        snackBar.show()
+    }
 }

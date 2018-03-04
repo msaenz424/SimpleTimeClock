@@ -69,6 +69,8 @@
     <string name="worklog_detail_delete_dialog_yes">Yes</string>
     <string name="worklog_detail_delete_dialog_no">No</string>
     <string name="deleted_time_message">Work Log Deleted</string>
+    <string name="snackbar_incoherent_dates_message">Incoherent dates. Correct it and try again</string>
+    <string name="snackbar_ok_button">OK</string>
 
     <!-- Banner Ad -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
