@@ -122,6 +122,7 @@ public class AllEmployeesFragment extends Fragment
                 rootView,
                 R.string.status_update_message,
                 Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         snackbar.show();
     }
 
@@ -132,6 +133,7 @@ public class AllEmployeesFragment extends Fragment
                 rootView,
                 R.string.success_delete_message,
                 Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         snackbar.show();
     }
 
@@ -142,6 +144,7 @@ public class AllEmployeesFragment extends Fragment
                 rootView,
                 R.string.partial_delete_message,
                 Snackbar.LENGTH_LONG);
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         snackbar.show();
     }
 
@@ -152,6 +155,7 @@ public class AllEmployeesFragment extends Fragment
                 rootView,
                 R.string.failed_delete_message,
                 Snackbar.LENGTH_LONG);
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         snackbar.show();
     }
 

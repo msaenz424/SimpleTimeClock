@@ -199,6 +199,7 @@ public class EmployeeDetailsFragment extends Fragment
                     startActivity(intent);
                 } else {
                     Snackbar mySnackbar = Snackbar.make(mRootView, R.string.message_invalid_date_range, Snackbar.LENGTH_SHORT);
+                    mySnackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     mySnackbar.show();
                 }
             }

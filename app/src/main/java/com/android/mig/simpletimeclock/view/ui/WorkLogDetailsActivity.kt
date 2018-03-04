@@ -1,10 +1,10 @@
 package com.android.mig.simpletimeclock.view.ui
 
 import android.content.Intent
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -198,6 +198,8 @@ class WorkLogDetailsActivity : AppCompatActivity(),
 
     override fun displayCorrectionSuccessMessage() {
         snackbar(worklog_details_linear_layout, resources.getString(R.string.update_success_message))
+                .view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
+
     }
 
     override fun displayCorrectionFailMessage() {
@@ -206,6 +208,7 @@ class WorkLogDetailsActivity : AppCompatActivity(),
 
     override fun displayDeleteSuccessMessage() {
         snackbar(worklog_details_linear_layout, resources.getString(R.string.deleted_break_message))
+                .view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
     }
 
     override fun finishActivity() {
@@ -313,16 +316,11 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         return true
     }
 
-    private fun displayIncoherentDatesMessage(){
+    private fun displayIncoherentDatesMessage() {
         val snackBar = Snackbar.make(worklog_details_linear_layout, resources.getString(R.string.snackbar_incoherent_dates_message), Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(resources.getString(R.string.snackbar_ok_button), {snackBar.dismiss()})
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            snackBar.setActionTextColor(resources.getColor(android.R.color.white, theme))
-            snackBar.view.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, theme))
-        } else {
-            snackBar.setActionTextColor(resources.getColor(android.R.color.white))
-            snackBar.view.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
-        }
+        snackBar.setAction(resources.getString(R.string.snackbar_ok_button), { snackBar.dismiss() })
+        snackBar.setActionTextColor(ContextCompat.getColor(applicationContext, android.R.color.white))
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(applicationContext, android.R.color.holo_red_light))
         snackBar.show()
     }
 }
