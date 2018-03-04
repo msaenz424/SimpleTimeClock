@@ -88,7 +88,7 @@ class WorkLogDetailsActivity : AppCompatActivity(),
         }
 
         add_break_button.setOnClickListener {
-            mWorkLogDetailsPresenter.onAddBreakClicked(mTimeClock.timeId, System.currentTimeMillis() / 1000, System.currentTimeMillis() / 1000)
+            mWorkLogDetailsPresenter.onAddBreakClicked(mTimeClock.timeId, mTimeClock.clockIn , mTimeClock.clockIn)  // use clockIn time as starting point for breaks
         }
 
         worklog_delete_button.setOnClickListener {
