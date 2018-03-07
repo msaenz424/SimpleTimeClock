@@ -142,7 +142,7 @@ public class EmployeeDetailsFragment extends Fragment
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Pay " + getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings + "?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
@@ -221,7 +221,7 @@ public class EmployeeDetailsFragment extends Fragment
         String photoUri = employeeDetails.getPhotoPath();
 
         if (photoUri != null && !photoUri.equals("null") && !photoUri.isEmpty()){
-            Glide.with(getContext())
+            Glide.with(getActivity())
                     .load(photoUri)
                     .listener(mRequestListener)
                     .into(mPhotoImageView);
@@ -252,7 +252,7 @@ public class EmployeeDetailsFragment extends Fragment
 
     @Override
     public void showPaidMessage() {
-        Toast.makeText(getContext(),
+        Toast.makeText(getActivity(),
                 getResources().getString(R.string.dollar_currency_symbol) + mUnpaidEarnings + " " + getResources().getString(R.string.paid_earnings_message),
                 Toast.LENGTH_LONG)
                 .show();
