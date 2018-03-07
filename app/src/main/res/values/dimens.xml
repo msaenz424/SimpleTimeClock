@@ -62,5 +62,6 @@
     <dimen name="worklog_item_bottom_padding">8dp</dimen>
     <dimen name="worklog_break_item_delete_button_left_margin">2dp</dimen>
     <dimen name="warning_padding">8dp</dimen>
+    <dimen name="worklog_breaks_recycler_view">98dp</dimen>
 
 </resources>
