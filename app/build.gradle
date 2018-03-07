@@ -22,8 +22,8 @@ android {
         applicationId "com.marsac.migc.simpletimeclock"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 11
-        versionName "1.6.1"
+        versionCode 12
+        versionName "1.6.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
